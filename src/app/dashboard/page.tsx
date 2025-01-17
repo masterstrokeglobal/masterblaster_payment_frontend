@@ -55,17 +55,13 @@ const Dashboard: React.FC = () => {
             <div className="max-w-7xl mx-auto space-y-8">
                 {/* Primary Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <MetricCard title="Total Merchant" value={5} prefix="" icon={Users} />
-                    <MetricCard title="Total Active Merchant" value={5} prefix="" icon={UserCheck} />
-                    <MetricCard title="Total Merchant Balance" value={11263.42} icon={Wallet} />
+                    <MetricCard title="Total Merchant" value={50} prefix="" icon={Users} />
+                    <MetricCard title="Total Active Merchant" value={50} prefix="" icon={UserCheck} />
+                    <MetricCard title="Total Merchant Balance" value={61263.42} icon={Wallet} />
                 </div>
 
                 {/* Today's Metrics */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <MetricCard title="Today Payout" value={0.0} icon={ArrowDownToLine} />
-                    <MetricCard title="Today Payout Commission" value={0.0} icon={Percent} />
-                    <MetricCard title="Today Fund Request" value={0.0} icon={BanknoteIcon} />
-                </div>
+ 
             </div>
         </div>
     );
