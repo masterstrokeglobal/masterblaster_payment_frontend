@@ -41,10 +41,15 @@ const LoginForm = () => {
 
     const onSubmit = (formValue: LoginFormValues) => {
         mutate(formValue, {
-            onSuccess: (data) => {
-                const admin = new Admin(data.data.admin);
+            onSuccess: (data:any) => {
+                const admin = new Admin(data?.data?.admin);
                 setUser(admin);
-                router.push("/dashboard");
+                const role = formValue.loginAs;
+                if (role === AdminRole.Merchant) {
+                    router.push("/dashboard/merchant-stats");
+                } else {
+                     router.push("/dashboard");
+                }
             }
         });
     };

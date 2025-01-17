@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Building, Clock, DollarSign, Home, LucideIcon, Repeat1, Users } from 'lucide-react';
+import { BriefcaseBusiness, Building, Clock, DollarSign, Home, LucideIcon, QrCodeIcon, Repeat1, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -27,92 +27,61 @@ interface MenuItem {
 }
 const adminMenuItems: MenuItem[] = [
     {
-        name: 'Admins',
-        icon: Users,
-        subItems: [
-            { name: 'View Admins', link: '/dashboard/admins' },
-            { name: 'Create Admin', link: '/dashboard/admins/create' },
-        ],
+        name: 'Dashboard',
+        icon: Home,
+        link: '/dashboard',
     },
     {
-        name: 'Company',
-        icon: Building,
-        subItems: [
-            { name: 'View Companies', link: '/dashboard/company' },
-            { name: 'Create Company', link: '/dashboard/company/create' },
-        ],
+        name: 'Merchants',
+        icon: BriefcaseBusiness,
+        link: '/dashboard/merchants',
     },
     {
-        name: 'Users',
+        name: 'Transactions',
         icon: Users,
-        link: '/dashboard/users',
+        link: '/dashboard/transactions',
     },
+    //payouts
     {
-        name: 'Market Items',
-        icon: Users,
-        link: '/dashboard/market-items',
-    }/* {
+        name: 'Payouts',
+        icon: DollarSign,
+        link: '/dashboard/payouts',
+    },
+
+    /* {
         name:"Holidays",
         icon: Clock,
         link:'/dashboard/holiday'
     } */
 ];
 
-const companyMenuItems: MenuItem[] = [
 
+const merchantMenuItems: MenuItem[] = [
+    {
+        name: 'Dashboard',
+        icon: Home,
+        link: '/dashboard/merchant-stats',
+    },
 
-    {
-        name: 'Users',
-        icon: Users,
-        link: '/dashboard/users',
-    },
-    //agents
-    {
-        name: 'Agents',
-        icon: Users,
-        subItems: [
-            { name: 'View Agents', link: '/dashboard/agents' },
-            { name: 'Create Agent', link: '/dashboard/agents/create' },
-        ],
-    },
-    {
-        name: 'Scheduler',
-        icon: Clock,
-        subItems: [
-            { name: 'View Schedule', link: '/dashboard/scheduler' },
-            { name: 'Create Schedule', link: '/dashboard/scheduler/create' },
-        ]
-    },
     {
         name: 'Transactions',
-        icon: DollarSign,
+        icon: Users,
         link: '/dashboard/transactions',
     },
     {
-        name: 'Rounds',
-        icon: Repeat1,
-        link: '/dashboard/round-records',
-    },
-    {
-        name: 'Market Items',
-        icon: Users,
-        link: '/dashboard/market-items',
-    }
-];
-
-const agentMenuItems: MenuItem[] = [
-    { name: 'Dashboard', icon: Home, link: '/dashboard/agent' },
-    //users
-    {
-        name: 'Users',
-        icon: Users,
-        link: '/dashboard/agent-users',
-    },
-
-    {
-        name: "Profit/Loss",
+        name: 'Payouts',
         icon: DollarSign,
-        link: '/dashboard/agent-profit-loss'
+        link: '/dashboard/payouts',
+    },
+    {
+        name: "QR Codes",
+        icon: QrCodeIcon,
+        link: '/dashboard/qr-codes'
+    },
+    {
+        name: "Payout Options",
+        icon: Repeat1,
+        link: '/dashboard/payout-options'
     }
 ];
 
@@ -120,8 +89,8 @@ const agentMenuItems: MenuItem[] = [
 
 const Sidebar = ({ className }: PropsWithClassName) => {
     const pathname = usePathname();
+    const { userDetails } = useAuthStore();
 
-   
     const renderMenuItem = (item: MenuItem) => {
         const isActive = pathname === item.link ||
             (item.subItems && item.subItems.some(subItem => pathname === subItem.link));
@@ -130,7 +99,7 @@ const Sidebar = ({ className }: PropsWithClassName) => {
             return (
                 <AccordionItem value={item.name} key={item.name}>
                     <AccordionTrigger className={cn(
-                        "flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:text-black [&[data-state=open]]:bg-gray-200 [&[data-state=open]]:rounded-b-none rounded-md hover:bg-accent ",
+                        "flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:text-black [&[data-state=open]]:bg-gray-200 [&[data-state=open]]:rounded-b-none rounded-md hover:bg-primary ",
                         isActive && "bg-primary text-primary-foreground hover:bg-primary/90"
                     )}>
                         <span className="flex items-center">
@@ -163,9 +132,9 @@ const Sidebar = ({ className }: PropsWithClassName) => {
                     key={item.name}
                     href={item.link}
                     className={cn(
-                        "flex items-center py-2 px-4 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground",
+                        "flex items-center py-2 px-4 text-sm font-medium rounded-md hover:bg-blue-100 hover:text-accent-foreground",
                         "transition-colors duration-200",
-                        isActive && "bg-primary text-primary-foreground hover:bg-primary/90"
+                        isActive && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
                     )}
                 >
                     <item.icon className="mr-2 h-4 w-4" />
@@ -176,6 +145,8 @@ const Sidebar = ({ className }: PropsWithClassName) => {
         return null;
     };
 
+    const menuItems = userDetails?.role === AdminRole.SUPER_ADMIN ? adminMenuItems : merchantMenuItems;
+
     return (
         <div className={cn("flex  flex-col ", className)}>
             <div className="flex h-16 items-center  px-4">
@@ -183,7 +154,7 @@ const Sidebar = ({ className }: PropsWithClassName) => {
             </div>
             <nav className="flex-1 overflow-y-auto px-4 pt-8">
                 <Accordion type="multiple" className="w-full space-y-2">
-                    {adminMenuItems.map(renderMenuItem)}
+                    {menuItems.map(renderMenuItem)}
                 </Accordion>
             </nav>
         </div>

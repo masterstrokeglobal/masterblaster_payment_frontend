@@ -2,10 +2,9 @@
 import {
     CircleUser,
     Menu,
-} from "lucide-react";
+} from "lucide-react"
 
-import Sidebar from "@/components/sidebar";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,22 +12,31 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useAuthStore } from "@/context/auth-context";
+} from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { PropsWithChildren, useEffect } from "react"
+import { useAuthStore } from "@/context/auth-context"
+import LoadingScreen from "@/components/common/loading-screen"
 import { useRouter } from "next/navigation";
-import { PropsWithChildren, useEffect } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import useLogin from "@/hooks/use-login";
+import { useLogout } from "@/features/user/data/user-queries";
+import Sidebar from "@/components/sidebar";
 
 const DashboardLayout = ({ children }: PropsWithChildren) => {
     const { loading, userDetails } = useAuthStore();
     const router = useRouter();
+    const { mutate } = useLogout();
+    useLogin();
     useEffect(() => {
         if (!loading && !userDetails) {
-            router.push("/login");
+            router.push("/auth/login");
         }
     }, [userDetails, loading, router]);
 
+    if (!userDetails) {
+        return <LoadingScreen className="h-screen" />
+    }
 
     return (
         <div className="min-h-screen bg-[#f5f7f9] w-full md:p-4 ">
@@ -61,7 +69,11 @@ const DashboardLayout = ({ children }: PropsWithChildren) => {
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Logout</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    mutate();
+                                }}
+                            >Logout</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </header>

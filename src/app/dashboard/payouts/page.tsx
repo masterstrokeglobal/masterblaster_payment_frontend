@@ -2,24 +2,24 @@
 
 import DataTable from "@/components/ui/data-table-server";
 import { Input } from "@/components/ui/input";
-import userColumns from "@/features/user/components/user-columns";
-import { useGetAllUsers } from "@/features/user/data/user-queries";
-import User from "@/models/user"; // Import the User model
+import { useGetAllPayouts } from "@/features/payout/api/payout-quieries";
+import { payoutColumns, payouts } from "@/features/user/components/payout-columns";
+import Payout from "@/models/payout";
 import { Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
-const UserTable = () => {
+const PayoutTable = () => {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
 
-    const { data, isSuccess, isFetching } = useGetAllUsers({
+    const { data, isSuccess, isFetching } = useGetAllPayouts({
         page: page,
         search: search,
     });
 
-    const users = useMemo(() => {
-        if (isSuccess && data?.data?.users) {
-            return Array.from(data.data.users).map((user: any) => new User(user));
+    const payoutss = useMemo(() => {
+        if (isSuccess && data?.data?.payouts) {
+            return Array.from(data.data.payouts).map((payout: any) => new Payout(payout));
         }
         return [];
     }, [data, isSuccess]);
@@ -40,7 +40,7 @@ const UserTable = () => {
     return (
         <section className="container-main min-h-[60vh] my-12">
             <header className="flex flex-col md:flex-row gap-4 flex-wrap md:items-center justify-between">
-                <h2 className="text-xl font-semibold">Users</h2>
+                <h2 className="text-xl font-semibold">Payouts</h2>
                 <div className="flex gap-5 flex-wrap">
                     <div className="relative min-w-60 flex-1">
                         <Search size={18} className="absolute top-2.5 left-2.5" />
@@ -56,8 +56,8 @@ const UserTable = () => {
                 <DataTable
                     page={page}
                     loading={isFetching}
-                    columns={userColumns}
-                    data={users}
+                    columns={payoutColumns}
+                    data={payouts}
                     totalPage={totalPages}
                     changePage={changePage}
                 />
@@ -66,4 +66,4 @@ const UserTable = () => {
     );
 };
 
-export default UserTable;
+export default PayoutTable;

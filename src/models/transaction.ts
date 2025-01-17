@@ -1,27 +1,43 @@
 export enum TransactionType {
     DEPOSIT = "deposit",
-    WITHDRAWAL = "withdrawal",
-}
-
-export enum TransactionStatus {
+    WITHDRAWAL = "withdraw",
+  }
+  
+  export enum TransactionStatus {
     PENDING = "pending",
     COMPLETED = "completed",
     FAILED = "failed",
-}
-export class Transaction {
+  }
+  
+  export type Merchant = {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    companyName: string;
+    companyAddress: string;
+    companyGSTNumber: string | null;
+    platformFeePercentage: number;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+  };
+  
+  export class Transaction {
     id!: number;
     pgId?: string;
     type!: TransactionType;
     amount!: number;
     status!: TransactionStatus;
-    bonusPercentage!: number;
-    walletId!: number; // Foreign key
-    companyId!: number; // Foreign key
+    platformFeePercentage!: number;
+    platformFeeAmount!: number;
     createdAt!: Date;
     updatedAt!: Date;
     deletedAt?: Date;
-
+    merchant!: Merchant;
+  
     constructor(data: Partial<Transaction>) {
-        Object.assign(this, data);
+      Object.assign(this, data);
     }
-}
+  }
+  

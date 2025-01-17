@@ -14,13 +14,16 @@ export type RegisterPayload = {
 
 export const userAPI = {
     register: async (data: RegisterPayload) => {
-        return api.post("/user", data);
+        return api.post("/dashboard", data);
     },
     login: async (data: LoginFormValues) => {
-        return api.post("/user/login", data);
+        return api.post("/auth/login", data);
+    },
+    logout: async () => {
+        return api.post("/auth/logout");
     },
     getCurrentUser: async () => {
-        return await api.get("/user");
+        return await api.get("/dashboard");
     },
     updateUser: async (data: RegisterPayload) => {
         return await api.patch("/user", data);

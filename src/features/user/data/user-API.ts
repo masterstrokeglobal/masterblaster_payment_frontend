@@ -2,9 +2,12 @@ import api from "@/lib/axios/instance";
 
 export const userAPI = {
     getAllUsers: async (filter: any) => {
-        return api.get("/user", {
+        return api.get("/merchant", {
             params: filter
         });
+    },
+    logout: async () => {
+        return api.post("/auth/logout");
     },
 
     getUserById: async (userId: string) => {

@@ -18,26 +18,26 @@ export type UpdateTransactionPayload = {
 
 export const transactionAPI = {
     createTransaction: async (data: CreateTransactionPayload) => {
-        return api.post("/transactions", data);
+        return api.post("/transaction", data);
     },
 
-    getAllTransactions: async (filter?: Record<string, any>) => {
-        return api.get("/transactions", { params: filter });
+    getAlltransaction: async (filter?: Record<string, any>) => {
+        return api.get("/transaction", { params: filter });
     },
 
     getTransactionById: async (id: string) => {
-        return api.get(`/transactions/${id}`);
+        return api.get(`/transaction/${id}`);
     },
 
     updateTransactionById: async (data: UpdateTransactionPayload) => {
-        return api.patch(`/transactions/${data.id}`, data);
+        return api.patch(`/transaction/${data.id}`, data);
     },
 
     deleteTransactionById: async (id: string) => {
-        return api.delete(`/transactions/${id}`);
+        return api.delete(`/transaction/${id}`);
     },
 
     confirmWithdrawal: async (id: string) => {
-        return api.post(`/transactions/${id}/confirm-withdrawal`);
+        return api.post(`/transaction/${id}/confirm-withdrawal`);
     }
 };

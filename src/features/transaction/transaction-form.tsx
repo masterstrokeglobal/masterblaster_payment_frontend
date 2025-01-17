@@ -26,7 +26,7 @@ type TransactionEditProps = {
 const TransactionEditForm = ({ transaction, onSubmit, isLoading }: TransactionEditProps) => {
     const form = useForm<TransactionFormValues>({
         resolver: zodResolver(transactionEditSchema),
-        defaultValues: { status: TransactionStatus.FAILED},
+        defaultValues: { status: TransactionStatus.FAILED },
     });
 
 
@@ -46,7 +46,7 @@ const TransactionEditForm = ({ transaction, onSubmit, isLoading }: TransactionEd
                         <p><strong>Type:</strong> {transaction.type}</p>
                         <p><strong>Amount:</strong> ₹{transaction.amount}</p>
                         <p><strong>PG ID:</strong> {transaction.pgId || "N/A"}</p>
-                        <p><strong>Bonus Percentage:</strong> {transaction.bonusPercentage || 0}%</p>
+                        <p><strong>PlatFormFee %:</strong> {transaction.platformFeePercentage || 0}%</p>
                         <p><strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleDateString()}</p>
                     </div>
                     {currentStatus === TransactionStatus.PENDING && (

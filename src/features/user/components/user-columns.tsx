@@ -1,14 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import Link from "next/link";
-import User from "@/models/user";
 import { Trash2, Loader2, Eye } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog';
 import { useAuthStore } from "@/context/auth-context";
 import Admin, { AdminRole } from "@/models/admin";
+import Merchant from "@/models/merchant";
 
-const userColumns: ColumnDef<User>[] = [
+const merchantColumns: ColumnDef<Merchant>[] = [
     {
         header: "NAME",
         accessorKey: "name",
@@ -20,14 +20,14 @@ const userColumns: ColumnDef<User>[] = [
         cell: ({ row }) => <div className="text-[#6B7280] w-48 truncate">{row.original.email}</div>,
     },
     {
-        header: "USERNAME",
-        accessorKey: "username",
-        cell: ({ row }) => <div className="w-48 truncate">{row.original.username}</div>,
-    },
-    {
         header: "PHONE",
         accessorKey: "phone",
         cell: ({ row }) => <div className="text-[#6B7280]">{row.original.phone || 'N/A'}</div>,
+    },
+    {
+        header: "COMPANY NAME",
+        accessorKey: "companyName",
+        cell: ({ row }) => <div className="w-48 truncate">{row.original.companyName}</div>,
     },
     {
         header: "CREATED ON",
@@ -41,16 +41,17 @@ const userColumns: ColumnDef<User>[] = [
     {
         header: "",
         accessorKey: "actions",
-        cell: ({ row }) => <ActionColumn user={row.original} />,
+        cell: ({ row }) => <ActionColumn merchant={row.original} />,
     },
 ];
 
-const ActionColumn = ({ user }: { user: User }) => {
+const ActionColumn = ({ merchant }: { merchant: Merchant }) => {
     const { userDetails } = useAuthStore();
     const currentUser = userDetails as Admin;
 
     const handleDeleting = () => {
-        if (user.id) {
+        if (merchant.id) {
+            // Add delete logic here
         }
     };
 
@@ -63,27 +64,19 @@ const ActionColumn = ({ user }: { user: User }) => {
     return (
         <AlertDialog>
             <div className="flex space-x-4 w-36 justify-end">
-                <Link href={`/dashboard/users/${user.id}`}>
-                    <Button size="icon" variant="ghost" aria-label="View User">
+                <Link href={`/dashboard/merchants/${merchant.id}`}>
+                    <Button size="icon" variant="ghost" aria-label="View Merchant">
                         <Eye className="w-5 h-5" />
                     </Button>
                 </Link>
-                <AlertDialogTrigger asChild>
-                    <Button
-                        variant="destructive"
-                        size="icon"
-                        aria-label="Delete User"
-                    >
-                        <Trash2 className="w-5 h-5" />
-                    </Button>
-                </AlertDialogTrigger>
+
             </div>
 
             <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
                 <AlertDialogHeader>
                     <AlertDialogTitle className="text-lg font-semibold">Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription className="mt-2 text-gray-600">
-                        This action cannot be undone. This will permanently delete the user account and remove their data
+                        This action cannot be undone. This will permanently delete the merchant account and remove their data
                         from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -96,7 +89,7 @@ const ActionColumn = ({ user }: { user: User }) => {
                             variant="destructive"
                             onClick={handleDeleting}
                         >
-                            Delete User
+                            Delete Merchant
                         </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>
@@ -105,4 +98,4 @@ const ActionColumn = ({ user }: { user: User }) => {
     );
 };
 
-export default userColumns;
+export default merchantColumns;

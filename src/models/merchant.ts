@@ -1,45 +1,38 @@
-import { AdminRole } from "./admin";
-
-
-class User {
+class Merchant {
     id?: number;
-    firstname?: string;
-    lastname?: string;
+    name?: string;
     username?: string;
     email?: string;
     phone?: string;
-    role?:AdminRole;
     password?: string;
-    googleId?: string;
+    companyName?: string;
+    companyAddress?: string;
+    companyGSTNumber?: string;
+    platformFee?: number;
     profileImage?: string;
-    otpSecret?: string;
     isVerified?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date;
 
-    constructor(params: Partial<User> = {}) {
+    constructor(params: Partial<Merchant> = {}) {
         this.id = params.id;
-        this.firstname = params.firstname;
-        this.lastname = params.lastname;
+        this.name = params.name;
         this.username = params.username;
         this.email = params.email;
-        this.role = params.role;
         this.phone = params.phone;
         this.password = params.password;
-        this.googleId = params.googleId;
-        this.otpSecret = params.otpSecret;
-        this.isVerified = params.isVerified;
+        this.companyName = params.companyName;
+        this.companyAddress = params.companyAddress;
+        this.companyGSTNumber = params.companyGSTNumber;
+        this.platformFee = params.platformFee;
         this.profileImage = params.profileImage;
+        this.isVerified = params.isVerified;
         this.createdAt = params.createdAt;
         this.updatedAt = params.updatedAt;
         this.deletedAt = params.deletedAt;
     }
 
-    get name() {
-        return `${this.firstname} ${this.lastname}`;
-    }
-
 }
 
-export default User;
+export default Merchant;

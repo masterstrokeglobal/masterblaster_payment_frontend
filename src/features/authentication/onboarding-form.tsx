@@ -134,7 +134,7 @@ export const OnboardingFlowForm = () => {
                 {
                     onSuccess: () => {
                         toast.success("Profile setup completed successfully");
-                        router.push("/dashboard/overview");
+                        router.push("/dashboard/transactions");
                     },
                     onError: (error) => {
                         toast.error(error.response?.data?.details ?? "An error occurred");

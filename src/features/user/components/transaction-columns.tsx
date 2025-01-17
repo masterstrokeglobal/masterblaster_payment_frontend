@@ -1,7 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
+import { Eye, PenIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Transaction, TransactionStatus, TransactionType } from "@/models/transaction";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { useAuthStore } from "@/context/auth-context";
 
 const transactionColumns: ColumnDef<Transaction>[] = [
     {
@@ -16,15 +19,24 @@ const transactionColumns: ColumnDef<Transaction>[] = [
         accessorKey: "type",
         cell: ({ row }) => {
             const type = row.original.type;
-            const colorClass = type === TransactionType.DEPOSIT 
-                ? "text-green-600" 
+            const colorClass = type === TransactionType.DEPOSIT
+                ? "text-green-600"
                 : "text-red-600";
             return (
-                <div className={`font-medium capitalize ${colorClass}`}>
+                <Badge variant={type === TransactionType.DEPOSIT ? "success" : "destructive"}>
                     {type}
-                </div>
+                </Badge>
             );
         },
+    },
+    {
+        header: "UTR",
+        accessorKey: "pgId",
+        cell: ({ row }) => (
+            <div className="text-[#6B7280]">
+                {row.original.pgId}
+            </div>
+        ),
     },
     {
         header: "AMOUNT",
@@ -40,33 +52,51 @@ const transactionColumns: ColumnDef<Transaction>[] = [
         accessorKey: "status",
         cell: ({ row }) => {
             const status = row.original.status;
-            let statusClass = "";
-            
+            let variant = "";
+
             switch (status) {
                 case TransactionStatus.COMPLETED:
-                    statusClass = "bg-green-100 text-green-700";
+                    variant = "success";
                     break;
                 case TransactionStatus.PENDING:
-                    statusClass = "bg-yellow-100 text-yellow-700";
+                    variant = "warning";
                     break;
                 case TransactionStatus.FAILED:
-                    statusClass = "bg-red-100 text-red-700";
+                    variant = "destructive";
                     break;
             }
-            
+
             return (
-                <div className={`inline-flex px-2 py-1 rounded-full text-xs font-medium capitalize ${statusClass}`}>
+                <Badge variant={variant as any}>
                     {status}
-                </div>
+                </Badge>
             );
         },
     },
     {
-        header: "BONUS %",
+        header: "Platform Fee %",
         accessorKey: "bonusPercentage",
         cell: ({ row }) => (
             <div className="text-[#6B7280]">
-                {row.original.bonusPercentage}%
+                {row.original.platformFeePercentage}%
+            </div>
+        ),
+    },
+    {
+        header: "Platform Fee",
+        accessorKey: "bonusAmount",
+        cell: ({ row }) => (
+            <div className="text-[#6B7280]">
+                ${row.original.platformFeeAmount.toFixed(2)}
+            </div>
+        ),
+    },
+    {
+        header: "CREATED AT",
+        accessorKey: "createdAt",
+        cell: ({ row }) => (
+            <div className="text-[#6B7280]">
+                {new Date(row.original.createdAt).toLocaleString()}
             </div>
         ),
     },
@@ -74,17 +104,38 @@ const transactionColumns: ColumnDef<Transaction>[] = [
         header: "",
         accessorKey: "actions",
         cell: ({ row }) => (
-            <div className="flex justify-end">
-                <Button 
-                    size="icon" 
-                    variant="ghost" 
-                    aria-label="View Transaction Details"
-                >
-                    <Eye className="w-5 h-5" />
-                </Button>
-            </div>
+            <ActionColumn transaction={row.original} />
         ),
     },
 ];
 
 export default transactionColumns;
+
+const ActionColumn = ({ transaction }: { transaction: Transaction }) => {
+    const { userDetails } = useAuthStore();
+
+    const isMerchant = userDetails?.role === "merchant";
+    return (
+        <div className="flex justify-end">
+            <Link href={`/dashboard/transactions/${transaction.id}/view`}>
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    aria-label="View Transaction Details"
+                >
+                    <Eye className="w-5 h-5" />
+                </Button>
+            </Link>
+            {!isMerchant && <Link href={`/dashboard/transactions/${transaction.id}`}>
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    aria-label="Edit Transaction"
+                >
+                    <PenIcon className="w-5 h-5" />
+                </Button>
+            </Link>
+            }
+        </div>
+    );
+}

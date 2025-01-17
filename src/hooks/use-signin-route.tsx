@@ -8,7 +8,7 @@ const useCheckAuth = () => {
 
     useEffect(() => {
         if (user) {
-            router.push("/dashboard/overview");
+            router.push("/dashboard/transactions");
         }
 
         if (!isLoading && !user) {

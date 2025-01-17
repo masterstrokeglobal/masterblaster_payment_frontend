@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { RegisterPayload, userAPI } from '../api/user';
 import User from '@/models/user';
 import { AxiosError } from 'axios';
+import { toast } from 'sonner';
+import { error } from 'console';
 
 
 
@@ -24,9 +26,19 @@ export const useGetCurrentUser = () => {
         },
         queryFn: async () => {
             const response = await userAPI.getCurrentUser();
-            const user = new User(response.data);
+            const user = new User(response.data?.user);
             return user;
         },
+    });
+};
+// Current user fetch hook
+export const useGetCurrentMerchant = () => {
+    return useQuery({
+        queryKey: ['user'],
+        retry: (failureCount) => {
+            return failureCount < 3;
+        },
+        queryFn: userAPI.getCurrentUser,
     });
 };
 
@@ -47,7 +59,13 @@ export const useUpdateUser = () => {
 };
 
 export const useAdminLogin = () => {
-    return useMutation({
+    return useMutation<unknown, AxiosError<any, any>, any>({
         mutationFn: userAPI.login,
+        onSuccess: (data) => {
+            toast.success("Login successful");
+        },
+        onError: (error) => {
+            toast.error(error.response?.data?.message ?? "Error logging in");
+        },
     });
 }

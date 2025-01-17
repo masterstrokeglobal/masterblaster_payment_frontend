@@ -10,12 +10,14 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"; 
+} from "@/components/ui/select";
 import { Transaction, TransactionStatus, TransactionType } from "@/models/transaction";
 import { Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useGetAllTransactions } from "./query/transactions-queries";
 import transactionColumns from "../user/components/transaction-columns";
+import { useAuthStore } from "@/context/auth-context";
+import { AdminRole } from "@/models/admin";
 
 
 type Props = {
@@ -27,13 +29,16 @@ const TransactionTable = ({ userId }: Props) => {
     const [search, setSearch] = useState("");
     const [type, setType] = useState<string | "">("");
     const [status, setStatus] = useState<string | "">("");
+    const {userDetails} = useAuthStore();
+
+    const merchanntId = userDetails?.role === AdminRole.Merchant ? userDetails?.id : userId;
 
     // Fetch all transactions with pagination, search query, and filters
     const { data, isSuccess, isFetching } = useGetAllTransactions({
         page: page,
         search: search,
         type: type === "all" ? "" : type,
-        userId: userId,
+        merchantId: merchanntId,
         status: status === "all" ? "" : status,
     });
 
@@ -48,7 +53,7 @@ const TransactionTable = ({ userId }: Props) => {
 
     // Calculate total pages based on data count
     const totalPages = useMemo(() => {
-        return Math.ceil(data?.data?.count / 10) || 1;
+        return Math.ceil(data?.data?.total / 10) || 1;
     }, [data, isSuccess]);
 
     // Handle search input change
