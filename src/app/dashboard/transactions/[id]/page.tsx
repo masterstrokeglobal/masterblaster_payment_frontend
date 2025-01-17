@@ -6,6 +6,9 @@ import { useParams, useRouter } from "next/navigation";
 import { Transaction, TransactionType } from "@/models/transaction";
 import TransactionEditForm from "@/features/transaction/transaction-form";
 import { useConfirmWithdrawal, useGetTransactionById, useUpdateTransactionById } from "@/features/transaction/query/transactions-queries";
+import WithdrawDetailsRecord from "@/models/withdrawl-details";
+import Merchant from "@/models/merchant";
+import { MerchantDetailsCard, WithdrawalDetailsCard } from "@/features/merchant/merchant-card-small";
 
 const EditTransactionPage = () => {
     const params = useParams();
@@ -16,9 +19,18 @@ const EditTransactionPage = () => {
     const router = useRouter();
 
     const transaction = useMemo(() => {
-        return new Transaction(data?.data?.transaction);
+        return new Transaction(data?.data);
     }, [data]);
 
+
+    const withdrawlDetails = useMemo(() => {
+        if (data?.data.withdrawDetails) return new WithdrawDetailsRecord(data?.data.withdrawDetails);
+        return null;
+    }, [data]);
+
+    const merchant = useMemo(() => {
+        return new Merchant(data?.data.merchant);
+    }, [data]);
     const onSubmit = (updatedData: any) => {
 
         if (transaction.type == TransactionType.DEPOSIT) {
@@ -52,11 +64,16 @@ const EditTransactionPage = () => {
     return (
         <>
             {isSuccess && data && (
-                <TransactionEditForm
-                    transaction={data.data.transaction}
-                    onSubmit={onSubmit}
-                    isLoading={isPending || confirmPending}
-                />)}
+                <div className="grid md:grid-cols-2 gap-8">
+                    {withdrawlDetails && <WithdrawalDetailsCard withdrawDetails={withdrawlDetails} />}
+                    <MerchantDetailsCard merchant={merchant} />
+                    <TransactionEditForm
+                        transaction={data.data}
+                        onSubmit={onSubmit}
+                        isLoading={isPending || confirmPending}
+                    />
+                </ div>
+            )}
         </>
     );
 

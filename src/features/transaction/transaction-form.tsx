@@ -49,9 +49,8 @@ const TransactionEditForm = ({ transaction, onSubmit, isLoading }: TransactionEd
                         <p><strong>PlatFormFee %:</strong> {transaction.platformFeePercentage || 0}%</p>
                         <p><strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleDateString()}</p>
                     </div>
-                    {currentStatus === TransactionStatus.PENDING && (
+                    {/* {currentStatus === TransactionStatus.PENDING && (
                         <FormProvider methods={form} onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-                            {/* Editable Status Field */}
                             <FormGroupSelect
                                 control={control}
                                 name="status"
@@ -69,7 +68,7 @@ const TransactionEditForm = ({ transaction, onSubmit, isLoading }: TransactionEd
                                 </Button>
                             </footer>
                         </FormProvider>
-                    )}
+                    )} */}
                     {currentStatus !== TransactionStatus.PENDING && (
                         <TransactionStatusAlert currentStatus={currentStatus} />
                     )}

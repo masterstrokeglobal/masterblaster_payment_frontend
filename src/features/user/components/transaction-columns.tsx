@@ -43,7 +43,7 @@ const transactionColumns: ColumnDef<Transaction>[] = [
         accessorKey: "amount",
         cell: ({ row }) => (
             <div className="font-medium">
-                ${row.original.amount.toFixed(2)}
+                Rs.{row.original.amount.toFixed(2)}
             </div>
         ),
     },
@@ -87,7 +87,7 @@ const transactionColumns: ColumnDef<Transaction>[] = [
         accessorKey: "bonusAmount",
         cell: ({ row }) => (
             <div className="text-[#6B7280]">
-                ${row.original.platformFeeAmount.toFixed(2)}
+                Rs.{row.original.platformFeeAmount.toFixed(2)}
             </div>
         ),
     },
@@ -114,28 +114,19 @@ export default transactionColumns;
 const ActionColumn = ({ transaction }: { transaction: Transaction }) => {
     const { userDetails } = useAuthStore();
 
-    const isMerchant = userDetails?.role === "merchant";
     return (
         <div className="flex justify-end">
-            <Link href={`/dashboard/transactions/${transaction.id}/view`}>
-                <Button
-                    size="icon"
-                    variant="ghost"
-                    aria-label="View Transaction Details"
-                >
-                    <Eye className="w-5 h-5" />
-                </Button>
-            </Link>
-            {!isMerchant && <Link href={`/dashboard/transactions/${transaction.id}`}>
+
+            <Link href={`/dashboard/transactions/${transaction.id}`}>
                 <Button
                     size="icon"
                     variant="ghost"
                     aria-label="Edit Transaction"
                 >
-                    <PenIcon className="w-5 h-5" />
+                    <Eye className="w-5 h-5" />
                 </Button>
             </Link>
-            }
+
         </div>
     );
 }

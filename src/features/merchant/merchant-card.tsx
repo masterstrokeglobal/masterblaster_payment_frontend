@@ -63,10 +63,12 @@ const MerchantProfileCard = ({ merchant }: { merchant: Merchant }) => {
       <CardContent className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
+            
             <Section title="Basic Information">
               <InfoItem icon={User} label="Full Name" value={merchant.name} />
               <InfoItem icon={Mail} label="Email Address" value={merchant.email} />
               <InfoItem icon={Phone} label="Phone Number" value={merchant.phone} />
+              {merchant.wallet?.amount!=undefined && (<InfoItem icon={Percent} label="Wallet Balance" value={`Rs. ${merchant.wallet?.getFormattedAmount()}`} />)}
             </Section>
 
             <Section title="Company Details">
@@ -120,6 +122,7 @@ const MerchantProfileCard = ({ merchant }: { merchant: Merchant }) => {
                 />
               )}
             </Section>
+
           </div>
         </div>
       </CardContent>

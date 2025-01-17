@@ -21,7 +21,7 @@ export const userAPI = {
     deleteUserById: async (userId: string) => {
         return api.delete(`/user/${userId}`);
     },
-    
+
     uploadImage: async (data: FormData) => {
         return api.post("/company/upload-image", data, {
             headers: {

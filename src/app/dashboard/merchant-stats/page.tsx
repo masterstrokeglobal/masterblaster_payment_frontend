@@ -1,14 +1,11 @@
 "use client";
 import LoadingScreen from '@/components/common/loading-screen';
-import { useGetCurrentMerchant, useGetCurrentUser } from '@/features/authentication/query/user';
-import { useGetMerchantById } from '@/features/merchant/api/merchant-query';
+import { useGetCurrentMerchant } from '@/features/authentication/query/user';
 import MerchantProfileCard from '@/features/merchant/merchant-card';
 import Merchant from '@/models/merchant';
-import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
 
 const MerchantDashboard = () => {
-    const { id } = useParams();
     const { isLoading, data, isSuccess } = useGetCurrentMerchant();
 
     const merchant = useMemo(() => {

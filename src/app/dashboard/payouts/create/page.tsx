@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -7,39 +7,57 @@ import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import PayoutRequestForm from '@/features/payout/create/payout-form';
+import { useAuthStore } from '@/context/auth-context';
+import LoadingScreen from '@/components/common/loading-screen';
+import { useGetMerchantById } from '@/features/merchant/api/merchant-query';
+import Merchant from '@/models/merchant';
+import { useCreateTransaction } from '@/features/transaction/query/transactions-queries';
+import { Transaction, TransactionType } from '@/models/transaction';
+import { randomID } from '@/lib/utils';
 
-// You would typically get this from an API
-const mockMerchantData = {
-  id: 1,
-  walletBalance: 25000,
-  name: "John's Store"
-};
 
 const PayoutRequestPage = () => {
+  const { userDetails } = useAuthStore();
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { mutate, isPending } = useCreateTransaction();
+
+  const { data, isLoading, isSuccess } = useGetMerchantById(userDetails!.id!.toString());
+
+  const merchant = useMemo(() => {
+    if (isSuccess && data) {
+      return new Merchant(data.data);
+    }
+    return null;
+  }, [data, isSuccess]);
+
 
   const handlePayoutSubmit = async (data: any) => {
-    try {
-      setIsSubmitting(true);
-      // Here you would make your API call to submit the payout request
-      // await submitPayoutRequest(data);
-      
-      console.log('Submitting payout request:', data);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    mutate({
+      ...data,
+      merchantId: userDetails?.id,
+      pgId: randomID(),
+      type: TransactionType.WITHDRAWAL,
+    },{
+      onSuccess: () => {
+        toast.success('Payout request submitted successfully');
+        router.push('/dashboard/payouts');
+      },
+    });
 
-      toast.success("Payout request submitted successfully");
 
-      // Redirect back to dashboard after successful submission
-      router.push('/merchants/dashboard');
-    } catch (error) {
-        toast.error("An error occurred. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
   };
+
+  if (isLoading && merchant === null) {
+    return <LoadingScreen />;
+  }
+
+  if (!userDetails?.isMerchant) {
+    return (<div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-4">
+        <h1 className="text-xl font-semibold">You are not authorized to view this page</h1>
+      </div>
+    </div>);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -56,7 +74,7 @@ const PayoutRequestPage = () => {
               <h1 className="text-xl font-semibold">Request Payout</h1>
             </div>
             <div className="text-sm text-gray-500">
-              ID: {mockMerchantData.id}
+              ID: {merchant?.id}
             </div>
           </div>
         </div>
@@ -70,8 +88,9 @@ const PayoutRequestPage = () => {
             <div className="md:col-span-2">
               <PayoutRequestForm
                 onSubmit={handlePayoutSubmit}
-                isLoading={isSubmitting}
-                walletBalance={mockMerchantData.walletBalance}
+                isLoading={isPending}
+                paymentMethods={merchant?.withdrawDetails ?? []}
+                walletBalance={merchant?.wallet?.amount ?? 0}
               />
             </div>
 

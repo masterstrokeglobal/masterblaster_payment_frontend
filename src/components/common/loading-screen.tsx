@@ -9,7 +9,7 @@ type Props = {
     children?: React.ReactNode;
 };
 
-const LoadingScreen = ({ className, logo = true }: Props) => {
+const LoadingScreen = ({ className, logo = false }: Props) => {
     return (
         <Skeleton className={cn("flex justify-center items-center ", className)}>
             {logo ?

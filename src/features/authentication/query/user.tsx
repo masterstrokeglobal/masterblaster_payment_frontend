@@ -4,6 +4,7 @@ import User from '@/models/user';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { error } from 'console';
+import Admin from '@/models/admin';
 
 
 
@@ -26,7 +27,7 @@ export const useGetCurrentUser = () => {
         },
         queryFn: async () => {
             const response = await userAPI.getCurrentUser();
-            const user = new User(response.data?.user);
+            const user = new Admin(response.data?.user);
             return user;
         },
     });
@@ -34,7 +35,7 @@ export const useGetCurrentUser = () => {
 // Current user fetch hook
 export const useGetCurrentMerchant = () => {
     return useQuery({
-        queryKey: ['user'],
+        queryKey: ['user', "merchangt"],
         retry: (failureCount) => {
             return failureCount < 3;
         },

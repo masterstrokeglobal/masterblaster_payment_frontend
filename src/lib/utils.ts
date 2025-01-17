@@ -17,3 +17,5 @@ export const pronounOptions = [
   { label: "They/Them", value: "They/Them" },
   { label: "Other", value: "Other" }
 ];
+
+export const randomID = () => Math.random().toString(36).substr(2, 9);

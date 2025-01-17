@@ -8,10 +8,10 @@ import React, {
 } from "react";
 
 interface UserContextType {
-  userDetails: Admin | User | null;
+  userDetails: Admin  | null;
   setLoadig: (loading: boolean) => void;
   loading: boolean;
-  setUser: (details: Admin | User | null) => void;
+  setUser: (details: Admin  | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -25,13 +25,14 @@ export const useAuthStore = () => {
 };
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
-  const [userDetails, setUser] = useState<Admin | User | null>(null);
+  const [userDetails, setUser] = useState<Admin  | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const updateUser = (details: Admin | User | null) => {
+  const updateUser = (details: Admin  | null) => {
     setIsLoading(false);
     setUser(details);
   };
+  console.log("state update",userDetails);
 
   const value: UserContextType = {
     userDetails,

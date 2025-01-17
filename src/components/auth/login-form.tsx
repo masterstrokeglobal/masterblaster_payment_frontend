@@ -30,7 +30,6 @@ const defaultValues: LoginFormValues = {
 };
 
 const LoginForm = () => {
-    const { setUser } = useAuthStore();
     const router = useRouter();
     const { mutate, isPending } = useAdminLogin();
     const form = useForm({
@@ -41,9 +40,7 @@ const LoginForm = () => {
 
     const onSubmit = (formValue: LoginFormValues) => {
         mutate(formValue, {
-            onSuccess: (data:any) => {
-                const admin = new Admin(data?.data?.admin);
-                setUser(admin);
+            onSuccess: () => {
                 const role = formValue.loginAs;
                 if (role === AdminRole.Merchant) {
                     router.push("/dashboard/merchant-stats");

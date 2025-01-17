@@ -47,7 +47,7 @@ const payoutColumns: ColumnDef<typeof payouts[0]>[] = [
     {
         header: "AMOUNT",
         accessorKey: "amount",
-        cell: ({ row }) => <div className="text-[#6B7280]">${row.original.amount}</div>,
+        cell: ({ row }) => <div className="text-[#6B7280]">Rs.{row.original.amount}</div>,
     },
     {
         header: "BANK",
@@ -76,7 +76,7 @@ const payoutColumns: ColumnDef<typeof payouts[0]>[] = [
     {
         header: "WALLET BALANCE",
         accessorKey: "walletBalance",
-        cell: ({ row }) => <div className="text-[#6B7280]">${row.original.walletBalance}</div>,
+        cell: ({ row }) => <div className="text-[#6B7280]">Rs.{row.original.walletBalance}</div>,
     },
     {
         header: "DATE",
