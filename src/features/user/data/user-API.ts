@@ -9,6 +9,9 @@ export const userAPI = {
     logout: async () => {
         return api.post("/auth/logout");
     },
+    dashboardStats: async () => {
+        return api.get("/dashboard")
+    },
 
     getUserById: async (userId: string) => {
         return api.get(`/user/${userId}`);
