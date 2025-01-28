@@ -67,6 +67,7 @@ export const useDeleteTransactionById = () => {
     });
 };
 
+
 export const useConfirmWithdrawal = () => {
     const queryClient = useQueryClient();
 
@@ -82,6 +83,45 @@ export const useConfirmWithdrawal = () => {
         },
         onError: (error: any) => {
             toast.error(error.response?.data?.message ?? "Error confirming withdrawal");
+        },
+    });
+};
+
+export const useApproveTransaction = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: transactionAPI.approveTransaction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    return query.queryKey[0] === "transactions";
+                },
+            });
+            toast.success("Transaction approved successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message ?? "Error approving transaction");
+        },
+    });
+}
+
+export const useRejectTransaction = () => {
+
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: transactionAPI.rejectTransaction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    return query.queryKey[0] === "transactions";
+                },
+            });
+            toast.success("Transaction rejected successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message ?? "Error rejecting transaction");
         },
     });
 };

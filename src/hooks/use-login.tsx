@@ -7,9 +7,7 @@ const useLogin = () => {
     const { data, isSuccess, isError } = useGetCurrentUser();
 
     useEffect(() => {
-
         if (isSuccess) {
-            
             setUser(data);
         }
         if (isError) {

@@ -1,12 +1,5 @@
 import api from "@/lib/axios/instance";
 
-export type CreateTransactionPayload = {
-    // Add your transaction creation fields here
-    amount: number;
-    type: string;
-    description?: string;
-    // Add other relevant fields
-};
 
 export type UpdateTransactionPayload = {
     // Add your transaction update fields here
@@ -17,7 +10,7 @@ export type UpdateTransactionPayload = {
 };
 
 export const transactionAPI = {
-    createTransaction: async (data: CreateTransactionPayload) => {
+    createTransaction: async (data: any) => {
         return api.post("/transaction", data);
     },
 
@@ -36,8 +29,16 @@ export const transactionAPI = {
     deleteTransactionById: async (id: string) => {
         return api.delete(`/transaction/${id}`);
     },
-
     confirmWithdrawal: async (id: string) => {
         return api.post(`/transaction/${id}/confirm-withdrawal`);
-    }
+    },
+
+    // Add other transaction API methods
+    approveTransaction: async (id: string) => {
+        return api.patch(`/transaction/approve/${id}`);
+    },
+
+    rejectTransaction: async (id: string) => {
+        return api.patch(`/transaction/reject/${id}`);
+    },
 };

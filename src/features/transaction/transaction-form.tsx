@@ -15,21 +15,20 @@ export const transactionEditSchema = z.object({
     status: z.enum([TransactionStatus.PENDING, TransactionStatus.COMPLETED, TransactionStatus.FAILED]),
 });
 
-type TransactionFormValues = z.infer<typeof transactionEditSchema>;
+export type TransactionFormValues = z.infer<typeof transactionEditSchema>;
 
 type TransactionEditProps = {
     transaction: Transaction;
+    showForm?: boolean;
     onSubmit: (data: TransactionFormValues) => void;
     isLoading?: boolean;
 };
 
-const TransactionEditForm = ({ transaction, onSubmit, isLoading }: TransactionEditProps) => {
+const TransactionEditForm = ({ transaction, onSubmit, isLoading, showForm = false }: TransactionEditProps) => {
     const form = useForm<TransactionFormValues>({
         resolver: zodResolver(transactionEditSchema),
         defaultValues: { status: TransactionStatus.FAILED },
     });
-
-
 
     const { control, handleSubmit } = form;
     const currentStatus = transaction.status
@@ -49,7 +48,7 @@ const TransactionEditForm = ({ transaction, onSubmit, isLoading }: TransactionEd
                         <p><strong>PlatFormFee %:</strong> {transaction.platformFeePercentage || 0}%</p>
                         <p><strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleDateString()}</p>
                     </div>
-                    {/* {currentStatus === TransactionStatus.PENDING && (
+                    {(currentStatus === TransactionStatus.PENDING && showForm) && (
                         <FormProvider methods={form} onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
                             <FormGroupSelect
                                 control={control}
@@ -68,8 +67,8 @@ const TransactionEditForm = ({ transaction, onSubmit, isLoading }: TransactionEd
                                 </Button>
                             </footer>
                         </FormProvider>
-                    )} */}
-                    {currentStatus !== TransactionStatus.PENDING && (
+                    )}
+                    {(currentStatus !== TransactionStatus.PENDING && showForm) && (
                         <TransactionStatusAlert currentStatus={currentStatus} />
                     )}
                 </CardContent>

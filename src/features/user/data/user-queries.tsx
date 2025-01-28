@@ -72,7 +72,7 @@ export const useUploadImage = () => {
 export const useDashboardStats = () => {
     return useQuery({
         queryKey: ["dashboard-data"],
-        queryFn: () => userAPI.dashboardStats
+        queryFn: userAPI.dashboardStats
     });
 };
 

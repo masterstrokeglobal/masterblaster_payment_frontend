@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -9,6 +10,7 @@ import {
     BanknoteIcon,
     LucideIcon,
 } from 'lucide-react';
+import { useDashboardStats } from '@/features/user/data/user-queries';
 
 // Define prop types for MetricCard
 interface MetricCardProps {
@@ -35,10 +37,7 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, prefix = '₹', i
                 <div className="pl-1">
                     <p className="text-3xl font-bold tracking-tight text-gray-900">
                         {prefix}
-                        {value.toLocaleString('en-IN', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                        })}
+                        {value}
                     </p>
                 </div>
             </CardContent>
@@ -47,6 +46,18 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, prefix = '₹', i
 };
 
 const Dashboard: React.FC = () => {
+    const { data, isLoading } = useDashboardStats();
+
+    const stats = data?.data;
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    const totalMerchant = stats?.totalMerchants || 0;
+    const totalMerchantBalance = stats?.totalMerchantBalance || 0;
+    const totalDepositBalance = stats?.totalDepositAmount || 0;
+    const totalWithdrawal = stats?.totalWithdrawalAmount || 0;
     return (
         <div className="p-8 pt-12 bg-gradient-to-br min-h-screen">
             <header className="flex items-center justify-between mb-4">
@@ -55,13 +66,31 @@ const Dashboard: React.FC = () => {
             <div className="max-w-7xl mx-auto space-y-8">
                 {/* Primary Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <MetricCard title="Total Merchant" value={50} prefix="" icon={Users} />
-                    <MetricCard title="Total Active Merchant" value={50} prefix="" icon={UserCheck} />
-                    <MetricCard title="Total Merchant Balance" value={61263.42} icon={Wallet} />
+                    <MetricCard
+                        title="Total Merchants"
+                        value={totalMerchant}
+                        icon={Users}
+                        prefix=''
+                    />
+                    <MetricCard
+                        title="Total Deposit Balance"
+                        value={totalDepositBalance}
+                        icon={BanknoteIcon}
+                    />
+
+                    <MetricCard
+                        title="Total Balance"
+                        value={totalMerchantBalance}
+                        icon={Wallet}
+                    />
+
+                    <MetricCard
+                        title="Total Withdrawal"
+                        value={totalWithdrawal}
+                        icon={ArrowDownToLine}
+                    />
                 </div>
 
-                {/* Today's Metrics */}
- 
             </div>
         </div>
     );

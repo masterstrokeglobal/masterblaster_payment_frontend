@@ -3,24 +3,21 @@
 import React, { useMemo } from "react";
 import LoadingScreen from "@/components/common/loading-screen";
 import { useParams, useRouter } from "next/navigation";
-import { Transaction, TransactionType } from "@/models/transaction";
-import TransactionEditForm from "@/features/transaction/transaction-form";
-import { useConfirmWithdrawal, useGetTransactionById, useUpdateTransactionById } from "@/features/transaction/query/transactions-queries";
+import { Transaction, TransactionStatus, TransactionType } from "@/models/transaction";
+import TransactionEditForm, { TransactionFormValues } from "@/features/transaction/transaction-form";
+import { useApproveTransaction, useConfirmWithdrawal, useGetTransactionById, useRejectTransaction, useUpdateTransactionById } from "@/features/transaction/query/transactions-queries";
 import WithdrawDetailsRecord from "@/models/withdrawl-details";
 import Merchant from "@/models/merchant";
 import { MerchantDetailsCard, WithdrawalDetailsCard } from "@/features/merchant/merchant-card-small";
+import { useAuthStore } from "@/context/auth-context";
 
 const EditTransactionPage = () => {
     const params = useParams();
+    const { userDetails } = useAuthStore();
     const { id } = params;
     const { data, isLoading, isSuccess } = useGetTransactionById(id!.toString());
-    const { mutate, isPending } = useUpdateTransactionById();
-    const { mutate: withdrawl, isPending: confirmPending } = useConfirmWithdrawal();
-    const router = useRouter();
-
-    const transaction = useMemo(() => {
-        return new Transaction(data?.data);
-    }, [data]);
+    const { mutate: approve, isPending: isPending } = useApproveTransaction();
+    const { mutate: reject, isPending: confirmPending } = useRejectTransaction();
 
 
     const withdrawlDetails = useMemo(() => {
@@ -31,35 +28,20 @@ const EditTransactionPage = () => {
     const merchant = useMemo(() => {
         return new Merchant(data?.data.merchant);
     }, [data]);
-    const onSubmit = (updatedData: any) => {
 
-        if (transaction.type == TransactionType.DEPOSIT) {
-            mutate({
-                id,
-                ...updatedData,
-            }, {
-                onSuccess: () => {
-                    router.push("/dashboard/transactions");
-                },
-            });
-        };
+    const onSubmit = (updatedData: TransactionFormValues) => {
 
-        if (transaction.type == TransactionType.WITHDRAWAL) {
-            withdrawl({
-                id,
-                ...updatedData,
-            }, {
-                onSuccess: () => {
-                    router.push("/dashboard/transactions");
-                },
-            });
-        };
+        if (updatedData.status == TransactionStatus.COMPLETED) {
+            approve(id!.toString());
+        }
+        if (updatedData.status == TransactionStatus.FAILED) {
+            reject(id!.toString());
+        }
     };
-
-
 
     if (isLoading) return <LoadingScreen>Loading transaction...</LoadingScreen>;
 
+    console.log(userDetails);
 
     return (
         <>
@@ -70,6 +52,7 @@ const EditTransactionPage = () => {
                     <TransactionEditForm
                         transaction={data.data}
                         onSubmit={onSubmit}
+                        showForm={userDetails?.isSuperAdmin}
                         isLoading={isPending || confirmPending}
                     />
                 </ div>

@@ -33,7 +33,7 @@ const MerchantQRDashboard = () => {
     const [copied, setCopied] = React.useState(false);
 
     const handleCopyLink = () => {
-        navigator.clipboard.writeText("https://skynyxtech.com/wp-content/uploads/2023/06/Offline-Merchant.png");
+        navigator.clipboard.writeText("https://6tv9r7zrsn.ufs.sh/f/HbaQF5z7YpECLiujhVrWnGXFy1BAJxMf6ZYijTmbouzcgEDa");
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -69,7 +69,7 @@ const MerchantQRDashboard = () => {
                                 <div className="flex justify-center">
                                     <div className="relative group bg-white p-6 rounded-lg shadow-sm">
                                         <img
-                                            src="https://skynyxtech.com/wp-content/uploads/2023/06/Offline-Merchant.png"
+                                            src="https://6tv9r7zrsn.ufs.sh/f/HbaQF5z7YpECLiujhVrWnGXFy1BAJxMf6ZYijTmbouzcgEDa"
                                             alt="Merchant QR Code"
                                             className="w-64 h-64 object-contain"
                                         />
@@ -79,7 +79,7 @@ const MerchantQRDashboard = () => {
                             </div>
                         </CardContent>
                         <CardFooter className="grid grid-cols-2 gap-4">
-                            <Button variant="outline" onClick={() => window.open("https://skynyxtech.com/wp-content/uploads/2023/06/Offline-Merchant.png", "_blank")}>
+                            <Button variant="outline" onClick={() => window.open("https://6tv9r7zrsn.ufs.sh/f/HbaQF5z7YpECLiujhVrWnGXFy1BAJxMf6ZYijTmbouzcgEDa", "_blank")}>
                                 <Download className="w-4 h-4 mr-2" />
                                 Download
                             </Button>
