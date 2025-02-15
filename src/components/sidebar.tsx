@@ -74,6 +74,11 @@ const merchantMenuItems: MenuItem[] = [
         link: '/dashboard/payouts',
     },
     {
+        name:"User Payouts",
+        icon: DollarSign,
+        link:'/dashboard/user-payouts'
+    },
+    {
         name: "QR Codes",
         icon: QrCodeIcon,
         link: '/dashboard/qr-codes'

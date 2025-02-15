@@ -1,5 +1,4 @@
 import api from "@/lib/axios/instance";
-import { create } from "domain";
 
 export const merchantAPI = {
     getAllMerchants: async (filter: any) => {
