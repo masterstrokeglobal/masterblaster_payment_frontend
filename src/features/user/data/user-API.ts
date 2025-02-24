@@ -25,11 +25,5 @@ export const userAPI = {
         return api.delete(`/user/${userId}`);
     },
 
-    uploadImage: async (data: FormData) => {
-        return api.post("/company/upload-image", data, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        });
-    },
+
 };

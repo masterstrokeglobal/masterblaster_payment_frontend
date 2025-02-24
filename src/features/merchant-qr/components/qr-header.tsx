@@ -1,0 +1,20 @@
+"use client";
+
+import { QrCode } from 'lucide-react';
+
+interface QRHeaderProps {
+  title: string;
+  description: string;
+}
+
+export const QRHeader = ({ title, description }: QRHeaderProps) => {
+  return (
+    <div className="mb-8">
+      <div className="flex items-center space-x-2 mb-1">
+        <QrCode className="w-6 h-6 text-blue-600" />
+        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+      </div>
+      <p className="text-gray-500">{description}</p>
+    </div>
+  );
+};
