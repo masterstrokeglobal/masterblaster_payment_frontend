@@ -151,7 +151,6 @@ const MerchantQrPage = () => {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="container mx-auto p-6">
