@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { MerchantQr } from "@/features/merchant-qr/type";
 import Link from "next/link";
 import { useMerchantQrWebSocket } from "@/hooks/use-payments";
+import QRCode from "@/features/merchant-qr/components/custom-qr-code";
 
 
 
@@ -53,11 +54,7 @@ const MerchantQrCard = ({ qr }: MerchantQrCardProps) => {
           {/* QR Code Display */}
           <div className="w-full md:w-1/2 flex justify-center">
             <div className="bg-white p-4 rounded-lg shadow-sm">
-              <img
-                src={qr.qrCode}
-                alt="Payment QR Code"
-                className="w-48 h-48"
-              />
+              <QRCode merchantQr={qr} />
             </div>
           </div>
 
@@ -66,7 +63,7 @@ const MerchantQrCard = ({ qr }: MerchantQrCardProps) => {
             <div className="space-y-1">
               <p className="text-sm text-gray-500">UPI ID</p>
               <div className="flex items-center gap-2">
-                <p className="font-mono text-sm">{qr.upiId}</p>
+                <p className="font-mono text-sm text-wrap">{qr.upiId}</p>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -123,7 +120,6 @@ const MerchantQrCard = ({ qr }: MerchantQrCardProps) => {
                 Pay with UPI App
               </Button>
             </Link>
-
           </div>
         </div>
       </CardContent>

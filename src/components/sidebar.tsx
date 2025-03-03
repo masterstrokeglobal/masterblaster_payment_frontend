@@ -60,9 +60,8 @@ const merchantMenuItems: MenuItem[] = [
     {
         name: 'Dashboard',
         icon: Home,
-        link: '/dashboard/merchant-stats',
+        link: '/dashboard/merchant-dashboard',
     },
-
     {
         name: 'Transactions',
         icon: Users,
@@ -74,9 +73,9 @@ const merchantMenuItems: MenuItem[] = [
         link: '/dashboard/payouts',
     },
     {
-        name:"User Payouts",
+        name: "User Payouts",
         icon: DollarSign,
-        link:'/dashboard/user-payouts'
+        link: '/dashboard/user-payouts'
     },
     {
         name: "QR Codes",

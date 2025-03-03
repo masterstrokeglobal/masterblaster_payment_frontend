@@ -77,7 +77,7 @@ const UserWithdrawalEditForm = () => {
     return (
         <div className="max-w-7xl mx-auto p-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-6">Withdrawal Details</h1>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card className=" transition-shadow duration-300">
                     <CardHeader className="border-b bg-gray-50">
@@ -131,7 +131,7 @@ const UserWithdrawalEditForm = () => {
                             <h3 className="text-sm font-medium text-gray-900 mb-4">
                                 {withdrawal?.type === WithdrawalType.UPI ? 'UPI Details' : 'Bank Details'}
                             </h3>
-                            
+
                             {withdrawal?.type === WithdrawalType.UPI ? (
                                 <div className="bg-gray-50 p-4 rounded-lg">
                                     <p className="text-sm text-gray-500">UPI ID</p>
@@ -166,9 +166,9 @@ const UserWithdrawalEditForm = () => {
                                                 value: status,
                                             }))}
                                         />
-                                        <Button 
-                                            type="submit" 
-                                            disabled={updateWithdrawalStatus.isPending} 
+                                        <Button
+                                            type="submit"
+                                            disabled={updateWithdrawalStatus.isPending}
                                             className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors duration-200"
                                         >
                                             {updateWithdrawalStatus.isPending ? "Updating..." : "Update Status"}

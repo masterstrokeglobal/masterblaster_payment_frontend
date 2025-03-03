@@ -86,3 +86,10 @@ export const useUploadImage = () => {
         },
     });
 };
+
+export const useGetMerchantDashboardData = (filter: any) => {
+    return useQuery({
+        queryKey: ["dashboard","merchant", filter],
+        queryFn: () => merchantAPI.getDashboardData(filter),
+    });
+};

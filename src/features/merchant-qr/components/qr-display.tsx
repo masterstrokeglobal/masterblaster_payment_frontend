@@ -1,7 +1,7 @@
 "use client";
 
 import { Download, Share2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
     Card,
     CardContent,
@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { MerchantQr } from '../type';
+import QRCode from './custom-qr-code';
 
 interface QRDisplayProps {
     qrCode: MerchantQr;
@@ -21,7 +22,8 @@ interface QRDisplayProps {
 
 export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
     const [copied, setCopied] = useState(false);
-
+    const qrCodeRef = useRef(null);
+    
     const handleCopyLink = () => {
         if (qrCode?.upiId) {
             navigator.clipboard.writeText(qrCode.upiId);
@@ -29,17 +31,36 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
             setTimeout(() => setCopied(false), 2000);
         }
     };
-
+    
     const handleDownload = () => {
-        if (qrCode?.qrCode) {
-            window.open(qrCode.qrCode, "_blank");
-        }
+        if (!qrCode?.qrCode || !qrCodeRef.current) return;
+        
+        // Create a canvas from the QR code element
+        const qrElement = qrCodeRef.current;
+        
+        // Use html2canvas (you'll need to install this package)
+        import('html2canvas').then((html2canvas) => {
+            html2canvas.default(qrElement).then((canvas) => {
+                // Convert canvas to image data URL
+                const imageData = canvas.toDataURL('image/png');
+                
+                // Create a download link
+                const downloadLink = document.createElement('a');
+                downloadLink.href = imageData;
+                downloadLink.download = `qrcode_${qrCode.upiId || 'merchant'}.png`;
+                
+                // Trigger download
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            });
+        });
     };
-
+    
     const formattedDate = qrCode?.updatedAt
         ? format(new Date(qrCode.updatedAt), 'PPP p')
         : 'N/A';
-
+    
     return (
         <Card className="lg:col-span-2 border-2">
             <CardHeader className="pb-4">
@@ -58,17 +79,16 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                     </Badge>
                 </div>
             </CardHeader>
-
+            
             <CardContent>
                 <div className="bg-gradient-to-b from-white to-gray-50 rounded-xl border-2 border-gray-100 p-8">
                     <div className="flex justify-center">
-                        <div className="relative group bg-white p-6 rounded-lg shadow-sm">
-                            {qrCode?.qrCode ? (
-                                <img
-                                    src={qrCode.qrCode}
-                                    alt="Merchant QR Code"
-                                    className="w-64 h-64 object-contain"
-                                />
+                        <div 
+                            ref={qrCodeRef}
+                            className="relative group bg-white p-6 rounded-lg shadow-sm"
+                        >
+                            {qrCode?.upiId ? (
+                                <QRCode merchantQr={qrCode} />
                             ) : (
                                 <div className="w-64 h-64 flex items-center justify-center border-2 border-dashed rounded-lg">
                                     <p className="text-gray-500">No QR Code Available</p>
@@ -79,7 +99,7 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                     </div>
                 </div>
             </CardContent>
-
+            
             <CardFooter className="grid grid-cols-2 gap-4">
                 <Button
                     variant="outline"

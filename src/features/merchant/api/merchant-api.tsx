@@ -6,7 +6,14 @@ export const merchantAPI = {
             params: filter
         });
     },
-    createMerchant : async (data: any) => {
+
+    getDashboardData: async (filter:any) => {
+        return api.get("/merchant/dashboard", {
+            params: filter
+        });
+    },
+
+    createMerchant: async (data: any) => {
         return api.post("/merchant", data);
     },
 

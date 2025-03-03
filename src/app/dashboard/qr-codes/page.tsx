@@ -126,7 +126,7 @@ const MerchantQRDashboard: React.FC = () => {
                             </div>
                         )}
                     </div>
-                    <QuickActions/>
+                    <QuickActions />
                 </div>
 
                 <div className="grid lg:grid-cols-3 gap-8">
@@ -137,8 +137,8 @@ const MerchantQRDashboard: React.FC = () => {
                                 key={qr.id}
                                 onClick={() => setSelectedQRId(qr.id)}
                                 className={`p-4 rounded-lg border transition-all cursor-pointer hover:border-blue-500 ${selectedQRId === qr.id
-                                        ? 'border-blue-500 bg-blue-50'
-                                        : 'border-gray-200'
+                                    ? 'border-blue-500 bg-blue-50'
+                                    : 'border-gray-200'
                                     }`}
                             >
                                 <div className="font-medium">

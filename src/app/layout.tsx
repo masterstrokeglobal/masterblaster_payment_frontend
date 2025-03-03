@@ -25,6 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>Bolt Payments - All in one payment solution</title>
+        <script src="https://unpkg.com/@bitjson/qr-code@1.0.2/dist/qr-code.js"></script>
       </head>
       <body
         className={`${plusJarkartaSans.variable} antialiased`}

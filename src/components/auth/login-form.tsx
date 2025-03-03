@@ -43,7 +43,7 @@ const LoginForm = () => {
             onSuccess: () => {
                 const role = formValue.loginAs;
                 if (role === AdminRole.Merchant) {
-                    router.push("/dashboard/merchant-stats");
+                    router.push("/dashboard/merchant-dashboard");
                 } else {
                      router.push("/dashboard");
                 }

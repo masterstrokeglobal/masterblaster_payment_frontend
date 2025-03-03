@@ -40,7 +40,6 @@ export const merchantQrFormSchema = z.object({
     bankName: z.string().min(1, "Bank name is required"),
     upiId: z.string().min(1, "UPI ID is required"),
     ifscCode: z.string().min(1, "IFSC code is required"),
-    qrCode:z.string().url(),
     isActive: z.boolean().default(true),
 });
 

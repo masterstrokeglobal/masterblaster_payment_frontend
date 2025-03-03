@@ -1,30 +1,21 @@
 "use client";
 
-import { Loader2 } from 'lucide-react';
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import FormInput from '@/components/form/form-input';
+import FormSwitch from '@/components/form/form-switch';
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import {
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogDescription,
 } from "@/components/ui/dialog";
+import {
+    Form
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from 'lucide-react';
+import { useForm } from "react-hook-form";
 import { merchantQrFormSchema, MerchantQrFormValues } from '../type';
-import FormImage from '@/components/ui/form-image';
-import FormInput from '@/components/form/form-input';
-import FormSwitch from '@/components/form/form-switch';
 
 interface QRGenerateFormProps {
     onSubmit: (values: MerchantQrFormValues) => Promise<void>;
@@ -41,9 +32,7 @@ export const QRGenerateForm = ({ onSubmit, isGenerating, defaultValues }: QRGene
             bankName: defaultValues?.bankName ?? "",
             upiId: defaultValues?.upiId ?? "",
             ifscCode: defaultValues?.ifscCode ?? "",
-            isActive: defaultValues?.isActive ?? true,
-            qrCode: defaultValues?.qrCode ?? ""
-        }
+            isActive: defaultValues?.isActive ?? true}
     });
 
     return (
@@ -92,9 +81,7 @@ export const QRGenerateForm = ({ onSubmit, isGenerating, defaultValues }: QRGene
                         label="Active Status"
                         description="Set whether this QR code is active"
                     />
-                    
-                    <FormImage control={form.control} name='qrCode' />
-                    
+                                        
                     <DialogFooter>
                         <Button type="submit" disabled={isGenerating}>
                             {isGenerating && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
