@@ -13,16 +13,16 @@ import { useGetMerchantDashboardData } from "@/features/merchant/api/merchant-qu
 import { useAuthStore } from "@/context/auth-context"
 
 export default function Dashboard() {
-  const [dateFilter, setDateFilter] = useState("today");
+  const [dateFilter, setDateFilter] = useState("month");
+  const today = endOfDay(new Date())
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: startOfDay(new Date()),
-    to: addDays(startOfDay(new Date()), 0)
+    from: startOfMonth(today), to: today
   })
 
-  const {userDetails} = useAuthStore();
-  const {data, isLoading, isSuccess} = useGetMerchantDashboardData({
+  const { userDetails } = useAuthStore();
+  const { data, isLoading, isSuccess } = useGetMerchantDashboardData({
     merchantId: userDetails?.id,
-    startDate: dateRange?.from, 
+    startDate: dateRange?.from,
     endDate: dateRange?.to
   });
 
@@ -42,12 +42,13 @@ export default function Dashboard() {
 
   const handleDateFilterChange = (value: string) => {
     setDateFilter(value)
-    
-    const today = startOfDay(new Date())
-    
-    switch(value) {
+
+    const today = endOfDay(new Date())
+    const startOfToday = startOfDay(new Date())
+
+    switch (value) {
       case "today":
-        setDateRange({ from: today, to: endOfDay(today) })
+        setDateRange({ from: startOfToday, to: today })
         break
       case "week":
         setDateRange({ from: startOfWeek(today), to: today })
@@ -64,16 +65,7 @@ export default function Dashboard() {
     }
   }
 
-  const totalTransactions = useMemo(() => {
-    if (!merchantStats) return 0;
-    return merchantStats.completedCount + merchantStats.failedCount + merchantStats.pendingCount;
-  }, [merchantStats]);
-
-  const getStatusPercentage = (count: number) => {
-    if (!totalTransactions) return 0;
-    return Math.round((count / totalTransactions) * 100);
-  }
-
+  console.log("merchantStats", merchantStats)
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -91,15 +83,15 @@ export default function Dashboard() {
               <SelectItem value="custom">Custom Range</SelectItem>
             </SelectContent>
           </Select>
-          
-          <DatePickerWithRange 
-            dateRange={dateRange} 
+
+          <DatePickerWithRange
+            dateRange={dateRange}
             onDateRangeChange={(range) => {
               if (range?.from && range?.to) {
                 setDateFilter("custom")
                 setDateRange(range)
               }
-            }} 
+            }}
           />
         </div>
       </div>
@@ -111,16 +103,16 @@ export default function Dashboard() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-600 text-white hover:shadow-xl transition-shadow">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-emerald-100">Payin Balance</CardTitle>
+                <CardTitle className="text-sm font-medium text-emerald-100">Pay In Balance</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="text-3xl font-bold">{merchantStats ? formatCurrency(merchantStats.totalPayIn) : '₹ 0'}</span>
-                    <p className="text-xs text-emerald-100 mt-1">Total incoming transactions</p>
+                    <p className="text-xs text-emerald-100 mt-1">Total  User Deposits</p>
                   </div>
                   <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                     <Wallet className="h-6 w-6 text-white" />
@@ -131,13 +123,29 @@ export default function Dashboard() {
 
             <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-rose-500 to-rose-600 text-white hover:shadow-xl transition-shadow">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-rose-100">Payout Balance</CardTitle>
+                <CardTitle className="text-sm font-medium text-rose-100">Merchant </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="text-3xl font-bold">{merchantStats ? formatCurrency(merchantStats.totalPayOut) : '₹ 0'}</span>
-                    <p className="text-xs text-rose-100 mt-1">Total outgoing transactions</p>
+                    <p className="text-xs text-rose-100 mt-1">Total User Withdrawl </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <CreditCard className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:shadow-xl transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-rose-100">Merchat Withdrawl</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-3xl font-bold">{merchantStats ? formatCurrency(merchantStats.totalMerchantPayOut) : '₹ 0'}</span>
+                    <p className="text-xs text-rose-100 mt-1">Total Merchant Withdrawl </p>
                   </div>
                   <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                     <CreditCard className="h-6 w-6 text-white" />
@@ -174,8 +182,8 @@ export default function Dashboard() {
                   </div>
                   <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-medium">
                     {dateFilter === "custom" && dateRange?.from && dateRange?.to
-                    ? `${format(dateRange.from, "MMM d")} - ${format(dateRange.to, "MMM d, yyyy")}`
-                    : dateFilter.charAt(0).toUpperCase() + dateFilter.slice(1)}
+                      ? `${format(dateRange.from, "MMM d")} - ${format(dateRange.to, "MMM d, yyyy")}`
+                      : dateFilter.charAt(0).toUpperCase() + dateFilter.slice(1)}
                   </div>
                 </div>
               </CardHeader>
@@ -192,8 +200,8 @@ export default function Dashboard() {
                 </div>
               </CardHeader>
               <CardContent className="pt-6">
-                <TransactionDonut  failed={merchantStats?.failedCount} pending={merchantStats?.pendingCount} successful={merchantStats?.completedCount} />
-          
+                <TransactionDonut failed={merchantStats?.failedCount} pending={merchantStats?.pendingCount} successful={merchantStats?.completedCount} />
+
               </CardContent>
             </Card>
           </div>

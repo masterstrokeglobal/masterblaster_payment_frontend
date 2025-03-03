@@ -89,7 +89,14 @@ export const useUploadImage = () => {
 
 export const useGetMerchantDashboardData = (filter: any) => {
     return useQuery({
-        queryKey: ["dashboard","merchant", filter],
+        queryKey: ["dashboard", "merchant", filter],
         queryFn: () => merchantAPI.getDashboardData(filter),
+    });
+};
+
+export const useGetBarChartData = (filter: any) => {
+    return useQuery({
+        queryKey: ["dashboard", "bar-chart", filter],
+        queryFn: () => merchantAPI.getBarChartData(filter),
     });
 };

@@ -13,6 +13,12 @@ export const merchantAPI = {
         });
     },
 
+    getBarChartData: async (filter:any) => {
+        return api.get("/merchant/dashboard/bar-chart", {
+            params: filter
+        });
+    },
+
     createMerchant: async (data: any) => {
         return api.post("/merchant", data);
     },
