@@ -1,251 +1,211 @@
-"use client";
+"use client"
 
-import { Card, CardContent } from '@/components/ui/card';
-import { useDashboardStats } from '@/features/user/data/user-queries';
-import {
-    Activity,
-    ArrowDownToLine,
-    BanknoteIcon,
-    TrendingUp,
-    Users,
-    Wallet
-} from 'lucide-react';
-import React from 'react';
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useMemo, useState } from "react"
+import { DateRange } from "react-day-picker"
+import { addDays, endOfDay, format, startOfDay, startOfMonth, startOfWeek } from "date-fns"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Wallet, CreditCard, BarChart2, PieChart, Loader2 } from 'lucide-react'
+import { DatePickerWithRange } from "@/components/ui/date-range-picker"
+import { TransactionChart } from "@/features/merchant/transaction-chart"
+import { TransactionDonut } from "@/features/merchant/transaction-donut"
+import { useGetMerchantDashboardData } from "@/features/merchant/api/merchant-query"
+import { useAuthStore } from "@/context/auth-context"
 
-// Define prop types for MetricCard
-interface MetricCardProps {
-    title: string;
-    value: number;
-    prefix?: string;
-    icon: React.ElementType;
-    trend?: number;
-    trendLabel?: string;
-}
+export default function Dashboard() {
+  const [dateFilter, setDateFilter] = useState("month");
+  const today = endOfDay(new Date())
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: startOfMonth(today), to: today
+  })
 
-const MetricCard: React.FC<MetricCardProps> = ({ 
-    title, 
-    value, 
-    prefix = '₹', 
-    icon: Icon,
-    trend,
-    trendLabel
-}) => {
-    const isTrendPositive = trend && trend > 0;
-    const isTrendNegative = trend && trend < 0;
-    
-    return (
-        <Card className="relative overflow-hidden backdrop-blur-sm bg-white/50 hover:bg-white/80 transition-all duration-300 border-none shadow-md hover:shadow-lg">
-            <div className="absolute top-0 right-0 w-24 h-24 -mt-8 -mr-8 bg-blue-500/5 rounded-full" />
-            <div className="absolute bottom-0 left-0 w-16 h-16 -mb-6 -ml-6 bg-blue-500/5 rounded-full" />
-            <CardContent className="relative p-6">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100">
-                            <Icon className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <p className="text-sm font-medium text-gray-600">
-                            {title}
-                        </p>
-                    </div>
-                    {trend && (
-                        <div className={`flex items-center text-sm ${isTrendPositive ? 'text-green-600' : isTrendNegative ? 'text-red-600' : 'text-gray-600'}`}>
-                            <TrendingUp className={`w-4 h-4 mr-1 ${isTrendPositive ? '' : isTrendNegative ? 'transform rotate-180' : ''}`} />
-                            <span>{Math.abs(trend)}% {trendLabel || (isTrendPositive ? 'increase' : 'decrease')}</span>
-                        </div>
-                    )}
-                </div>
-                <div className="pl-1">
-                    <p className="text-3xl font-bold tracking-tight text-gray-900">
-                        {prefix && value !== 0 ? prefix : ''}{value.toLocaleString()}
-                    </p>
-                </div>
-            </CardContent>
-        </Card>
-    );
-};
+  const { userDetails } = useAuthStore();
+  const { data, isLoading, isSuccess } = useGetMerchantDashboardData({
+    merchantId: userDetails?.id,
+    startDate: dateRange?.from,
+    endDate: dateRange?.to
+  });
 
-// Sample chart data for visualization
-const generateChartData = () => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    return months.map(month => ({
-        name: month,
-        userDeposit: Math.floor(Math.random() * 50000) + 10000,
-        userWithdrawal: Math.floor(Math.random() * 30000) + 5000,
-        merchantPayout: Math.floor(Math.random() * 20000) + 8000,
-    }));
-};
+  const merchantStats = useMemo(() => {
+    if (isLoading) return null;
+    if (!isSuccess) return null;
+    return data?.data;
+  }, [data, isLoading, isSuccess])
 
-const TransactionSummaryChart = () => {
-    const chartData = generateChartData();
-    
-    return (
-        <Card className="col-span-2 backdrop-blur-sm bg-white/50 hover:bg-white/80 transition-all duration-300 border-none shadow-md hover:shadow-lg">
-            <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-semibold text-gray-900">Transaction Summary</h3>
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                            <span className="text-xs text-gray-600">Deposits</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                            <span className="text-xs text-gray-600">Withdrawals</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-                            <span className="text-xs text-gray-600">Payouts</span>
-                        </div>
-                    </div>
-                </div>
-                <div style={{ height: "300px" }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart
-                            data={chartData}
-                            margin={{
-                                top: 10,
-                                right: 30,
-                                left: 0,
-                                bottom: 0,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Area 
-                                type="monotone" 
-                                dataKey="userDeposit" 
-                                stackId="1" 
-                                stroke="#3b82f6" 
-                                fill="#3b82f6" 
-                                fillOpacity={0.6} 
-                            />
-                            <Area 
-                                type="monotone" 
-                                dataKey="userWithdrawal" 
-                                stackId="1" 
-                                stroke="#ef4444" 
-                                fill="#ef4444" 
-                                fillOpacity={0.6} 
-                            />
-                            <Area 
-                                type="monotone" 
-                                dataKey="merchantPayout" 
-                                stackId="1" 
-                                stroke="#f59e0b" 
-                                fill="#f59e0b" 
-                                fillOpacity={0.6} 
-                            />
-                        </AreaChart>
-                    </ResponsiveContainer>
-                </div>
-            </CardContent>
-        </Card>
-    );
-};
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  }
 
-const Dashboard: React.FC = () => {
-    const { data, isLoading } = useDashboardStats();
-    
-    const stats = data?.data;
-    
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    <p className="mt-4 text-gray-600">Loading dashboard data...</p>
-                </div>
-            </div>
-        );
+  const handleDateFilterChange = (value: string) => {
+    setDateFilter(value)
+
+    const today = endOfDay(new Date())
+    const startOfToday = startOfDay(new Date())
+
+    switch (value) {
+      case "today":
+        setDateRange({ from: startOfToday, to: today })
+        break
+      case "week":
+        setDateRange({ from: startOfWeek(today), to: today })
+        break
+      case "month":
+        setDateRange({ from: startOfMonth(today), to: today })
+        break
+      case "lifetime":
+        setDateRange({ from: new Date(2020, 0, 1), to: today })
+        break
+      default:
+        // Keep custom date range if already set
+        break
     }
-    
-    const totalMerchant = stats?.totalMerchants || 0;
-    const totalMerchantBalance = stats?.totalMerchantBalance || 0;
-    const totalDepositBalance = stats?.totalDepositAmount || 0;
-    const totalWithdrawal = stats?.totalWithdrawalAmount || 0;
+  }
 
-    // Calculate a simple percentage for demonstration
-    const depositGrowth = 8.5; // Example growth percentage
-    const withdrawalGrowth = -3.2; // Example decline percentage
-    
-    return (
-        <div className="p-8 pt-12 bg-gradient-to-br from-blue-50 to-white min-h-screen">
-            <header className="flex items-center justify-between mb-6">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Financial Dashboard</h1>
-                    <p className="text-gray-600 mt-1">Overview of your financial metrics</p>
-                </div>
-                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-md shadow-sm border border-gray-100">
-                    <Activity className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm font-medium">Last updated: Today</span>
-                </div>
-            </header>
-            
-            <div className="max-w-7xl mx-auto space-y-8">
-                {/* Primary Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <MetricCard
-                        title="Total Merchants"
-                        value={totalMerchant}
-                        icon={Users}
-                        prefix=""
-                        trend={4.2}
-                        trendLabel="this month"
-                    />
-                    <MetricCard
-                        title="Total Deposit Balance"
-                        value={totalDepositBalance}
-                        icon={BanknoteIcon}
-                        trend={depositGrowth}
-                    />
-                    <MetricCard
-                        title="Total Merchant Balance"
-                        value={totalMerchantBalance}
-                        icon={Wallet}
-                        trend={2.8}
-                    />
-                    <MetricCard
-                        title="Total Withdrawal"
-                        value={totalWithdrawal}
-                        icon={ArrowDownToLine}
-                        trend={withdrawalGrowth}
-                    />
-                </div>
-                
-                {/* Charts Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <TransactionSummaryChart />
-                    
-                    <Card className="backdrop-blur-sm bg-white/50 hover:bg-white/80 transition-all duration-300 border-none shadow-md hover:shadow-lg">
-                        <CardContent className="p-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-6">Transaction Distribution</h3>
-                            <div style={{ height: "300px" }} className="flex items-center justify-center">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart
-                                        data={[
-                                            { name: 'Deposits', value: totalDepositBalance },
-                                            { name: 'Withdrawals', value: totalWithdrawal },
-                                            { name: 'Balance', value: totalMerchantBalance },
-                                        ]}
-                                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                                    >
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="name" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Bar dataKey="value" fill="#3b82f6" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
+  console.log("merchantStats", merchantStats)
+  return (
+    <div className="space-y-6 p-4 ">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-3xl font-bold text-black-sub-heading ">Dashboard</h1>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Select value={dateFilter} onValueChange={handleDateFilterChange}>
+            <SelectTrigger className="w-full sm:w-[180px] border-indigo-200 hover:border-indigo-400 transition-colors">
+              <SelectValue placeholder="Select date range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="today">Today</SelectItem>
+              <SelectItem value="week">This Week</SelectItem>
+              <SelectItem value="month">This Month</SelectItem>
+              <SelectItem value="lifetime">Lifetime</SelectItem>
+              <SelectItem value="custom">Custom Range</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <DatePickerWithRange
+            dateRange={dateRange}
+            onDateRangeChange={(range) => {
+              if (range?.from && range?.to) {
+                setDateFilter("custom")
+                setDateRange(range)
+              }
+            }}
+          />
         </div>
-    );
-};
+      </div>
 
-export default Dashboard;
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <Loader2 className="h-8 w-8  animate-spin" />
+          <span className="ml-2 text-lg ">Loading dashboard data...</span>
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-600 text-white hover:shadow-xl transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-emerald-100">Pay In Balance</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-3xl font-bold">{merchantStats ? formatCurrency(merchantStats.totalPayIn) : '₹ 0'}</span>
+                    <p className="text-xs text-emerald-100 mt-1">Total  User Deposits</p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <Wallet className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-rose-500 to-rose-600 text-white hover:shadow-xl transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-rose-100">User Withdrawl </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-3xl font-bold">{merchantStats ? formatCurrency(merchantStats.totalPayOut) : '₹ 0'}</span>
+                    <p className="text-xs text-rose-100 mt-1">Total User Withdrawl </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <CreditCard className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:shadow-xl transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-rose-100">Merchat Withdrawl</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-3xl font-bold">{merchantStats ? formatCurrency(merchantStats.totalMerchantPayOut) : '₹ 0'}</span>
+                    <p className="text-xs text-rose-100 mt-1">Total Merchant Withdrawl </p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <CreditCard className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-indigo-500 to-indigo-600 text-white hover:shadow-xl transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-indigo-100">Wallet Balance</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <span className="text-3xl font-bold">{merchantStats ? formatCurrency(merchantStats.wallet) : '₹ 0'}</span>
+                    <p className="text-xs text-indigo-100 mt-1">Available balance</p>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <Wallet className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="lg:col-span-2">
+              <CardHeader className="border-b border-gray-100 pb-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <BarChart2 className="h-5 w-5 text-indigo-600" />
+                    <CardTitle className="text-indigo-700">Transaction Statistics</CardTitle>
+                  </div>
+                  <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-medium">
+                    {dateFilter === "custom" && dateRange?.from && dateRange?.to
+                      ? `${format(dateRange.from, "MMM d")} - ${format(dateRange.to, "MMM d, yyyy")}`
+                      : dateFilter.charAt(0).toUpperCase() + dateFilter.slice(1)}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <TransactionChart />
+              </CardContent>
+            </Card>
+
+            <Card className="transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between border-b border-gray-100 pb-4">
+                <div className="flex items-center gap-2">
+                  <PieChart className="h-5 w-5 " />
+                  <CardTitle className="">Transaction Status</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <TransactionDonut failed={merchantStats?.failedCount} pending={merchantStats?.pendingCount} successful={merchantStats?.completedCount} />
+              </CardContent>
+            </Card>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
