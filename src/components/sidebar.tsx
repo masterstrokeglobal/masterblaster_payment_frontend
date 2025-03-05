@@ -39,7 +39,7 @@ const adminMenuItems: MenuItem[] = [
     {
         name: 'Transactions',
         icon: Users,
-        link: '/dashboard/transactions',
+        link: '/dashboard/admin-transactions',
     },
     //payouts
     {

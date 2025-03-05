@@ -1,5 +1,6 @@
 "use client";
 
+import Combobox from "@/components/ui/combobox";
 import DataTable from "@/components/ui/data-table-server";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,28 +12,38 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { useGetAllTransactions } from "@/features/transaction/query/transactions-queries";
+import transactionColumns from "@/features/user/components/transaction-columns";
+import { useGetAllUsers } from "@/features/user/data/user-queries";
+import Merchant from "@/models/merchant";
 import { Transaction, TransactionStatus, TransactionType } from "@/models/transaction";
 import { Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { useGetAllTransactions } from "./query/transactions-queries";
-import transactionColumns from "../user/components/transaction-columns";
-import { useAuthStore } from "@/context/auth-context";
-import { AdminRole } from "@/models/admin";
 
 
-type Props = {
-    userId?: string;
-};
-
-const TransactionTable = ({ userId }: Props) => {
+const AdminTransactionTable = () => {
+    const [merchanntId, setMerchanntId] = useState<string | undefined>(undefined);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [type, setType] = useState<string | "">("");
     const [status, setStatus] = useState<string | "">("");
-    const { userDetails } = useAuthStore();
 
-    const merchanntId = userDetails?.role === AdminRole.Merchant ? userDetails?.id : userId;
+    const { data:merchantData, isSuccess:isMerchantSuccess } = useGetAllUsers({
+        page: page,
+        search: search,
+    });
 
+    const merchantOptions = useMemo(() => {
+        if (isMerchantSuccess && merchantData?.data?.merchants) {
+            return Array.from(merchantData.data.merchants).map((user: any) => new Merchant(user)).map((merchant: Merchant) => {
+                return {
+                    value: merchant.id!.toString(),
+                    label: merchant.name!
+                }
+            });
+        }
+        return [];
+    }, [ merchantData, isMerchantSuccess]);
     // Fetch all transactions with pagination, search query, and filters
     const { data, isSuccess, isFetching } = useGetAllTransactions({
         page: page,
@@ -98,6 +109,8 @@ const TransactionTable = ({ userId }: Props) => {
                         </SelectContent>
                     </Select>
 
+                   <Combobox options={merchantOptions} value={merchanntId} onChange={(value)=>setMerchanntId(value)}  placeholder="All Merchants" />
+ 
                     {/* ShadCN Select for Status Filter */}
                     <Select value={status} onValueChange={(val) => {
                         setStatus(val as TransactionStatus)
@@ -132,4 +145,4 @@ const TransactionTable = ({ userId }: Props) => {
     );
 };
 
-export default TransactionTable;
+export default AdminTransactionTable;

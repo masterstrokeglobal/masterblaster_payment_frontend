@@ -2,15 +2,18 @@ import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuthStore } from "@/context/auth-context";
 import { useDashboardStats, useLogout } from "@/features/user/data/user-queries";
+import { cn } from "@/lib/utils";
 import { CircleUser, Menu, Wallet2 } from "lucide-react";
 import Link from "next/link";
 
 const Navbar = () => {
     const { data, isLoading } = useDashboardStats();
+    const { userDetails } = useAuthStore();
     const { mutate } = useLogout();
-    console.log(data);
 
+    const isMerchant = userDetails?.isMerchant;
 
     return <header className="flex h-16 items-center gap-4 border-b bg-muted/40 px-4 lg:h-16 lg:px-6">
         <Sheet>
@@ -28,25 +31,25 @@ const Navbar = () => {
                 <Sidebar />
             </SheetContent>
         </Sheet>
-        <Button variant="outline-primary"  className="ml-auto">
+        {isMerchant && <Button variant="outline-primary" className="ml-auto">
             <Wallet2 className="h-5 w-5" />
             <span className="mr-2">
                 Wallet
             </span>
             {isLoading ? 'Loading...' : data ? `₹ ${data.data?.user?.wallet?.amount}` : '₹ 0'}
-        </Button>
+        </Button>}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="secondary"  className="rounded-full ml-4">
+                <Button variant="secondary" className={cn('ml-2 rounded-full', isMerchant ? 'ml-2' : 'ml-auto')}>
                     <CircleUser className="h-5 w-5" />
                     <span className="sr-only">Toggle user menu</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <Link href="/dashboard/merchant-stats">
+                {isMerchant && <Link href="/dashboard/merchant-stats">
                     <DropdownMenuItem>Profile</DropdownMenuItem>
-                </Link>
+                </Link>}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={() => {
