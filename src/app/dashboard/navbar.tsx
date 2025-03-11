@@ -6,7 +6,6 @@ import { useAuthStore } from "@/context/auth-context";
 import { useDashboardStats, useLogout } from "@/features/user/data/user-queries";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, CircleUser, Menu, Wallet2 } from "lucide-react";
-import { CircleUser } from "lucide-react";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
