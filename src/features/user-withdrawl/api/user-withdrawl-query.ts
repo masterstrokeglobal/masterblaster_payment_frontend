@@ -26,6 +26,22 @@ export const useCreateUserWithdrawal = () => {
     });
 };
 
+export const useCreateBulkPayout = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: userWithdrawalAPI.createBulkPayout,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => query.queryKey[0] === "user-withdrawals",
+            });
+            toast.success("Bulk payout created successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message ?? "Error creating bulk payout");
+        },
+    });
+};
+
 export const useGetUserWithdrawalById = (withdrawalId?: string) => {
     return useQuery({
         queryKey: ["user-withdrawals", withdrawalId],

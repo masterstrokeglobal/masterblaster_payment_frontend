@@ -13,7 +13,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { TransactionStatus, TransactionType } from "@/models/transaction";
-import { Plus, Search } from "lucide-react";
+import { FileIcon, Plus, Search } from "lucide-react";
 import React, { useMemo, useState } from "react";
 
 import { useAuthStore } from "@/context/auth-context";
@@ -22,6 +22,7 @@ import userWithdrawalColumns from "@/features/user/components/user-payout";
 import { AdminRole } from "@/models/admin";
 import { UserWithdrawal } from "@/models/user-withdrawl";
 import Link from "next/link";
+import Merchant, { APIS } from "@/models/merchant";
 
 
 const UserPaymentsTable = () => {
@@ -31,6 +32,7 @@ const UserPaymentsTable = () => {
     const { userDetails } = useAuthStore();
 
     const merchantId = userDetails?.role === AdminRole.Merchant ? userDetails?.id : undefined;
+    const merchant = userDetails as Merchant;
 
     const { data, isSuccess, isFetching } = useGetAllUserWithdrawals({
         page: page,
@@ -104,6 +106,16 @@ const UserPaymentsTable = () => {
                             >
                                 <Plus size={16} />
                                 Create Request
+                            </Button>
+                        </Link>
+                    }
+                    {merchant.hasAccessTo(APIS.USER_WITHDRAW_BULK) &&
+                        <Link href="/dashboard/user-payouts/bulk">
+                            <Button
+                                className="flex items-center gap-2"
+                            >
+                                <FileIcon size={16} />
+                                Bulk Payout
                             </Button>
                         </Link>
                     }

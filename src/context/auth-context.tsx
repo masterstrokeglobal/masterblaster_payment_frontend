@@ -1,4 +1,5 @@
 import Admin from "@/models/admin";
+import Merchant from "@/models/merchant";
 import User from "@/models/user";
 import React, {
   PropsWithChildren,
@@ -8,10 +9,10 @@ import React, {
 } from "react";
 
 interface UserContextType {
-  userDetails: Admin  | null;
+  userDetails: Admin | Merchant | null;
   setLoadig: (loading: boolean) => void;
   loading: boolean;
-  setUser: (details: Admin  | null) => void;
+  setUser: (details: Admin | Merchant | null) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -25,14 +26,13 @@ export const useAuthStore = () => {
 };
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
-  const [userDetails, setUser] = useState<Admin  | null>(null);
+  const [userDetails, setUser] = useState<Admin | Merchant | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const updateUser = (details: Admin  | null) => {
+  const updateUser = (details: Admin | Merchant | null) => {
     setIsLoading(false);
     setUser(details);
   };
-  console.log("state update",userDetails);
 
   const value: UserContextType = {
     userDetails,

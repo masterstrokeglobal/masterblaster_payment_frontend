@@ -100,3 +100,40 @@ export const useGetBarChartData = (filter: any) => {
         queryFn: () => merchantAPI.getBarChartData(filter),
     });
 };
+
+export const useUpdateMerchant = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: merchantAPI.updateMerchant,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    return query.queryKey[0] === "merchants";
+                },
+            });
+            toast.success("Merchant updated successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data.message ?? "Error updating merchant");
+        },
+    });
+}
+
+export const useUpdateRestrictionsMerchant = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: merchantAPI.updateRestrictionsMerchant,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    return query.queryKey[0] === "merchants";
+                },
+            });
+            toast.success("Merchant restrictions updated successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data.message ?? "Error updating merchant restrictions");
+        },
+    });
+};

@@ -38,7 +38,6 @@ const MerchantForm = ({ defaultValues, onSubmit, isLoading }: Props) => {
         resolver: zodResolver(createMerchantInputSchema),
         defaultValues,
     });
-    console.log(form.formState.errors);
 
     const handleSubmit = (data: MerchantFormValues) => {
         onSubmit(data);

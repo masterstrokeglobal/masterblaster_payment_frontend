@@ -7,6 +7,7 @@ const useLogin = () => {
     const { data, isSuccess, isError } = useGetCurrentUser();
 
     useEffect(() => {
+        console.log(data);
         if (isSuccess) {
             setUser(data);
         }

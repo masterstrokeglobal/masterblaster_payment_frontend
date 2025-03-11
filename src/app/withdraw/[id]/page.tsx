@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { WithdrawalType } from "@/models/user-withdrawl";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useCreateUserWithdrawal } from "@/features/user-withdrawl/api/user-withdrawl-query";
 import FormProvider from "@/components/form/form-provider";
 import FormInput from "@/components/form/form-input";
@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 import { motion } from "motion/react";
+import { useGetMerchantById } from "@/features/merchant/api/merchant-query";
+import Merchant, { APIS } from "@/models/merchant";
 
 const withdrawalFormSchema = z
     .object({
@@ -45,7 +47,15 @@ const WithdrawalForm = () => {
     const { id: merchantId } = useParams();
     const [success, setSuccess] = useState(false);
 
-    console.log("merchantId", merchantId);
+    const { data, isSuccess } = useGetMerchantById(merchantId!.toString());
+
+    const merchant = useMemo(() => {
+        if(isSuccess) {
+            return new Merchant(data?.data);
+        }
+        return null;
+    }, [data]);
+
     const form = useForm<WithdrawalFormValues>({
         resolver: zodResolver(withdrawalFormSchema),
         defaultValues: {
@@ -57,7 +67,7 @@ const WithdrawalForm = () => {
             ifscCode: "",
             bankName: "",
             userEmail: "",
-            userName:""
+            userName: ""
         }
     });
 
@@ -65,7 +75,7 @@ const WithdrawalForm = () => {
     const watchType = form.watch("type");
 
     const onSubmit = (data: WithdrawalFormValues) => {
-        mutate({...data,merchantId}, {
+        mutate({ ...data, merchantId }, {
             onSuccess: () => {
                 setSuccess(true);
                 setTimeout(() => {
@@ -77,7 +87,10 @@ const WithdrawalForm = () => {
         });
     };
 
-    console.log("merchantId", form.formState.errors);
+    if (merchant?.isRestricted(APIS.USER_WITHDRAW)) {
+        return <h1>Restricted</h1>;
+    }   
+
     return (
         <Card className="max-w-xl mx-auto border mt-10 border-gray-200 shadow-lg bg-white rounded-lg">
             <CardHeader className="bg-primary text-white py-4 rounded-t-lg">

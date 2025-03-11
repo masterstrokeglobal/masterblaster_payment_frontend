@@ -14,6 +14,7 @@ import FormInput from "@/components/form/form-input";
 import { useGetMerchantById } from "@/features/merchant/api/merchant-query";
 import { useGetAllMerchantQrs } from "@/features/merchant-qr/api/merchant-qr-query";
 import MerchantQRCarousel from "@/features/merchant-qr/components/qr-carousel";
+import Merchant, { APIS } from "@/models/merchant";
 
 const paymentFormSchema = z.object({
   pgId: z.string().min(1, { message: "Transaction ID is required" }),
@@ -29,17 +30,20 @@ const defaultValues: PaymentFormValues = {
 
 const PaymentPage = () => {
   const { id: merchantId } = useParams();
-  
+
   const [isSuccess, setIsSuccess] = useState(false);
   const { mutate, data, isPending } = useCreateTransaction();
   const { data: merchantData } = useGetMerchantById(merchantId!.toString());
 
-  const merchant = merchantData?.data;
+  const merchant = new Merchant(merchantData?.data);
+
 
   const form = useForm({
     resolver: zodResolver(paymentFormSchema),
     defaultValues,
   });
+
+
 
   const onSubmit = (formValue: PaymentFormValues) => {
     mutate(
@@ -62,6 +66,9 @@ const PaymentPage = () => {
     );
   };
 
+  if (merchant.isRestricted(APIS.MERCHANT_PAYIN)) return <h1>Restricted</h1>;
+
+
   return (
     <section className="p-4 flex justify-center items-center min-h-screen bg-gray-50">
       <Card className="w-full max-w-md relative overflow-hidden">
@@ -80,7 +87,7 @@ const PaymentPage = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-         
+
 
             <FormProvider
               className="space-y-4"

@@ -4,7 +4,8 @@ import User from '@/models/user';
 import { AxiosError } from 'axios';
 import { toast } from 'sonner';
 import { error } from 'console';
-import Admin from '@/models/admin';
+import Admin, { AdminRole } from '@/models/admin';
+import Merchant from '@/models/merchant';
 
 
 
@@ -21,13 +22,13 @@ export const useRegisterUser = () => {
 // Current user fetch hook
 export const useGetCurrentUser = () => {
     return useQuery({
-        queryKey: ['user'],
+        queryKey: ['user', "my-details"],
         retry: (failureCount) => {
             return failureCount < 3;
         },
         queryFn: async () => {
             const response = await userAPI.getCurrentUser();
-            const user = new Admin(response.data?.user);
+            const user = response.data.role === AdminRole.Merchant ? new Merchant(response.data) : new Admin(response.data);
             return user;
         },
     });

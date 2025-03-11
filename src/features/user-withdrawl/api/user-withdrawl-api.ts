@@ -1,4 +1,5 @@
 import api from "@/lib/axios/instance";
+import { create } from "domain";
 
 export const userWithdrawalAPI = {
     getAllUserWithdrawals: async (filter: any) => {
@@ -15,6 +16,15 @@ export const userWithdrawalAPI = {
     updateUserWithdrawalStatus: async (withdrawalId: string, data: any) => {
         return api.patch(`/user-withdrawal/${withdrawalId}`, data);
     },
+
+    createBulkPayout: async (data: any) => {
+        return api.post("/user-withdrawal/bulk", data,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
+
 };
 
 export default userWithdrawalAPI;

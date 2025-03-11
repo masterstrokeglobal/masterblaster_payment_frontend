@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { BriefcaseBusiness, Building, Clock, DollarSign, Home, LucideIcon, QrCodeIcon, Repeat1, Users } from 'lucide-react';
+import { BriefcaseBusiness, Building, Clock, Code2, DollarSign, Home, KeyIcon, LucideIcon, QrCodeIcon, Repeat1, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -13,6 +13,7 @@ import {
 import { useAuthStore } from '@/context/auth-context';
 import Admin, { AdminRole } from '@/models/admin';
 import Logo from "./common/logo";
+import Merchant, { APIS } from "@/models/merchant";
 
 interface SubMenuItem {
     name: string;
@@ -56,42 +57,23 @@ const adminMenuItems: MenuItem[] = [
 ];
 
 
-const merchantMenuItems: MenuItem[] = [
-    {
-        name: 'Dashboard',
-        icon: Home,
-        link: '/dashboard/merchant-dashboard',
-    },
-    {
-        name: 'Transactions',
-        icon: Users,
-        link: '/dashboard/transactions',
-    },
-    {
-        name: 'Payouts',
-        icon: DollarSign,
-        link: '/dashboard/payouts',
-    },
-    {
-        name: "User Payouts",
-        icon: DollarSign,
-        link: '/dashboard/user-payouts'
-    },
-    {
-        name: "QR Codes",
-        icon: QrCodeIcon,
-        link: '/dashboard/qr-codes'
-    },
-    {
-        name: "Payout Options",
-        icon: Repeat1,
-        link: '/dashboard/payout-options'
-    }
-];
-
 
 
 const Sidebar = ({ className }: PropsWithClassName) => {
+
+    const merchantMenuItems: MenuItem[] = [
+        {
+            name: 'Dashboard',
+            icon: Home,
+            link: '/dashboard/merchant-dashboard',
+        },
+        {
+            name: 'Transactions',
+            icon: Users,
+            link: '/dashboard/transactions',
+        },
+    ];
+
     const pathname = usePathname();
     const { userDetails } = useAuthStore();
 
@@ -150,6 +132,55 @@ const Sidebar = ({ className }: PropsWithClassName) => {
     };
 
     const menuItems = userDetails?.role === AdminRole.SUPER_ADMIN ? adminMenuItems : merchantMenuItems;
+
+    const isMerchant = userDetails?.role != AdminRole.SUPER_ADMIN;
+
+    if (isMerchant) {
+        const merchant = userDetails as Merchant;
+
+        if (!merchant.restrictedApi?.includes(APIS.MERCHANT_QR)) {
+            menuItems.push({
+                name: "QR Codes",
+                icon: QrCodeIcon,
+                link: '/dashboard/qr-codes'
+            });
+        }
+
+        if (!merchant.restrictedApi?.includes(APIS.USER_WITHDRAW)) {
+            menuItems.push({
+                name: "User Payouts",
+                icon: DollarSign,
+                link: '/dashboard/user-payouts'
+            });
+        }
+
+        if (!merchant.restrictedApi?.includes(APIS.MERCHANT_PAYOUT)) {
+            menuItems.push({
+                name: 'Payouts',
+                icon: DollarSign,
+                link: '/dashboard/payouts',
+            });
+            menuItems.push({
+                name: "Payout Options",
+                icon: Repeat1,
+                link: '/dashboard/payout-options'
+            });
+        }
+
+        if (!merchant.restrictedApi?.includes(APIS.DEVELOPER_API)) {
+            menuItems.push({
+                name: "Available API's",
+                icon: Code2,
+                link: '/dashboard/apis'
+            },
+                {
+                    name: "Developer Settings",
+                    icon: KeyIcon,
+                    link: '/dashboard/api-key'
+                });
+        }
+
+    }
 
     return (
         <div className={cn("flex  flex-col ", className)}>

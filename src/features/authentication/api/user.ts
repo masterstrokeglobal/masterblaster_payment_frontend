@@ -23,7 +23,7 @@ export const userAPI = {
         return api.post("/auth/logout");
     },
     getCurrentUser: async () => {
-        return await api.get("/dashboard");
+        return await api.get("/auth/my-details");
     },
     updateUser: async (data: RegisterPayload) => {
         return await api.patch("/user", data);

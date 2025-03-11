@@ -7,18 +7,23 @@ export const merchantAPI = {
         });
     },
 
-    getDashboardData: async (filter:any) => {
+    getDashboardData: async (filter: any) => {
         return api.get("/merchant/dashboard", {
             params: filter
         });
     },
 
-    getBarChartData: async (filter:any) => {
+    getBarChartData: async (filter: any) => {
         return api.get("/merchant/dashboard/bar-chart", {
             params: filter
         });
     },
-
+    updateMerchant: async (data: any) => {
+        return api.patch(`/merchant/${data.id}`, data);
+    },
+    updateRestrictionsMerchant: async (data: any) => {
+        return api.patch(`/merchant/restricted-api/${data.id}`, data);
+    },
     createMerchant: async (data: any) => {
         return api.post("/merchant", data);
     },

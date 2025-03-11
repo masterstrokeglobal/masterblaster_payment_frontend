@@ -5,13 +5,18 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuthStore } from "@/context/auth-context";
 import { useDashboardStats, useLogout } from "@/features/user/data/user-queries";
 import { cn } from "@/lib/utils";
-import { CircleUser, Menu, Wallet2 } from "lucide-react";
+import { ArrowLeft, CircleUser, Menu, Wallet2 } from "lucide-react";
+import { CircleUser } from "lucide-react";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
     const { data, isLoading } = useDashboardStats();
     const { userDetails } = useAuthStore();
     const { mutate } = useLogout();
+    const router = useRouter();
+
 
     const isMerchant = userDetails?.isMerchant;
 
@@ -31,6 +36,12 @@ const Navbar = () => {
                 <Sidebar />
             </SheetContent>
         </Sheet>
+        <Button variant="outline-primary" onClick={() => router.back()}
+            className="rounded-full">
+            <ArrowLeft className="h-5 w-5" />
+            Back
+        </Button>
+
         {isMerchant && <Button variant="outline-primary" className="ml-auto">
             <Wallet2 className="h-5 w-5" />
             <span className="mr-2">
