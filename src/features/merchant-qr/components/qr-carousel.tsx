@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Carousel,
     CarouselContent,
@@ -6,13 +5,13 @@ import {
     CarouselNext,
     CarouselPrevious
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllMerchantQrs } from '../api/merchant-qr-query';
 import QRCode from './custom-qr-code';
 
 type Props = {
     merchantId: string;
 }
+
 const MerchantQRCarousel = ({ merchantId }: Props) => {
     const { data: merchantQrs, isLoading, error } = useGetAllMerchantQrs({ isActive: true, merchantId: merchantId });
 
@@ -29,7 +28,9 @@ const MerchantQRCarousel = ({ merchantId }: Props) => {
             <Carousel className="w-full">
                 <CarouselContent>
                     {merchantQrs.data.map((qr: any) => (
-                        <QRCode key={qr.id} merchantQr={qr} />
+                        <CarouselItem key={qr.id} className="flex justify-center">
+                            <QRCode merchantQr={qr} />
+                        </CarouselItem>
                     ))}
                 </CarouselContent>
                 <CarouselPrevious />

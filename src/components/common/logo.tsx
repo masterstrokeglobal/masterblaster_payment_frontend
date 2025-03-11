@@ -1,9 +1,10 @@
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { appName, cn } from "@/lib/utils";
 
 const Logo = ({ className }: PropsWithClassName) => {
     return (
-        <Image width={120} height={120} src="/images/text-logo.svg" className={cn(" w-full", className)} alt="logo" />
+        <div className={cn('text-lg font-bold', className)}>
+            {appName}
+        </div>
     );
 }
 

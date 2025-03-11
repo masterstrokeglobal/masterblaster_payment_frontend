@@ -43,8 +43,6 @@ const PaymentPage = () => {
     defaultValues,
   });
 
-
-
   const onSubmit = (formValue: PaymentFormValues) => {
     mutate(
       {

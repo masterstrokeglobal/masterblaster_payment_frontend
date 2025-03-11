@@ -5,6 +5,7 @@ import "./globals.css";
 import QueryProvider from '@/lib/query-provider';
 import { Toaster } from 'sonner';
 import { UserProvider } from '@/context/auth-context';
+import { appName } from '@/lib/utils';
 
 
 
@@ -24,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Bolt Payments - All in one payment solution</title>
+        <title>{appName} - All in one payment solution</title>
         <script src="https://unpkg.com/@bitjson/qr-code@1.0.2/dist/qr-code.js"></script>
       </head>
       <body

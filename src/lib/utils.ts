@@ -5,17 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const genderOptions = [
-  { label: "Male", value: "male" },
-  { label: "Female", value: "female" },
-  { label: "Other", value: "other" }
-];
-
-export const pronounOptions = [
-  { label: "He/Him", value: "He/Him" },
-  { label: "She/Her", value: "She/Her" },
-  { label: "They/Them", value: "They/Them" },
-  { label: "Other", value: "Other" }
-];
-
 export const randomID = () => Math.random().toString(36).substr(2, 9);
+
+export const appName = process.env.NEXT_PUBLIC_APP_NAME || "Bolt Payments";

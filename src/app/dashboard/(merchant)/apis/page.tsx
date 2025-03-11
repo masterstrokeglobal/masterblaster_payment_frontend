@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Search } from 'lucide-react';
+import { appName } from '@/lib/utils';
 
 type ApiCategory = 'payment' | 'travel';
 
@@ -68,7 +69,7 @@ const ApiMarketplace: React.FC = () => {
           <p className="text-sm mt-1">Integrate powerful services into your applications</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-white text-sm bg-blue-500 px-3 py-1 rounded-full font-medium">SoftPayments</span>
+          <span className="text-white text-sm bg-blue-500 px-3 py-1 rounded-full font-medium">{appName}</span>
         </div>
       </div>
       
@@ -225,7 +226,7 @@ const ApiCard: React.FC<ApiCardProps> = ({ api }) => {
                   From Wallet To Bank
                 </div>
                 <div className="text-xs text-indigo-900 mt-1">
-                  with SoftPayments
+                  with {appName}
                 </div>
               </div>
             </div>

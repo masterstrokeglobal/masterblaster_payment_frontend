@@ -16,6 +16,7 @@ import { CheckCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useGetMerchantById } from "@/features/merchant/api/merchant-query";
 import Merchant, { APIS } from "@/models/merchant";
+import { appName } from "@/lib/utils";
 
 const withdrawalFormSchema = z
     .object({
@@ -50,7 +51,7 @@ const WithdrawalForm = () => {
     const { data, isSuccess } = useGetMerchantById(merchantId!.toString());
 
     const merchant = useMemo(() => {
-        if(isSuccess) {
+        if (isSuccess) {
             return new Merchant(data?.data);
         }
         return null;
@@ -89,7 +90,7 @@ const WithdrawalForm = () => {
 
     if (merchant?.isRestricted(APIS.USER_WITHDRAW)) {
         return <h1>Restricted</h1>;
-    }   
+    }
 
     return (
         <Card className="max-w-xl mx-auto border mt-10 border-gray-200 shadow-lg bg-white rounded-lg">
@@ -172,7 +173,7 @@ const WithdrawalForm = () => {
 
             {/* Powered By Section */}
             <div className="text-center text-gray-500 text-sm py-3 border-t">
-                Powered by <span className="font-semibold text-blue-600">SOFT Payments</span>
+                Powered by <span className="font-semibold text-blue-600">{appName}</span>
             </div>
         </Card>
     );

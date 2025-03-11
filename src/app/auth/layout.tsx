@@ -1,5 +1,6 @@
 "use client";
 
+import { appName } from "@/lib/utils";
 import { CreditCard, Globe, ShieldCheck, Zap } from "lucide-react";
 import { PropsWithChildren } from "react";
 
@@ -40,7 +41,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
               Seamless Payments Made Simple
             </h1>
             <p className="text-black-caption text-lg max-w-md">
-              Join thousands of businesses using Bolt Payments to process transactions securely and efficiently. Experience the future of payment processing today.
+              Join thousands of businesses using {appName} to process transactions securely and efficiently. Experience the future of payment processing today.
             </p>
           </div>
 
