@@ -49,11 +49,11 @@ const adminMenuItems: MenuItem[] = [
         link: '/dashboard/payouts',
     },
 
-    /* {
-        name:"Holidays",
-        icon: Clock,
-        link:'/dashboard/holiday'
-    } */
+    {
+        name: 'Employee',
+        icon: Users,
+        link: '/dashboard/employee',
+    },
 ];
 
 

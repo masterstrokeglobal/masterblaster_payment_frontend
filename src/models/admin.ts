@@ -3,6 +3,7 @@ export enum AdminRole {
     SUPER_ADMIN = "admin",
     Merchant = "merchant",
     AGENT = "agent",
+    EMPLOYEE = "employee",
 }
 
 interface AdminParams {
