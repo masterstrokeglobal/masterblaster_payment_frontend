@@ -21,6 +21,8 @@ class Merchant {
     companyName?: string;
     companyAddress?: string;
     companyGSTNumber?: string;
+    companyPanNumber?: string;
+    companyCINNumber?: string;
     platformFee?: number;
     profileImage?: string;
     role?: AdminRole;
@@ -43,6 +45,8 @@ class Merchant {
         this.companyName = params.companyName;
         this.companyAddress = params.companyAddress;
         this.companyGSTNumber = params.companyGSTNumber;
+        this.companyPanNumber = params.companyPanNumber;
+        this.companyCINNumber = params.companyCINNumber;
         this.platformFee = params.platformFeePercentage;
         this.profileImage = params.profileImage;
         this.isVerified = params.isVerified;

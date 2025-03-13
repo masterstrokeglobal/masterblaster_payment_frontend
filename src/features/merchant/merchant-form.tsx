@@ -3,16 +3,19 @@ import { Button } from "@/components/ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { string, z } from "zod";
 import FormInput from "@/components/form/form-input";
 import FormProvider from "@/components/form/form-provider";
 import FormPassword from "@/components/form/form-password";
+import FormSwitch from "@/components/form/form-switch";
 
 // Define schema for merchant input
 const passwordValidation = z
     .string()
-    .min(8)
-    .max(100)
+    .refine((val) => val === '' || val === undefined || val.length >= 8, {
+        message: "Password must be at least 8 characters long",
+    });
+
 export const createMerchantInputSchema = z
     .object({
         id: z.string().optional(),
@@ -20,6 +23,9 @@ export const createMerchantInputSchema = z
         email: z.string().email(),
         password: passwordValidation,
         companyName: z.string().max(100),
+        companyPanNumber: z.string().optional(),
+        companyCINNumber: z.string().optional(),
+        isVerified: z.boolean().optional(),
         companyAddress: z.string().max(200),
         companyGSTNumber: z.string().optional(),
         platformFeePercentage: z.coerce.number().positive(),
@@ -69,11 +75,30 @@ const MerchantForm = ({ defaultValues, onSubmit, isLoading }: Props) => {
                     name="companyGSTNumber"
                     label="Company GST Number (Optional)"
                 />
+
+                <FormInput
+                    control={form.control}
+                    name="companyPanNumber"
+                    label="Company PAN Number (Optional)"
+                />
+
+                <FormInput
+                    control={form.control}
+                    name="companyCINNumber"
+                    label="Company CIN Number (Optional)"
+                />
+
                 <FormInput
                     control={form.control}
                     name="platformFeePercentage"
                     type="number"
                     label="Platform Fee"
+                />
+                <FormSwitch
+                    control={form.control}
+                    name="isVerified"
+                    label="Is Verified"
+                    description="If the merchant is verified, it will be shown in the dashboard"
                 />
             </div>
 

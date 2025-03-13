@@ -11,7 +11,8 @@ import { Badge } from '@/components/ui/badge';
 import { useGetMerchantById, useUpdateMerchant } from '@/features/merchant/api/merchant-query';
 import { APIS } from '@/models/merchant';
 import LoadingScreen from '@/components/common/loading-screen';
-import { AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Edit2,  XCircle } from 'lucide-react';
+import Link from 'next/link';
 
 // Define types for the merchant data
 interface Wallet {
@@ -103,11 +104,17 @@ const MerchantDetails = (): JSX.Element => {
     return (
         <div className="container mx-auto py-6 px-4">
             {/* Merchant Profile Card */}
-            <Card className="mb-6">
+            <Card className="mb-6 relative">
+                <Link href={`/dashboard/merchants/${id}/edit`}>
+                    <Button variant="outline" className="absolute top-2 right-2">
+                        <Edit2 className="h-4 w-4" />
+                    </Button>
+                </Link>
+
                 <CardHeader className="flex flex-row items-center gap-4">
-                    <Avatar className="h-16 w-16">
+                    <Avatar className="h-16 w-16 ">
                         <AvatarImage src={data?.data?.profileImage || ''} alt={merchantName} />
-                        <AvatarFallback className="text-lg">{initials}</AvatarFallback>
+                        <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
                     <div>
                         <CardTitle className="flex items-center gap-2">
