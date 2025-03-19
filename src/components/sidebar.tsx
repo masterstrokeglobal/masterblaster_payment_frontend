@@ -54,6 +54,28 @@ const adminMenuItems: MenuItem[] = [
         icon: Users,
         link: '/dashboard/employee',
     },
+
+    {
+        name: "API Services",
+        icon: Code2,
+        link: '/dashboard/api-service',
+    },
+    {
+        name: "API Requests",
+        icon: Code2,
+        link: '/dashboard/api-requests',
+    },
+    {
+        name: "Login Logs",
+        icon: Clock,
+        link: '/dashboard/login-log',
+    },
+    {
+        name: "Surcharge",
+        icon: DollarSign,
+        link: '/dashboard/surcharge',
+    },
+
 ];
 
 

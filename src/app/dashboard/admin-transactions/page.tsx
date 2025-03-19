@@ -109,7 +109,7 @@ const AdminTransactionTable = () => {
                         </SelectContent>
                     </Select>
 
-                   <Combobox options={merchantOptions} value={merchanntId} onChange={(value)=>setMerchanntId(value)}  placeholder="All Merchants" />
+                   <Combobox options={merchantOptions} value={merchanntId} onChange={(value: React.SetStateAction<string | undefined>)=>setMerchanntId(value)}  placeholder="All Merchants" />
  
                     {/* ShadCN Select for Status Filter */}
                     <Select value={status} onValueChange={(val) => {

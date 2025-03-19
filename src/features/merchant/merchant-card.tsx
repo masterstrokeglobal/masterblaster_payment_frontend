@@ -67,7 +67,6 @@ const MerchantProfileCard = ({ merchant }: { merchant: Merchant }) => {
             <Section title="Basic Information">
               <InfoItem icon={User} label="Full Name" value={merchant.name} />
               <InfoItem icon={Mail} label="Email Address" value={merchant.email} />
-              <InfoItem icon={Phone} label="Phone Number" value={merchant.phone} />
               {merchant.wallet?.amount!=undefined && (<InfoItem icon={Percent} label="Wallet Balance" value={`Rs. ${merchant.wallet?.getFormattedAmount()}`} />)}
             </Section>
 
@@ -82,18 +81,14 @@ const MerchantProfileCard = ({ merchant }: { merchant: Merchant }) => {
               <InfoItem
                 icon={Percent}
                 label="Platform Fee"
-                value={merchant.platformFee ? `${merchant.platformFee}%` : 'N/A'}
+                value={merchant.platformFeePercentage ? `${merchant.platformFeePercentage}%` : 'N/A'}
               />
             </Section>
           </div>
 
           <div className="space-y-6">
             <Section title="Additional Information">
-              <InfoItem
-                icon={ImageIcon}
-                label="Profile Image"
-                value={merchant.profileImage ? 'Available' : 'Not Available'}
-              />
+            
               <InfoItem
                 icon={Calendar}
                 label="Account Created"

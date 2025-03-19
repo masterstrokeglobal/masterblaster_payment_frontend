@@ -19,7 +19,7 @@ const Navbar = () => {
 
     const isMerchant = userDetails?.isMerchant;
 
-    return <header className="flex h-16 items-center gap-4 border-b bg-muted/40 px-4 lg:h-16 lg:px-6">
+    return <header className="flex h-16 items-center gap-4 sticky top-0  border-b bg-muted px-4 lg:h-16 z-20 lg:px-6">
         <Sheet>
             <SheetTrigger asChild>
                 <Button

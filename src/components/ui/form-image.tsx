@@ -37,13 +37,19 @@ const FormImage = <
     const uploadImageMutation = useUploadQrImage();
     // Watch the field value to sync with form state
     const fieldValue = watch(name);
-
     // Reset preview when field value is empty
     useEffect(() => {
         if (!fieldValue) {
             setPreviewUrl(null);
         }
     }, [fieldValue]);
+
+    // if field value is not null, set the preview url
+    useEffect(() => {
+        if (fieldValue) {
+            setPreviewUrl(fieldValue);
+        }
+    },[]);
 
     const handleUpload = useCallback((file: File) => {
         const formData = new FormData();

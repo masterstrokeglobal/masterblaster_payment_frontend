@@ -24,11 +24,7 @@ const merchantColumns: ColumnDef<Merchant>[] = [
         accessorKey: "email",
         cell: ({ row }) => <div className="text-[#6B7280] w-48 truncate">{row.original.email}</div>,
     },
-    {
-        header: "PHONE",
-        accessorKey: "phone",
-        cell: ({ row }) => <div className="text-[#6B7280]">{row.original.phone || 'N/A'}</div>,
-    },
+    
     {
         header: "COMPANY NAME",
         accessorKey: "companyName",

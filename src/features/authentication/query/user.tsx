@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { RegisterPayload, userAPI } from '../api/user';
 import User from '@/models/user';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'sonner';
 import { error } from 'console';
 import Admin, { AdminRole } from '@/models/admin';
@@ -61,7 +61,7 @@ export const useUpdateUser = () => {
 };
 
 export const useAdminLogin = () => {
-    return useMutation<unknown, AxiosError<any, any>, any>({
+    return useMutation<AxiosResponse<any, any>, AxiosError<any, any>, any>({
         mutationFn: userAPI.login,
         onSuccess: (data) => {
             toast.success("Login successful");

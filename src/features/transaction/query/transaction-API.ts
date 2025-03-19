@@ -1,4 +1,5 @@
 import api from "@/lib/axios/instance";
+import { getContentType } from "@/lib/utils";
 
 
 export type UpdateTransactionPayload = {
@@ -16,6 +17,14 @@ export const transactionAPI = {
 
     getAlltransaction: async (filter?: Record<string, any>) => {
         return api.get("/transaction", { params: filter });
+    },
+
+    getTransactionDownload: async (filter?: any) => {
+        return api.get("/transaction/download", {
+            params: filter, responseType: "arraybuffer", headers: {
+                "Content-Type": getContentType(filter.format)
+            }
+        });
     },
 
     getTransactionById: async (id: string) => {

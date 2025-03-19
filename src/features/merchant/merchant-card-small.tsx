@@ -105,7 +105,7 @@ const MerchantDetailsCard = ({ merchant }:{merchant:Merchant}) => {
           <DetailRow
             icon={Percent}
             label="Platform Fee"
-            value={`${merchant.platformFee}%`}
+            value={`${merchant.platformFeePercentage}%`}
           />
           
           <DetailRow

@@ -1,5 +1,5 @@
 "use client";
-
+import { Button } from "@/components/ui/button";
 import DataTable from "@/components/ui/data-table-server";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,14 +11,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Transaction, TransactionStatus, TransactionType } from "@/models/transaction";
-import { Search } from "lucide-react";
-import React, { useMemo, useState } from "react";
-import { useGetAllTransactions } from "./query/transactions-queries";
-import transactionColumns from "../user/components/transaction-columns";
 import { useAuthStore } from "@/context/auth-context";
 import { AdminRole } from "@/models/admin";
-
+import { Transaction, TransactionStatus, TransactionType } from "@/models/transaction";
+import { Download, Search } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import transactionColumns from "../user/components/transaction-columns";
+import { useGetAllTransactions, useGetTransactionDownload } from "./query/transactions-queries";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { getExtension } from "@/lib/utils";
 
 type Props = {
     userId?: string;
@@ -27,6 +28,7 @@ type Props = {
 const TransactionTable = ({ userId }: Props) => {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
+
     const [type, setType] = useState<string | "">("");
     const [status, setStatus] = useState<string | "">("");
     const { userDetails } = useAuthStore();
@@ -41,6 +43,34 @@ const TransactionTable = ({ userId }: Props) => {
         merchantId: merchanntId,
         status: status === "all" ? "" : status,
     });
+
+    const { mutateAsync: downloadData, isPending } = useGetTransactionDownload();
+
+    const handleClickDownload = async (format: "excel" | "pdf" | "csv") => {
+        const response = await downloadData({
+            page: page,
+            search: search,
+            format: format,
+            type: type === "all" ? "" : type,
+            merchantId: merchanntId,
+            status: status === "all" ? "" : status,
+        });
+        if (response.status === 200) {
+            const blob = new Blob([response.data], { type: response.headers["content-type"] });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+
+            a.download = `transactions.${getExtension(format)}`;
+            document.body.appendChild(a);
+            a.click();
+
+            setTimeout(() => {
+                document.body.removeChild(a);
+            }, 1000);
+        }
+
+    }
 
     const transactions = useMemo(() => {
         if (isSuccess && data?.data?.transactions) {
@@ -116,6 +146,25 @@ const TransactionTable = ({ userId }: Props) => {
                             </SelectGroup>
                         </SelectContent>
                     </Select>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="flex items-center gap-2" asChild>
+                            <Button variant="outline" size="sm" className="flex items-center gap-2" >
+                                <Download size={18} /> Download
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={() => handleClickDownload("excel")} disabled={isPending}>
+                                Excel
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleClickDownload("pdf")} disabled={isPending}>
+                                PDF
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleClickDownload("csv")} disabled={isPending}>
+                                CSV
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </header>
             <main className="mt-4">

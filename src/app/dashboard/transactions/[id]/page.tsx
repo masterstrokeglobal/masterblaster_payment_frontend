@@ -10,6 +10,7 @@ import WithdrawDetailsRecord from "@/models/withdrawl-details";
 import Merchant from "@/models/merchant";
 import { MerchantDetailsCard, WithdrawalDetailsCard } from "@/features/merchant/merchant-card-small";
 import { useAuthStore } from "@/context/auth-context";
+import Admin from "@/models/admin";
 
 const EditTransactionPage = () => {
     const params = useParams();
@@ -52,7 +53,7 @@ const EditTransactionPage = () => {
                     <TransactionEditForm
                         transaction={data.data}
                         onSubmit={onSubmit}
-                        showForm={userDetails?.isSuperAdmin}
+                        showForm={(userDetails as Admin)?.isSuperAdmin}
                         isLoading={isPending || confirmPending}
                     />
                 </ div>

@@ -125,3 +125,16 @@ export const useRejectTransaction = () => {
         },
     });
 };
+
+export const useGetTransactionDownload = () => {
+    return useMutation({
+        mutationFn: transactionAPI.getTransactionDownload,
+        onSuccess: () => {
+            toast.success("Transaction downloaded successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data?.message ?? "Error downloading transaction");
+        },
+    });
+};
+

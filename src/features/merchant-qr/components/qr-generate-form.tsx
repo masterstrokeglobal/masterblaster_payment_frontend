@@ -20,10 +20,12 @@ import { merchantQrFormSchema, MerchantQrFormValues } from '../type';
 interface QRGenerateFormProps {
     onSubmit: (values: MerchantQrFormValues) => Promise<void>;
     isGenerating: boolean;
+    title?: string;
+    description?: string;
     defaultValues?: Partial<MerchantQrFormValues>;
 }
 
-export const QRGenerateForm = ({ onSubmit, isGenerating, defaultValues }: QRGenerateFormProps) => {
+export const QRGenerateForm = ({ onSubmit, isGenerating, defaultValues, title = "Generate New QR Code", description = "Create a new QR code for your bank account" }: QRGenerateFormProps) => {
     const form = useForm<MerchantQrFormValues>({
         resolver: zodResolver(merchantQrFormSchema),
         defaultValues: {
@@ -32,60 +34,61 @@ export const QRGenerateForm = ({ onSubmit, isGenerating, defaultValues }: QRGene
             bankName: defaultValues?.bankName ?? "",
             upiId: defaultValues?.upiId ?? "",
             ifscCode: defaultValues?.ifscCode ?? "",
-            isActive: defaultValues?.isActive ?? true}
+            isActive: defaultValues?.isActive ?? true
+        }
     });
 
     return (
         <>
             <DialogHeader>
-                <DialogTitle>Generate New QR Code</DialogTitle>
+                <DialogTitle>{title}</DialogTitle>
                 <DialogDescription>
-                    Create a new QR code for your bank account
+                    {description}
                 </DialogDescription>
             </DialogHeader>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormInput 
-                        control={form.control} 
-                        name='accountName' 
-                        label='Account Name' 
+                    <FormInput
+                        control={form.control}
+                        name='accountName'
+                        label='Account Name'
                     />
-                    
-                    <FormInput 
-                        control={form.control} 
-                        name='accountNumber' 
-                        label='Account Number' 
+
+                    <FormInput
+                        control={form.control}
+                        name='accountNumber'
+                        label='Account Number'
                     />
-                    
-                    <FormInput 
-                        control={form.control} 
-                        name='bankName' 
-                        label='Bank Name' 
+
+                    <FormInput
+                        control={form.control}
+                        name='bankName'
+                        label='Bank Name'
                     />
-                    
-                    <FormInput 
-                        control={form.control} 
-                        name='upiId' 
-                        label='UPI ID' 
+
+                    <FormInput
+                        control={form.control}
+                        name='upiId'
+                        label='UPI ID'
                     />
-                    
-                    <FormInput 
-                        control={form.control} 
-                        name='ifscCode' 
-                        label='IFSC Code' 
+
+                    <FormInput
+                        control={form.control}
+                        name='ifscCode'
+                        label='IFSC Code'
                     />
-                    
+
                     <FormSwitch
                         control={form.control}
                         name="isActive"
                         label="Active Status"
                         description="Set whether this QR code is active"
                     />
-                                        
+
                     <DialogFooter>
-                        <Button type="submit" disabled={isGenerating}>
+                        <Button type="submit" className='w-full' disabled={isGenerating}>
                             {isGenerating && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                            Generate QR
+                            Submit
                         </Button>
                     </DialogFooter>
                 </form>

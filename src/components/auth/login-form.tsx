@@ -11,6 +11,9 @@ import FormInput from "../form/form-input";
 import FormPassword from "../form/form-password";
 import { useAdminLogin } from "@/features/authentication/query/user";
 import FormGroupSelect from "../form/form-select";
+import { useDeviceInfo } from "../common/use-device-info";
+import { useCreateLoginLog } from "@/features/login-logs/api/login-log-query";
+import { AxiosResponse } from "axios";
 
 const loginFormSchema = z.object({
     email: z
@@ -32,20 +35,34 @@ const defaultValues: LoginFormValues = {
 const LoginForm = () => {
     const router = useRouter();
     const { mutate, isPending } = useAdminLogin();
+    const { mutate: createLoginLog } = useCreateLoginLog();
     const form = useForm({
         resolver: zodResolver(loginFormSchema),
         defaultValues,
     });
 
-
+    const deviceInfo = useDeviceInfo();
     const onSubmit = (formValue: LoginFormValues) => {
         mutate(formValue, {
-            onSuccess: () => {
+            onSuccess: (data: AxiosResponse<any>) => {
                 const role = formValue.loginAs;
                 if (role === AdminRole.Merchant) {
-                    router.push("/dashboard/merchant-dashboard");
+                    createLoginLog({
+                        merchantId: data.data.id,
+                        ipAddress: deviceInfo.ip,
+                        userAgent: deviceInfo.userAgent,
+                        platform: deviceInfo.platform,
+                        deviceInfo: deviceInfo,
+                        longitude: deviceInfo.location.longitude?.toString() ?? "",
+                        latitude: deviceInfo.location.latitude?.toString() ?? "",
+                    }, {
+                        onSuccess: () => {
+                            router.push("/dashboard/merchant-dashboard");
+                        }
+                    });
+
                 } else {
-                     router.push("/dashboard");
+                    router.push("/dashboard");
                 }
             }
         });

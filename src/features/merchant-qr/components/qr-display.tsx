@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Share2 } from 'lucide-react';
+import { Download, PlusCircle, Share2, Trash } from 'lucide-react';
 import { useState, useRef } from 'react';
 import {
     Card,
@@ -13,8 +13,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import { MerchantQr } from '../type';
+import { MerchantQr, MerchantQrFormValues } from '../type';
 import QRCode from './custom-qr-code';
+import { useDeleteMerchantQr, useUpdateMerchantQr } from '../api/merchant-qr-query';
+import { Dialog, DialogClose, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { QRGenerateForm } from './qr-generate-form';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface QRDisplayProps {
     qrCode: MerchantQr;
@@ -23,7 +27,8 @@ interface QRDisplayProps {
 export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
     const [copied, setCopied] = useState(false);
     const qrCodeRef = useRef(null);
-    
+    const { mutateAsync: deleteQr, isPending: isDeleting } = useDeleteMerchantQr();
+
     const handleCopyLink = () => {
         if (qrCode?.upiId) {
             navigator.clipboard.writeText(qrCode.upiId);
@@ -31,24 +36,24 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
             setTimeout(() => setCopied(false), 2000);
         }
     };
-    
+
     const handleDownload = () => {
         if (!qrCode?.qrCode || !qrCodeRef.current) return;
-        
+
         // Create a canvas from the QR code element
         const qrElement = qrCodeRef.current;
-        
+
         // Use html2canvas (you'll need to install this package)
         import('html2canvas').then((html2canvas) => {
             html2canvas.default(qrElement).then((canvas) => {
                 // Convert canvas to image data URL
                 const imageData = canvas.toDataURL('image/png');
-                
+
                 // Create a download link
                 const downloadLink = document.createElement('a');
                 downloadLink.href = imageData;
                 downloadLink.download = `qrcode_${qrCode.upiId || 'merchant'}.png`;
-                
+
                 // Trigger download
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
@@ -56,11 +61,11 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
             });
         });
     };
-    
+
     const formattedDate = qrCode?.updatedAt
         ? format(new Date(qrCode.updatedAt), 'PPP p')
         : 'N/A';
-    
+
     return (
         <Card className="lg:col-span-2 border-2">
             <CardHeader className="pb-4">
@@ -79,11 +84,11 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                     </Badge>
                 </div>
             </CardHeader>
-            
+
             <CardContent>
                 <div className="bg-gradient-to-b from-white to-gray-50 rounded-xl border-2 border-gray-100 p-8">
                     <div className="flex justify-center">
-                        <div 
+                        <div
                             ref={qrCodeRef}
                             className="relative group bg-white p-6 rounded-lg shadow-sm"
                         >
@@ -99,7 +104,18 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                     </div>
                 </div>
             </CardContent>
-            
+
+            <CardFooter className="grid grid-cols-2 gap-4">
+                <UpdateQrMerchant qrCode={qrCode} />
+                <Button
+                    variant="outline"
+                    onClick={() => deleteQr(qrCode.id.toString())}
+                    disabled={isDeleting}
+                >
+                    <Trash className="w-4 h-4 mr-2" />
+                    Delete
+                </Button>
+            </CardFooter>
             <CardFooter className="grid grid-cols-2 gap-4">
                 <Button
                     variant="outline"
@@ -119,5 +135,43 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                 </Button>
             </CardFooter>
         </Card>
+    );
+};
+
+
+
+type Props = {
+    qrCode: MerchantQr;
+}
+
+export const UpdateQrMerchant = ({ qrCode }: Props) => {
+    const createMutation = useUpdateMerchantQr();
+
+    const closeButtonRef = useRef<HTMLButtonElement>(null);
+    const handleGenerateNewQR = async (values: MerchantQrFormValues): Promise<void> => {
+        try {
+            await createMutation.mutateAsync({ qrId: qrCode.id.toString(), data: values });
+        } catch (error) {
+            console.error('Error generating QR:', error);
+        }
+    };
+    return (
+
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button>
+                    Update QR
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogClose ref={closeButtonRef} />
+                <ScrollArea className="h-[80vh]">
+                    <QRGenerateForm onSubmit={handleGenerateNewQR} isGenerating={createMutation.isPending} defaultValues={qrCode}
+                        title="Update QR Code"
+                        description="Update the details of your QR code"
+                    />
+                </ScrollArea>
+            </DialogContent>
+        </Dialog>
     );
 };
