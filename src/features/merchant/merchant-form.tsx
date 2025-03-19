@@ -1,20 +1,17 @@
 import { Button } from "@/components/ui/button";
-import FormInput from "@/components/form/form-input";
-import FormPassword from "@/components/form/form-password";
-import FormProvider from "@/components/form/form-provider";
-import FormSwitch from "@/components/form/form-switch";
+
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import FormTextArea from "@/components/form/form-text-area";
-import FormImage from "@/components/ui/form-image";
-import { string, z } from "zod";
 import FormInput from "@/components/form/form-input";
-import FormProvider from "@/components/form/form-provider";
 import FormPassword from "@/components/form/form-password";
+import FormProvider from "@/components/form/form-provider";
 import FormSwitch from "@/components/form/form-switch";
+import FormTextArea from "@/components/form/form-text-area";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import FormImage from "@/components/ui/form-image";
+import { z } from "zod";
 
 // Define schema for merchant input
 const passwordValidation = z
@@ -35,14 +32,11 @@ export const createMerchantInputSchema = z
         isVerified: z.boolean().optional(),
         companyAddress: z.string().max(200),
         companyGSTNumber: z.string().optional(),
-        companyPanNumber: z.string().optional(),
-        companyCINNumber: z.string().optional(),
         companyGSTImage: z.string().optional(),
         companyPANImage: z.string().optional(),
         companyCINImage: z.string().optional(),
         additionalVerificationInfo: z.string().optional(),
         platformFeePercentage: z.coerce.number().positive(),
-        isVerified: z.boolean().optional(),
     });
 
 export type MerchantFormValues = z.infer<typeof createMerchantInputSchema>;
