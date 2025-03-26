@@ -14,47 +14,43 @@ import FormImage from "@/components/ui/form-image";
 import { z } from "zod";
 
 // Define schema for merchant input
-const passwordValidation = z
-    .string()
-    .refine((val) => val === '' || val === undefined || val.length >= 8, {
-        message: "Password must be at least 8 characters long",
-    });
 
-export const createMerchantInputSchema = z
-    .object({
-        id: z.string().optional(),
-        name: z.string().max(100),
-        email: z.string().email(),
-        password: passwordValidation,
-        companyName: z.string().max(100),
-        companyPanNumber: z.string().optional(),
-        companyCINNumber: z.string().optional(),
-        isVerified: z.boolean().optional(),
-        companyAddress: z.string().max(200),
-        companyGSTNumber: z.string().optional(),
-        companyGSTImage: z.string().optional(),
-        companyPANImage: z.string().optional(),
-        companyCINImage: z.string().optional(),
-        additionalVerificationInfo: z.string().optional(),
-        platformFeePercentage: z.coerce.number().positive(),
-    });
+export const createMerchantInputSchema = (isEdit: boolean) => z.object({
+    id: z.string().optional(),
+    name: z.string().max(100),
+    email: z.string().email(),
+    password: isEdit 
+        ? z.string().optional() 
+        : z.string().min(8, { message: "Password must be at least 8 characters long" }),
+    companyName: z.string().max(100),
+    companyPanNumber: z.string().optional(),
+    companyCINNumber: z.string().optional(),
+    isVerified: z.boolean().optional(),
+    companyAddress: z.string().max(200),
+    companyGSTNumber: z.string().optional(),
+    companyGSTImage: z.string().optional(),
+    companyPANImage: z.string().optional(),
+    companyCINImage: z.string().optional(),
+    additionalVerificationInfo: z.string().optional(),
+    platformFeePercentage: z.coerce.number().positive(),
+});
 
-export type MerchantFormValues = z.infer<typeof createMerchantInputSchema>;
+export type MerchantFormValues = z.infer<ReturnType<typeof  createMerchantInputSchema>>;
 
 type Props = {
     defaultValues?: MerchantFormValues;
     onSubmit: (data: MerchantFormValues) => void;
     isLoading?: boolean;
+    isEdit?: boolean;
 };
 
-const MerchantForm = ({ defaultValues, onSubmit, isLoading }: Props) => {
+const MerchantForm = ({ defaultValues, onSubmit, isLoading ,isEdit=false}: Props) => {
     const form = useForm<MerchantFormValues>({
-        resolver: zodResolver(createMerchantInputSchema),
+        resolver: zodResolver(createMerchantInputSchema(isEdit)),
         defaultValues,
     });
 
     const handleSubmit = (data: MerchantFormValues) => {
-
         onSubmit(data);
     };
 
@@ -97,55 +93,6 @@ const MerchantForm = ({ defaultValues, onSubmit, isLoading }: Props) => {
                         />
                     </CardContent>
                 </Card>
-
-                {/* Company Registration */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Company Registration</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormInput
-                                control={form.control}
-                                name="companyGSTNumber"
-                                label="GST Number"
-                            />
-                            <FormImage
-                                control={form.control}
-                                name="companyGSTImage"
-                                label="GST Certificate"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormInput
-                                control={form.control}
-                                name="companyPanNumber"
-                                label="PAN Number"
-                            />
-                            <FormImage
-                                control={form.control}
-                                name="companyPANImage"
-                                label="PAN Card"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormInput
-                                control={form.control}
-                                name="companyCINNumber"
-                                label="CIN Number"
-                            />
-                            <FormImage
-                                control={form.control}
-                                name="companyCINImage"
-                                label="CIN Certificate"
-                            />
-                        </div>
-
-                    </CardContent>
-                </Card>
-
                 {/* Platform Settings */}
                 <Card>
                     <CardHeader>

@@ -137,3 +137,49 @@ export const useUpdateRestrictionsMerchant = () => {
         },
     });
 };
+
+export const useGetMerchantDocumentByMerchantId = (merchantId: string) => {
+    return useQuery({
+        queryKey: ["merchant-document", merchantId],
+        retry:1,
+        queryFn: () => merchantAPI.getMerchantDocumentByMerchantId(merchantId),
+    });
+};
+
+export const useCreateMerchantDocument = () => {
+    const queryClient = useQueryClient();       
+    return useMutation({
+        mutationFn: merchantAPI.createMerchantDocument,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    return query.queryKey[0] === "merchant-document";
+                },
+            });
+            toast.success("Merchant document created successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data.message ?? "Error creating merchant document");
+        },
+    });
+};
+
+export const useUpdateMerchantDocument = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: merchantAPI.updateMerchantDocument,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => {
+                    return query.queryKey[0] === "merchant-document";
+                },
+            });
+            toast.success("Merchant document updated successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data.message ?? "Error updating merchant document");
+        },
+    });
+};
+
+

@@ -47,6 +47,22 @@ export const merchantAPI = {
             },
         });
     },
+
+    // Merchant Document
+    createMerchantDocument: async (data: any) => {
+        return api.post("/merchant-document", data);
+    },
+    getMerchantDocumentByMerchantId: async (merchantId: string) => {
+        return api.get(`/merchant-document/${merchantId}`);
+    },
+    updateMerchantDocument: async (data: any) => {
+        return api.patch(`/merchant-document/${data.id}`, data);
+    },
+    deleteMerchantDocument: async (merchantId: string) => {
+        return api.delete(`/merchant-document/${merchantId}`);
+    },
+
+
 };
 
 export default merchantAPI;

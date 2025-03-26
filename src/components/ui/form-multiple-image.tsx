@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Control, FieldPath, FieldValues, useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
-interface FormImageProps<
+interface FormMultiImageProps<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > {
@@ -18,9 +18,10 @@ interface FormImageProps<
     className?: string;
     inputClassName?: string;
     accept?: string;
+    maxImages?: number;
 }
 
-const FormImage = <
+const FormMultiImage = <
     TFieldValues extends FieldValues,
     TName extends FieldPath<TFieldValues>
 >({
@@ -31,47 +32,64 @@ const FormImage = <
     className,
     inputClassName,
     accept = "image/*",
-}: FormImageProps<TFieldValues, TName>) => {
+    maxImages = 5, // Default max images
+}: FormMultiImageProps<TFieldValues, TName>) => {
     const { setValue, watch } = useFormContext();
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const uploadImageMutation = useUploadQrImage();
-    const fieldValue = watch(name);
+
+    // Watch the field value to sync with form state
+    const fieldValue = watch(name) as string[] | undefined;
+
+    // Reset preview when field value is empty
     useEffect(() => {
-        if (!fieldValue) {
-            setPreviewUrl(null);
+        if (!fieldValue || fieldValue.length === 0 || fieldValue.every(url => !url)) {
+            setPreviewUrls([]);
         }
     }, [fieldValue]);
 
+    // Initialize preview URLs if field value exists and is not empty
     useEffect(() => {
-        console.log(fieldValue)
-        if (fieldValue) {
-            setPreviewUrl(fieldValue);
+        if (fieldValue && fieldValue.length > 0 && fieldValue.some(url => url)) {
+            const validUrls = fieldValue.filter(url => url);
+            setPreviewUrls(validUrls);
         }
-    },[]);
+    }, []);
 
     const handleUpload = useCallback((file: File) => {
+        // Check if max images limit is reached
+        if (previewUrls.length >= maxImages) {
+            toast.error(`Maximum ${maxImages} images allowed`);
+            return;
+        }
+
         const formData = new FormData();
         formData.append("image", file);
+        
         uploadImageMutation.mutate(formData, {
             onSuccess: (response) => {
                 const uploadedFileUrl = response.data.fileUrl;
-                setValue(name, uploadedFileUrl);
-                setPreviewUrl(uploadedFileUrl);
+                const newUrls = [...previewUrls, uploadedFileUrl];
+                
+                setPreviewUrls(newUrls);
+                setValue(name, newUrls as unknown as TFieldValues[TName]);
             },
             onError: () => {
-                setPreviewUrl(null);
-                setValue(name, "" as unknown as TFieldValues[TName]);
+                toast.error('Image upload failed');
             }
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [uploadImageMutation]);
+    }, [previewUrls, maxImages, uploadImageMutation, setValue, name]);
 
-    const handleRemove = useCallback(() => {
-        setPreviewUrl(null);
-        setValue(name, "" as unknown as TFieldValues[TName]);
+    const handleRemove = useCallback((indexToRemove: number) => {
+        const newUrls = previewUrls.filter((_, index) => index !== indexToRemove);
+        
+        setPreviewUrls(newUrls);
+        setValue(name, newUrls as unknown as TFieldValues[TName]);
         toast.info('Image removed');
-    }, [setValue, name]);
+    }, [previewUrls, setValue, name]);
 
+    // Ensure only valid (non-empty) URLs are rendered
+    const validPreviewUrls = previewUrls.filter(url => url && url.trim() !== '');
 
     return (
         <FormField
@@ -81,25 +99,34 @@ const FormImage = <
                 <FormItem className={className}>
                     {label && <FormLabel>{label}</FormLabel>}
                     <FormControl>
-                        <div className="relative">
-                            {previewUrl ? (
-                                <div className="relative bg-gray-100 rounded-xl pr-12 ">
-                                    <img
-                                        src={previewUrl}
-                                        alt="Preview"
-                                        width={160}
-                                        height={160}
-                                        className="w-auto h-40 rounded-lg object-cover"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={handleRemove}
-                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                                    >
-                                        <X size={18} />
-                                    </button>
+                        <div className="space-y-4">
+                            {/* Image Preview Grid */}
+                            {validPreviewUrls.length > 0 && (
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                    {validPreviewUrls.map((url, index) => (
+                                        <div 
+                                            key={index} 
+                                            className="relative bg-gray-100 rounded-xl"
+                                        >
+                                            <img
+                                                src={url}
+                                                alt={`Preview ${index + 1}`}
+                                                className="w-full h-40 rounded-lg object-cover"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemove(index)}
+                                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                                            >
+                                                <X size={18} />
+                                            </button>
+                                        </div>
+                                    ))}
                                 </div>
-                            ) : (
+                            )}
+
+                            {/* Upload Area */}
+                            {validPreviewUrls.length < maxImages && (
                                 <div
                                     className={`
                                         border-2 border-dashed bg-[#FAFAFA] 
@@ -125,25 +152,30 @@ const FormImage = <
                                         ) : (
                                             <div className="flex text-sm text-gray-600">
                                                 <p className="relative">
-                                                    Drop a file here or
-                                                    {" "}
-                                                    <span className="text-blue-600 hover:underline">browse</span>
-                                                    {" "}to upload file
+                                                    Drop files here or{" "}
+                                                    <span className="text-blue-600 hover:underline">
+                                                        browse
+                                                    </span>{" "}
+                                                    to upload ({validPreviewUrls.length}/{maxImages})
                                                 </p>
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             )}
+
                             <input
                                 id={`file-${name}`}
                                 type="file"
                                 className="hidden"
+                                multiple
                                 onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                                        handleUpload(file);
-                                        onChange(file);
+                                    const files = e.target.files;
+                                    if (files) {
+                                        Array.from(files).forEach(file => {
+                                            handleUpload(file);
+                                        });
+                                        onChange(files);
                                     }
                                 }}
                                 accept={accept}
@@ -158,4 +190,4 @@ const FormImage = <
     );
 }
 
-export default FormImage;
+export default FormMultiImage;

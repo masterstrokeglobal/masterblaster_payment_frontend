@@ -1,6 +1,8 @@
 "use client"
 import LoadingScreen from "@/components/common/loading-screen";
+import { Button } from "@/components/ui/button";
 import { useGetMerchantById, useUpdateMerchant } from "@/features/merchant/api/merchant-query";
+import MerchantDocumentViewDialog from "@/features/merchant/merchant-document-preview";
 import MerchantForm, { MerchantFormValues } from "@/features/merchant/merchant-form";
 import Merchant from "@/models/merchant";
 import { useParams } from "next/navigation";
@@ -49,8 +51,13 @@ const EditMerchantPage = () => {
 
     return (
         <section className="flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">Edit Merchant</h1>
-            <MerchantForm defaultValues={defaultValues} onSubmit={handleSubmit} isLoading={isPending} />
+            <header className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold">Edit Merchant</h1>
+                <MerchantDocumentViewDialog merchantId={id as string}>
+                    <Button variant="outline">Preview</Button>
+                </MerchantDocumentViewDialog>
+            </header>
+            <MerchantForm defaultValues={defaultValues} onSubmit={handleSubmit} isLoading={isPending} isEdit={true} />
         </section>
     )
 };

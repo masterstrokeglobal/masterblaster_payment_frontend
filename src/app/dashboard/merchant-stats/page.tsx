@@ -10,8 +10,7 @@ const MerchantDashboard = () => {
 
     const merchant = useMemo(() => {
         if (isSuccess) {
-            const merchant = new Merchant(data.data?.user);
-
+            const merchant = new Merchant(data.data);
             return merchant;
         }
         return null;

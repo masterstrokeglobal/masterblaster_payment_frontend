@@ -23,8 +23,8 @@ interface UserDeviceInfo {
  */
 export const useDeviceInfo = (): UserDeviceInfo => {
   const [deviceInfo, setDeviceInfo] = useState<UserDeviceInfo>({
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
+    userAgent: 'Unknown',
+    platform: 'Unknown',
     ip: null,
     location: {
       latitude: null,
@@ -36,8 +36,11 @@ export const useDeviceInfo = (): UserDeviceInfo => {
   });
 
   useEffect(() => {
+    // Ensure this only runs on the client-side
+    if (typeof window === 'undefined') return;
+
     let isMounted = true;
-    
+
     const collectInfo = async () => {
       try {
         // Get connection information if available
@@ -49,7 +52,7 @@ export const useDeviceInfo = (): UserDeviceInfo => {
             downlink: conn?.downlink
           };
         }
-        
+
         // Try to get IP using a public API
         let ipAddress = null;
         try {
@@ -59,14 +62,14 @@ export const useDeviceInfo = (): UserDeviceInfo => {
         } catch (ipError) {
           console.warn("Failed to fetch IP address:", ipError);
         }
-        
+
         // Try to get location if available
         let locationData = {
           latitude: null as number | null,
           longitude: null as number | null,
           permissionGranted: false
         };
-        
+
         try {
           const position = await new Promise<GeolocationPosition>((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -74,7 +77,7 @@ export const useDeviceInfo = (): UserDeviceInfo => {
               maximumAge: 60000
             });
           });
-          
+
           locationData = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -83,7 +86,7 @@ export const useDeviceInfo = (): UserDeviceInfo => {
         } catch (locationError) {
           console.warn("Location access denied or unavailable");
         }
-        
+
         // Update state if component is still mounted
         if (isMounted) {
           setDeviceInfo({
@@ -108,7 +111,7 @@ export const useDeviceInfo = (): UserDeviceInfo => {
     };
 
     collectInfo();
-    
+
     return () => {
       isMounted = false;
     };

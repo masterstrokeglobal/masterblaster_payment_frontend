@@ -23,6 +23,7 @@ const DashboardLayout = ({ children }: PropsWithChildren) => {
         return <LoadingScreen className="h-screen" />
     }
 
+    console.log(userDetails);
     return (
         <div className="min-h-screen bg-[#f5f7f9] w-full md:p-4 ">
             <Sidebar className="h-screen hidden md:block w-64 absolute top-0 left-0" />

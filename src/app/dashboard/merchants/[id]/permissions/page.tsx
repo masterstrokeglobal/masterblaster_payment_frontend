@@ -158,6 +158,12 @@ const MerchantDetails = (): JSX.Element => {
                         <p className="text-sm font-medium text-muted-foreground">Address</p>
                         <p className="text-sm">{data?.data?.companyAddress || 'No address provided'}</p>
                     </div>
+
+                    <Link href={`/dashboard/merchants/${id}/documents`} className="mt-4 block" >
+                        <Button>
+                            View Documents
+                        </Button>
+                    </Link>
                 </CardContent>
             </Card>
 

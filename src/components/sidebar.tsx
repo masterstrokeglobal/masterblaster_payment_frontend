@@ -32,6 +32,12 @@ const adminMenuItems: MenuItem[] = [
         icon: Home,
         link: '/dashboard',
     },
+    //Role Permission
+    {
+        name: 'Role Permission',
+        icon: KeyIcon,
+        link: '/dashboard/permissions',
+    },
     {
         name: 'Merchants',
         icon: BriefcaseBusiness,
@@ -94,6 +100,11 @@ const Sidebar = ({ className }: PropsWithClassName) => {
             icon: Users,
             link: '/dashboard/transactions',
         },
+        {
+            name:"Merchant Documents",
+            icon: Building,
+            link: '/dashboard/documents',
+        }
     ];
 
     const pathname = usePathname();
