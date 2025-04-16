@@ -144,6 +144,7 @@ const WithdrawalForm = () => {
                                         { label: "HSBC", value: "HSBC" },
                                         { label: "Standard Chartered", value: "SC" },
                                         { label: "Deutsche Bank", value: "DB" },
+                                        { label: "Others", value: "Others" }
                                     ]}
                                 />
                             </>

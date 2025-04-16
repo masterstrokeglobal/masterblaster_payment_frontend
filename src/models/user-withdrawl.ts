@@ -42,6 +42,7 @@ export class UserWithdrawal {
     bankName!: string;
     status!: WithdrawalStatus;
     paymentStatus?: string;
+    utr?: string;
     type!: WithdrawalType;
     amount!: number;
     userName!: string;
