@@ -4,6 +4,12 @@ export enum WithdrawalStatus {
     FAILED = "failed",
 }
 
+export enum PaymentStatus {
+    PENDING = "pending",
+    COMPLETED = "completed",
+    FAILED = "failed",
+    NOT_INITIATED = "notInitiated"
+}
 
 export enum WithdrawalType {
     RTGS = "RTGS",
@@ -35,6 +41,7 @@ export class UserWithdrawal {
     ifscCode!: string;
     bankName!: string;
     status!: WithdrawalStatus;
+    paymentStatus?: string;
     type!: WithdrawalType;
     amount!: number;
     userName!: string;

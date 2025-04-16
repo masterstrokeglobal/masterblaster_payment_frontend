@@ -3,7 +3,7 @@ import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { UserWithdrawal, WithdrawalStatus } from "@/models/user-withdrawl";
+import { PaymentStatus, UserWithdrawal, WithdrawalStatus } from "@/models/user-withdrawl";
 
 const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
     {
@@ -56,6 +56,35 @@ const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
                     break;
                 case WithdrawalStatus.FAILED:
                     variant = "destructive";
+                    break;
+            }
+
+            return (
+                <Badge variant={variant as any}>
+                    {status}
+                </Badge>
+            );
+        },
+    },
+    {
+        header: "PAYMENT STATUS",
+        accessorKey: "paymentStatus",
+        cell: ({ row }) => {
+            const status = row.original.paymentStatus;
+            let variant = "";
+
+            switch (status) {
+                case PaymentStatus.COMPLETED:
+                    variant = "success";
+                    break;
+                case PaymentStatus.PENDING:
+                    variant = "warning";
+                    break;
+                case PaymentStatus.FAILED:
+                    variant = "destructive";
+                    break;
+                case PaymentStatus.NOT_INITIATED:
+                    variant = "outline";
                     break;
             }
 
