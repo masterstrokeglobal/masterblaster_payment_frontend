@@ -92,7 +92,7 @@ const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
     accessorKey: "createdAt",
     cell: ({ row }) => (
       <div className="text-[#6B7280]">
-        {new Date(new Date(row.original.createdAt).getTime() + 19800000).toLocaleString("en-IN", {
+        {new Date(new Date(row.original.createdAt).getTime()).toLocaleString("en-IN", {
           timeZone: "Asia/Kolkata",
           dateStyle: "medium", 
           timeStyle: "medium",
@@ -106,7 +106,7 @@ const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
     accessorKey: "updatedAt",
     cell: ({ row }) => (
       <div className="text-[#6B7280]">
-        {new Date(new Date(row.original.updatedAt).getTime() + 19800000).toLocaleString("en-IN", {
+        {new Date(new Date(row.original.updatedAt).getTime()).toLocaleString("en-IN", {
           timeZone: "Asia/Kolkata",
           dateStyle: "medium",
           timeStyle: "medium",
