@@ -44,7 +44,7 @@ const UserPaymentsTable = () => {
 
     const transactions = useMemo(() => {
         if (isSuccess && data?.data) {
-            return Array.from(data.data).map(
+            return Array.from(data.data?.userWithdrawals).map(
                 (transaction: any) => new UserWithdrawal(transaction)
             );
         }

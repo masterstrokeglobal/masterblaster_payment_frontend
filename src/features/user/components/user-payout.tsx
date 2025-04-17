@@ -86,12 +86,13 @@ const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
     accessorKey: "utr",
     cell: ({ row }) => <div className="font-medium">{row.original.utr}</div>,
   },
+  //Added 5:30 hrs to the time since it was not converting correctly
   {
     header: "CREATED AT",
     accessorKey: "createdAt",
     cell: ({ row }) => (
       <div className="text-[#6B7280]">
-        {new Date(row.original.createdAt).toLocaleString("en-IN", {
+        {new Date(new Date(row.original.createdAt).getTime() + 19800000).toLocaleString("en-IN", {
           timeZone: "Asia/Kolkata",
           dateStyle: "medium", 
           timeStyle: "medium",
@@ -99,14 +100,15 @@ const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
       </div>
     ),
   },
+  //Added 5:30 hrs to the time since it was not converting correctly
   {
     header: "UPDATED AT",
     accessorKey: "updatedAt",
     cell: ({ row }) => (
       <div className="text-[#6B7280]">
-        {new Date(row.original.updatedAt).toLocaleString("en-IN", {
+        {new Date(new Date(row.original.updatedAt).getTime() + 19800000).toLocaleString("en-IN", {
           timeZone: "Asia/Kolkata",
-          dateStyle: "medium", 
+          dateStyle: "medium",
           timeStyle: "medium",
         })}
       </div>

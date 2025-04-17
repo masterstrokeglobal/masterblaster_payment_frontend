@@ -33,10 +33,9 @@ const Pagination = ({ className, changePage, page, totalPage }: Props) => {
     }, [page, totalPage]);
 
     const nextPage = () => {
-        // if (page < totalPage) {
-        //     changePage(page + 1);
-        // }
-        changePage(page+1)
+        if (page < totalPage) {
+            changePage(page + 1);
+        }
     }
 
     const prevPage = () => {
