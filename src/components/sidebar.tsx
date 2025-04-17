@@ -48,6 +48,11 @@ const adminMenuItems: MenuItem[] = [
         icon: Users,
         link: '/dashboard/admin-transactions',
     },
+    {
+        name: 'User Payouts',
+        icon: Users,
+        link: '/dashboard/user-payouts',
+    },
     //payouts
     {
         name: 'Payouts',

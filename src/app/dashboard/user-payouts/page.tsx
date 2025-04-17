@@ -33,7 +33,6 @@ const UserPaymentsTable = () => {
 
     const merchantId = userDetails?.role === AdminRole.Merchant ? userDetails?.id : undefined;
     const merchant = userDetails as Merchant;
-
     const { data, isSuccess, isFetching } = useGetAllUserWithdrawals({
         page: page,
         search: search,
@@ -109,7 +108,7 @@ const UserPaymentsTable = () => {
                             </Button>
                         </Link>
                     }
-                    {merchant.hasAccessTo(APIS.USER_WITHDRAW_BULK) &&
+                    {merchantId && merchant.hasAccessTo(APIS.USER_WITHDRAW_BULK) &&
                         <Link href="/dashboard/user-payouts/bulk">
                             <Button
                                 className="flex items-center gap-2"
