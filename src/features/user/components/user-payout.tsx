@@ -13,7 +13,6 @@ import FormGroupSelect from "@/components/form/form-select";
 import { useUpdateUserWithdrawalStatus } from "@/features/user-withdrawl/api/user-withdrawl-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { withdrawalSchema } from "@/app/dashboard/user-payouts/[id]/page";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -151,6 +150,10 @@ const ActionColumn = ({ withdrawal }: { withdrawal: UserWithdrawal }) => {
     </div>
   );
 };
+
+const withdrawalSchema = z.object({
+    status: z.enum([WithdrawalStatus.PENDING, WithdrawalStatus.COMPLETED, WithdrawalStatus.FAILED]),
+});
 
 const ActionDropDown = ({ withdrawal }: { withdrawal: UserWithdrawal }) => {
   const id = String(withdrawal.id);
