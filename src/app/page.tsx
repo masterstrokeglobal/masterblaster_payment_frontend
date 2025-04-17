@@ -1,7 +1,6 @@
 "use client";
 import LogoText from "@/components/common/logo-text";
 import useCheckAuth from "@/hooks/use-signin-route";
-
 export default function Home() {
   useCheckAuth();
   return (
