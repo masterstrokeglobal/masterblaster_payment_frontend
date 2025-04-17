@@ -13,7 +13,7 @@ import { useGetUserWithdrawalById, useUpdateUserWithdrawalStatus } from "@/featu
 import { toast } from "sonner";
 import { AlertCircle, Building2, CheckCircle2, Clock, User } from 'lucide-react';
 
-const withdrawalSchema = z.object({
+export const withdrawalSchema = z.object({
     status: z.enum([WithdrawalStatus.PENDING, WithdrawalStatus.COMPLETED, WithdrawalStatus.FAILED]),
 });
 

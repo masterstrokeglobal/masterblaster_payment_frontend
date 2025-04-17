@@ -8,6 +8,14 @@ import {
   UserWithdrawal,
   WithdrawalStatus,
 } from "@/models/user-withdrawl";
+import FormProvider from "@/components/form/form-provider";
+import FormGroupSelect from "@/components/form/form-select";
+import { useUpdateUserWithdrawalStatus } from "@/features/user-withdrawl/api/user-withdrawl-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { withdrawalSchema } from "@/app/dashboard/user-payouts/[id]/page";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
   {
@@ -82,37 +90,46 @@ const userWithdrawalColumns: ColumnDef<UserWithdrawal>[] = [
     },
   },
   {
-    header: "UTR",
-    accessorKey: "utr",
-    cell: ({ row }) => <div className="font-medium">{row.original.utr}</div>,
+    header: "Update Status",
+    accessorKey: "dropDown",
+    cell: ({ row }) => <ActionDropDown withdrawal={row.original} />,
   },
-  //Added 5:30 hrs to the time since it was not converting correctly
   {
     header: "CREATED AT",
     accessorKey: "createdAt",
     cell: ({ row }) => (
       <div className="text-[#6B7280]">
-        {new Date(new Date(row.original.createdAt).getTime()).toLocaleString("en-IN", {
-          timeZone: "Asia/Kolkata",
-          dateStyle: "medium", 
-          timeStyle: "medium",
-        })}
+        {new Date(new Date(row.original.createdAt).getTime()).toLocaleString(
+          "en-IN",
+          {
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium",
+            timeStyle: "medium",
+          }
+        )}
       </div>
     ),
   },
-  //Added 5:30 hrs to the time since it was not converting correctly
   {
     header: "UPDATED AT",
     accessorKey: "updatedAt",
     cell: ({ row }) => (
       <div className="text-[#6B7280]">
-        {new Date(new Date(row.original.updatedAt).getTime()).toLocaleString("en-IN", {
-          timeZone: "Asia/Kolkata",
-          dateStyle: "medium",
-          timeStyle: "medium",
-        })}
+        {new Date(new Date(row.original.updatedAt).getTime()).toLocaleString(
+          "en-IN",
+          {
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium",
+            timeStyle: "medium",
+          }
+        )}
       </div>
     ),
+  },
+  {
+    header: "UTR",
+    accessorKey: "utr",
+    cell: ({ row }) => <div className="font-medium">{row.original.utr}</div>,
   },
   {
     header: "",
@@ -132,5 +149,59 @@ const ActionColumn = ({ withdrawal }: { withdrawal: UserWithdrawal }) => {
         </Button>
       </Link>
     </div>
+  );
+};
+
+const ActionDropDown = ({ withdrawal }: { withdrawal: UserWithdrawal }) => {
+  const id = String(withdrawal.id);
+  const updateWithdrawalStatus = useUpdateUserWithdrawalStatus();
+
+  type WithdrawalFormValues = z.infer<typeof withdrawalSchema>;
+
+  const form = useForm<WithdrawalFormValues>({
+    resolver: zodResolver(withdrawalSchema),
+    defaultValues: { status: WithdrawalStatus.PENDING },
+  });
+
+  const { handleSubmit, control } = form;
+
+  const onSubmit = async (data: WithdrawalFormValues) => {
+    updateWithdrawalStatus.mutate(
+      { withdrawalId: id as string, data },
+      {
+        onSuccess: () =>
+          toast.success("Withdrawal status updated successfully"),
+        onError: (error) =>
+          toast.error(error.response?.data?.message || "Error updating status"),
+      }
+    );
+  };
+  return (
+    <>
+      {withdrawal?.status === WithdrawalStatus.PENDING && (
+        <div className="mt-6">
+          <FormProvider methods={form} onSubmit={handleSubmit(onSubmit)}>
+            <FormGroupSelect
+              name="status"
+              label=""
+              control={control}
+              options={Object.values(WithdrawalStatus).map((status) => ({
+                label: status,
+                value: status,
+              }))}
+            />
+            <Button
+              type="submit"
+              disabled={updateWithdrawalStatus.isPending}
+              className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors duration-200"
+            >
+              {updateWithdrawalStatus.isPending
+                ? "Updating..."
+                : "Update Status"}
+            </Button>
+          </FormProvider>
+        </div>
+      )}
+    </>
   );
 };
