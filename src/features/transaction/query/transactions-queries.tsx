@@ -14,10 +14,14 @@ export const useCreateTransaction = () => {
     });
 };
 
-export const useGetAllTransactions = (filter?: Record<string, any>) => {
+export const useGetAllTransactions = (filter?: Record<string, any> , options?: {
+    refetchInterval?: number | false;
+    [key: string]: any; // Allow other React Query options
+  }) => {
     return useQuery({
         queryKey: ["transactions", filter],
         queryFn: () => transactionAPI.getAlltransaction(filter),
+        ...options
     });
 };
 
