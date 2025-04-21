@@ -39,6 +39,9 @@ const UserPaymentsTable = () => {
         type: TransactionType.WITHDRAWAL,
         merchantId: merchantId,
         status: status === "all" ? "" : status,
+    },
+    {
+      refetchInterval: 5000,
     });
 
     const transactions = useMemo(() => {
