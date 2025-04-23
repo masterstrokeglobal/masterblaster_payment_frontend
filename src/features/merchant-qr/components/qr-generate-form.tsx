@@ -86,8 +86,8 @@ export const QRGenerateForm = ({ onSubmit, isGenerating, defaultValues, title = 
                     />
 
                     <DialogFooter>
-                        <Button type="submit" className='w-full' disabled={isGenerating}>
-                            {isGenerating && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                        <Button variant="outline" type="submit" className='w-full text-primary' disabled={isGenerating}>
+                            {isGenerating && <Loader2 className="text-primary w-4 h-4 mr-2 animate-spin" />}
                             Submit
                         </Button>
                     </DialogFooter>

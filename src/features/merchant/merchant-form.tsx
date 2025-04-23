@@ -119,7 +119,7 @@ const MerchantForm = ({ defaultValues, onSubmit, isLoading ,isEdit=false}: Props
                 <Button type="button" variant="outline" onClick={() => form.reset()}>
                     Reset
                 </Button>
-                <Button type="submit" disabled={isLoading}>
+                <Button variant="outline" type="submit" disabled={isLoading}>
                     {isLoading ? "Saving..." : "Save Merchant"}
                 </Button>
             </footer>

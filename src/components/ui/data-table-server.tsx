@@ -73,7 +73,7 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className={cn("dark:bg-dark-primary border rounded-xl overflow-hidden bg-white", className)}>
+      <div className={cn("dark:bg-dark-primary rounded-xl overflow-hidden transparent-dark", className)}>
         <Table>
           {showHeader && (
             <TableHeader className="px-4">
@@ -81,7 +81,7 @@ export default function DataTable<TData, TValue>({
                 <TableRow
                   key={headerGroup.id}                >
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="text-sm  text-gray-800 dark-border  border-b font-medium whitespace-nowrap" >
+                    <TableHead key={header.id} className="text-sm  text-primary font-medium whitespace-nowrap" >
                       <span className="flex font-semibold">
                         {header.isPlaceholder
                           ? null
@@ -107,7 +107,7 @@ export default function DataTable<TData, TValue>({
                   >
                     {row?.getVisibleCells().map((cell) => (
                       <ErrorBoundary key={cell.id}>
-                        <TableCell>
+                        <TableCell className="text-primary">
                           {flexRender(
                             cell?.column.columnDef.cell,
                             cell.getContext()
@@ -121,7 +121,7 @@ export default function DataTable<TData, TValue>({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className="h-24 text-center text-primary"
                   >
                     No results.
                   </TableCell>
@@ -136,7 +136,7 @@ export default function DataTable<TData, TValue>({
                     <TableRow key={i} className=" p-1">
                       {columns.map((column, j) => (
                         <TableCell key={j}>
-                          <Skeleton className="h-6 w-full" />
+                          <Skeleton className="transparent-dark h-6 w-full" />
                         </TableCell>
                       ))}
                     </TableRow>
@@ -145,14 +145,14 @@ export default function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className="flex md:items-center flex-wrap border-t py-2 px-4 bg-white w-full justify-between">
+        <div className="transparent-dark flex md:items-center flex-wrap border-t py-2 px-4 bg-white w-full justify-between">
           <div className="py-1 min-h-[60px]   md:px-4 items-center flex flex-row w-fit  justify-between gap-2">
-            <p className="text-[#6B7280]">Showing</p>
-            <div className="flex flex-col items-center gap-3">
+            <p className="text-primary">Showing</p>
+            <div className="flex flex-col items-center gap-3 text-primary">
               {page}-{totalPage}
             </div>
-            <div>
-              <span className="text-[#6B7280]">of</span>
+            <div className="text-primary">
+              <span>of</span>
               &nbsp; {totalPage}
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function DataTable<TData, TValue>({
             page={page}
             changePage={changePage}
             totalPage={totalPage}
-            className="md:ml-auto"
+            className="text-primary md:ml-auto"
           />
         </div>
       </div>

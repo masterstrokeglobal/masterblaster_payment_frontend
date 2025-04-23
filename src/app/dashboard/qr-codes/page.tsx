@@ -102,7 +102,7 @@ const MerchantQRDashboard: React.FC = () => {
                         size="sm"
                         onClick={handleRefresh}
                         disabled={isRefreshing}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 text-primary"
                     >
                         <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                         Refresh
@@ -121,7 +121,7 @@ const MerchantQRDashboard: React.FC = () => {
                             className="pl-10 w-full transition-all focus:ring-2 focus:ring-blue-500"
                         />
                         {searchQuery && (
-                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
+                            <div className="bg-background absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400">
                                 {filteredQRCodes.length} results
                             </div>
                         )}
@@ -136,7 +136,7 @@ const MerchantQRDashboard: React.FC = () => {
                             <div
                                 key={qr.id}
                                 onClick={() => setSelectedQRId(qr.id)}
-                                className={`p-4 rounded-lg border transition-all cursor-pointer hover:border-blue-500 ${selectedQRId === qr.id
+                                className={`bg-background p-4 rounded-lg border transition-all cursor-pointer hover:border-blue-500 ${selectedQRId === qr.id
                                     ? 'border-blue-500 bg-blue-50'
                                     : 'border-gray-200'
                                     }`}
@@ -155,7 +155,7 @@ const MerchantQRDashboard: React.FC = () => {
                             </div>
                         ))}
                         {filteredQRCodes.length === 0 && (
-                            <div className="text-center p-4 text-gray-500 bg-gray-50 rounded-lg">
+                            <div className="bg-background text-center p-4 text-gray-500 rounded-lg">
                                 No matching QR codes found
                             </div>
                         )}
@@ -165,7 +165,7 @@ const MerchantQRDashboard: React.FC = () => {
                     <div className="lg:col-span-2">
                         {selectedQR ? (<>
                             <QRDisplay qrCode={selectedQR} />
-                            <div className="space-y-6">
+                            <div className="bg-background space-y-6">
                                 <QRDetails merchantQR={selectedQR} />
                                 <Alert className="border-2 bg-blue-50">
                                     <AlertDescription className="text-sm text-blue-800">
@@ -175,7 +175,7 @@ const MerchantQRDashboard: React.FC = () => {
                             </div>
                         </>
                         ) : (
-                            <div className="flex items-center justify-center h-full min-h-[400px] bg-gray-50 rounded-lg">
+                            <div className="flex items-center justify-center h-full min-h-[400px] bg-background rounded-lg">
                                 <div className="text-center text-gray-500">
                                     Select a QR code to view details
                                 </div>

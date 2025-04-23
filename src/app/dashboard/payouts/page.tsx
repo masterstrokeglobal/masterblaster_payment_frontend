@@ -79,11 +79,11 @@ const TransactionTable = () => {
     <section className="container-main min-h-[60vh] my-12">
       <header className="flex flex-col md:flex-row gap-4 flex-wrap md:items-center justify-between">
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-semibold">Withdrawal Requests</h2>
+          <h2 className="text-xl font-semibold text-primary">Withdrawal Requests</h2>
         </div>
         <div className="flex gap-5">
           <div className="relative min-w-60 flex-1">
-            <Search size={18} className="absolute top-2.5 left-2.5" />
+            <Search size={18} className="absolute top-2.5 left-2.5 text-primary" />
             <Input
               placeholder="Search"
               onChange={handleSearch}
@@ -118,7 +118,7 @@ const TransactionTable = () => {
           </Select>
           {userDetails?.isMerchant && (
             <Link href="/dashboard/payouts/create">
-              <Button className="flex items-center gap-2">
+              <Button className="flex items-center gap-2 bg-background">
                 <Plus size={16} />
                 Create Request
               </Button>

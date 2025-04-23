@@ -43,18 +43,18 @@ const UserTable = () => {
     return (
         <section className="container-main min-h-[60vh] my-12">
             <header className="flex flex-col md:flex-row gap-4 flex-wrap md:items-center justify-between">
-                <h2 className="text-xl font-semibold">Merchants</h2>
+                <h2 className="text-xl font-semibold text-primary">Merchants</h2>
                 <div className="flex gap-5 flex-wrap">
                     <div className="relative min-w-60 flex-1">
-                        <Search size={18} className="absolute top-2.5 left-2.5" />
+                        <Search size={18} className="text-primary absolute top-2.5 left-2.5" />
                         <Input
                             placeholder="Search"
                             onChange={handleSearch}
-                            className="pl-10"
+                            className="pl-10 bg-background"
                         />
                     </div>
                     <Link href="/dashboard/merchants/create">
-                        <Button>
+                        <Button className="bg-background">
                             Create Merchant
                         </Button>
                     </Link>

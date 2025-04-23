@@ -42,7 +42,7 @@ export const QuickActions = () => {
 
         <Dialog>
             <DialogTrigger asChild>
-                <Button>
+                <Button variant="outline" className="text-primary">
                     <Plus className="w-4 h-4 mr-2" />
                     Generate New QR
                 </Button>

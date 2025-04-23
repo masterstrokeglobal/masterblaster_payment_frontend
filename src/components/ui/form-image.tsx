@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { Control, FieldPath, FieldValues, useFormContext } from "react-hook-form";
 import { toast } from "sonner";
-
 interface FormImageProps<
     TFieldValues extends FieldValues = FieldValues,
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
@@ -105,7 +104,7 @@ const FormImage = <
                                         border-2 border-dashed bg-[#FAFAFA] 
                                         border-[#E2E2E2] rounded-lg p-6 
                                         cursor-pointer hover:border-gray-400 
-                                        transition-colors ${inputClassName}
+                                        transition-colors bg-background ${inputClassName}
                                     `}
                                     onClick={() => document.getElementById(`file-${name}`)?.click()}
                                 >
@@ -115,7 +114,7 @@ const FormImage = <
                                             height={32}
                                             alt="file"
                                             src="/images/file.svg"
-                                            className="w-8 h-8"
+                                            className="w-8 h-8 text-primary"
                                         />
 
                                         {uploadImageMutation.isPending ? (
@@ -123,7 +122,7 @@ const FormImage = <
                                                 <span>Uploading...</span>
                                             </div>
                                         ) : (
-                                            <div className="flex text-sm text-gray-600">
+                                            <div className="flex text-sm text-primary">
                                                 <p className="relative">
                                                     Drop a file here or
                                                     {" "}

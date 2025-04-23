@@ -50,7 +50,7 @@ function Combobox({
 
     return (
         <div className={cn('w-full', className)}>
-            {label && <div className="mb-2 text-sm font-medium">{label}</div>}
+            {label && <div className="bg-background mb-2 text-sm font-medium">{label}</div>}
             <Popover open={isOpen} onOpenChange={(open) => {
                 setIsOpen(open);
                 if (!open) setSearchTerm('');
@@ -61,7 +61,7 @@ function Combobox({
                         role="combobox"
                         aria-expanded={isOpen}
                         disabled={disabled}
-                        className="w-full justify-between"
+                        className="w-full justify-between bg-background text-primary hover:bg-background"
                     >
                         {value
                             ? options.find((option) => option.value === value)?.label

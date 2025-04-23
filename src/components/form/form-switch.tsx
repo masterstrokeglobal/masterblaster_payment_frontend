@@ -31,7 +31,7 @@ function FormSwitch<
     control={control}
     name={name}
     render={({ field }) => (
-      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+      <FormItem className="flex flex-row items-center justify-between rounded-lg bg-background p-4">
         <div className="space-y-0.5">
           {label && <FormLabel>{label}</FormLabel>}
           {description && <FormDescription>{description}</FormDescription>}

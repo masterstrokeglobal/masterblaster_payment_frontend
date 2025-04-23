@@ -66,8 +66,8 @@ const CreateMerchantDocumentForm = ({merchantId}:Props) => {
         }
     }
     return <section className="flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">Save Merchant Document</h1>
-        {isLoading && <LoadingScreen className="min-h-96" />}
+        <h1 className="text-2xl font-bold text-primary">Save Merchant Document</h1>
+        {isLoading && <LoadingScreen className="min-h-96 bg-background" />}
         {defaultValues !== null && <MerchantDocumentForm onSubmit={onSubmit} isLoading={createPending || updatePending || isLoading} defaultValues={defaultValues} />}
 
     </section>

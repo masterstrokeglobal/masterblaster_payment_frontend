@@ -74,6 +74,8 @@ const LoginForm = () => {
                 label="Email"
                 name="email"
                 type="email"
+                inputClassName="bg-background"
+                className="text-primary"
             />
             <FormPassword
                 control={form.control}
@@ -90,7 +92,7 @@ const LoginForm = () => {
                 ]}
             />
             <div className="space-y-2 pt-2">
-                <Button disabled={isPending} className="block w-full"  >
+                <Button disabled={isPending} className="block w-full bg-[#53cafd] hover:bg-[#21bafc] font-bold"  >
                     Login
                 </Button>
             </div>

@@ -32,21 +32,20 @@ const TransactionEditForm = ({ transaction, onSubmit, isLoading, showForm = fals
 
     const { control, handleSubmit } = form;
     const currentStatus = transaction.status
-
     return (
         <section className="container-main min-h-[60vh] max-w-xl">
-            <Card className="border shadow-none bg-white">
+            <Card className="shadow-none bg-background">
                 <CardHeader>
                     <CardTitle className="text-xl font-semibold">Transaction Details</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
                         {/* Read-only Transaction Details */}
-                        <p><strong>Type:</strong> {transaction.type}</p>
-                        <p><strong>Amount:</strong> ₹{transaction.amount}</p>
-                        <p><strong>PG ID:</strong> {transaction.pgId || "N/A"}</p>
-                        <p><strong>PlatFormFee %:</strong> {transaction.platformFeePercentage || 0}%</p>
-                        <p><strong>Created At:</strong> {new Date(transaction.createdAt).toLocaleDateString()}</p>
+                        <p className="text-gray-400"><strong className="text-primary">Type:</strong> {transaction.type}</p>
+                        <p className="text-gray-400"><strong className="text-primary">Amount:</strong> ₹{transaction.amount}</p>
+                        <p className="text-gray-400"><strong className="text-primary">PG ID:</strong> {transaction.pgId || "N/A"}</p>
+                        <p className="text-gray-400"><strong className="text-primary">PlatFormFee %:</strong> {transaction.platformFeePercentage || 0}%</p>
+                        <p className="text-gray-400"><strong className="text-primary">Created At:</strong> {new Date(transaction.createdAt).toLocaleDateString()}</p>
                     </div>
                     {(currentStatus === TransactionStatus.PENDING && showForm) && (
                         <FormProvider methods={form} onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
@@ -62,7 +61,7 @@ const TransactionEditForm = ({ transaction, onSubmit, isLoading, showForm = fals
                             />
 
                             <footer className="flex justify-end gap-4 mt-8">
-                                <Button type="submit" disabled={isLoading}>
+                                <Button variant="outline" className="text-primary" type="submit" disabled={isLoading}>
                                     {isLoading ? "Updating..." : "Update Status"}
                                 </Button>
                             </footer>

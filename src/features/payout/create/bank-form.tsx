@@ -45,27 +45,27 @@ const BankAccountForm = ({
                     control={form.control}
                     name="accountName"
                     label="Account Holder Name*"
-                    className="bg-gray-50"
+                    inputClassName="bg-background"
                 />
                 <FormInput
                     control={form.control}
                     name="accountNumber"
                     label="Account Number*"
                     type="password"
-                    className="bg-gray-50"
+                    inputClassName="bg-background"
                 />
                 <FormInput
                     control={form.control}
                     name="confirmAccountNumber"
                     label="Confirm Account Number*"
                     type="password"
-                    className="bg-gray-50"
+                    inputClassName="bg-background"
                 />
                 <FormInput
                     control={form.control}
                     name="ifscCode"
                     label="IFSC Code*"
-                    className="uppercase bg-gray-50"
+                    inputClassName="uppercase bg-background"
                 />
             </div>
 
@@ -74,7 +74,7 @@ const BankAccountForm = ({
                     type="button"
                     variant="outline"
                     onClick={() => form.reset()}
-                    className="hover:bg-gray-100"
+                    className="text-primary "
                 >
                     Reset
                 </Button>

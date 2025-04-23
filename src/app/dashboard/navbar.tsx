@@ -19,7 +19,7 @@ const Navbar = () => {
 
     const isMerchant = userDetails?.isMerchant;
 
-    return <header className="flex h-16 items-center gap-4 sticky top-0  border-b bg-muted px-4 lg:h-16 z-20 lg:px-6">
+    return <header className="flex h-16 items-center gap-4 sticky top-0  px-4 lg:h-16 z-20 lg:px-6">
         <Sheet>
             <SheetTrigger asChild>
                 <Button
@@ -36,7 +36,7 @@ const Navbar = () => {
             </SheetContent>
         </Sheet>
         <Button variant="outline-primary" onClick={() => router.back()}
-            className="rounded-full">
+            className="rounded-full bg-gray-400/10 hover:bg-gray-400/10">
             <ArrowLeft className="h-5 w-5" />
             Back
         </Button>
@@ -50,7 +50,7 @@ const Navbar = () => {
         </Button>}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="secondary" className={cn('ml-2 rounded-full', isMerchant ? 'ml-2' : 'ml-auto')}>
+                <Button variant="secondary" className={cn('ml-2 rounded-full bg-gray-400/10 hover:bg-gray-400/10 text-primary', isMerchant ? 'ml-2' : 'ml-auto')}>
                     <CircleUser className="h-5 w-5" />
                     <span className="sr-only">Toggle user menu</span>
                 </Button>

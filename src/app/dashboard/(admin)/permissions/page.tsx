@@ -37,7 +37,7 @@ const PermissionTable = () => {
     return (
         <section className="container-main min-h-[60vh] my-12">
             <header className="flex flex-col md:flex-row gap-4 flex-wrap md:items-center justify-between">
-                <h2 className="text-xl font-semibold">Permissions</h2>
+                <h2 className="text-xl font-semibold text-primary">Permissions</h2>
                 <div className="flex gap-5 flex-wrap">
                     <div className="flex gap-2">
                         <Input
@@ -47,7 +47,7 @@ const PermissionTable = () => {
                         />
                     </div>
                     <Link href="/dashboard/permissions/create">
-                        <Button>
+                        <Button className="bg-gray-400/10">
                             Create Permission
                         </Button>
                     </Link>

@@ -24,10 +24,8 @@ import {
 } from "@/components/ui/accordion";
 import { useAuthStore } from "@/context/auth-context";
 import Admin, { AdminRole } from "@/models/admin";
-import Logo from "./common/logo";
 import Merchant, { APIS } from "@/models/merchant";
 import Image from "next/image";
-
 interface SubMenuItem {
   name: string;
   link: string;
@@ -170,10 +168,10 @@ const Sidebar = ({ className }: PropsWithClassName) => {
           key={item.name}
           href={item.link}
           className={cn(
-            "flex items-center py-2 px-4 text-sm font-medium rounded-md hover:bg-blue-100 hover:text-accent-foreground",
+            "flex items-center text-gray-400 py-2 px-4 text-sm font-medium rounded-md hover:bg-gray-100/10",
             "transition-colors duration-200",
             isActive &&
-              "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+              "bg-gray-300/30 text-primary-foreground  hover:text-primary-foreground"
           )}
         >
           <item.icon className="mr-2 h-4 w-4" />
@@ -240,7 +238,16 @@ const Sidebar = ({ className }: PropsWithClassName) => {
   }
 
   return (
-    <div className={cn("flex  flex-col ", className)}>
+    <div
+      style={{
+        backgroundImage: `url('/images/sidebarBG.jpg')`, // Replace with your image path
+        backgroundSize: "cover", // Adjusts image to cover the nav
+        backgroundPosition: "center", // Centers the image
+        flex: 1,
+        overflowY: "auto",
+      }}
+      className={cn("rounded-br-xl rounded-tr-xl flex  flex-col ", className)}
+    >
       <div className="flex h-16 items-center  px-4">
         <Image className="w-28" alt="RapidPay24" src={LogoIcon} />
         {/* <Logo /> */}

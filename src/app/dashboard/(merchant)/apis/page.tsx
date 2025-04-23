@@ -44,8 +44,8 @@ const ApiMarketplace: React.FC = () => {
     <div className="w-full min-h-screen">
       <div className="flex justify-between items-center p-6 mb-6">
         <div>
-          <h2 className="text-2xl font-bold">API Marketplace</h2>
-          <p className="text-sm mt-1">Integrate powerful services into your applications</p>
+          <h2 className="text-2xl font-bold text-primary">API Marketplace</h2>
+          <p className="text-sm mt-1 text-gray-400">Integrate powerful services into your applications</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-white text-sm bg-blue-500 px-3 py-1 rounded-full font-medium">{appName}</span>

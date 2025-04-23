@@ -13,8 +13,8 @@ const LoadingScreen = ({ className, logo = false }: Props) => {
     return (
         <Skeleton className={cn("flex justify-center items-center ", className)}>
             {logo ?
-                <LogoText className="animate-pulse" />
-                : <Loader2 className="animate-spin size-6" />
+                <LogoText className="animate-pulse text-primary" />
+                : <Loader2 className="animate-spin size-6 text-primary" />
             }
         </Skeleton>
     );

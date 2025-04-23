@@ -52,7 +52,7 @@ function FormPassword<
                     <FormControl >
                         <div className="relative">
                             <Input   {...props} {...field} type={inputType} />
-                            <Button onClick={toggleType} variant={'ghost'} type="button" size={'sm'} className="absolute right-1 top-0.5  cursor-pointer">
+                            <Button onClick={toggleType} variant={'ghost'} type="button" size={'sm'} className="text-primary absolute right-1 top-0.5  cursor-pointer">
                                 {!(inputType === 'password') ? (
                                     <Eye size={20} />
                                 ) : (

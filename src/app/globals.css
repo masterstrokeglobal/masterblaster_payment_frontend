@@ -7,15 +7,11 @@ body {
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {
-
   display: none;
-
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-
   display: none;
-
 }
 
 @keyframes recording-wave {
@@ -42,13 +38,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 @layer base {
   :root {
-    --background: #F9FAFB;
+    --background: rgba(156, 163, 175, 0.1);
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: rgba(156, 163, 175, 0.1);
     --card-foreground: 0 0% 3.9%;
+    --card-background: rgba(13, 41, 96, 0.6);
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: #1550F7;
+    --primary: #FFFFFF;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
@@ -125,6 +122,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 
+.transparent-dark {
+  background: var(--card-background);
+}
 
 /* Tip tap Editor */
 
@@ -174,24 +174,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   h1 {
     @apply text-[1.4rem];
-    font-family: 'Geist', sans-serif;
+    font-family: "Geist", sans-serif;
   }
 
   h2 {
     @apply text-[1.2rem];
-    font-family: 'Geist', sans-serif;
+    font-family: "Geist", sans-serif;
   }
 
   h3 {
     @apply text-[1.1rem];
-    font-family: 'Geist', sans-serif;
+    font-family: "Geist", sans-serif;
   }
 
   h4,
   h5,
   h6 {
     @apply text-base;
-    font-family: 'Geist', sans-serif;
+    font-family: "Geist", sans-serif;
   }
 
   /* Code and preformatted text styles */
@@ -215,4 +215,104 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   hr {
     @apply border-t border-gray-200 my-8 border-none;
   }
+}
+
+@keyframes gradient-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 400% 50%;
+  }
+}
+
+@keyframes slide-left {
+  0% {
+    transform: translateX(0%) rotate(-45deg);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(-50%) rotate(-45deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes slide-right {
+  0% {
+    transform: translateX(-50%) rotate(45deg);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(0%) rotate(45deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes pulse-glow {
+  0% {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2) translate(-50%, -50%);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 0.5;
+  }
+}
+
+.animate-gradient-rotate {
+  background-size: 400% 400%;
+  animation: gradient-rotate 15s linear infinite;
+}
+
+.animate-slide-left {
+  animation: slide-left 8s ease-in-out infinite;
+}
+
+.animate-slide-right {
+  animation: slide-right 8s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.bgGradient {
+  background: #000936;
+  background: linear-gradient(
+    54deg,
+    rgba(0, 9, 54, 1) 41%,
+    rgba(0, 13, 59, 1) 43%,
+    rgba(0, 25, 75, 1) 76%,
+    rgba(86, 21, 131, 1) 100%
+  );
+}
+
+@keyframes fly {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(20px, -20px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.animate-fly {
+  animation: fly 3s ease-in-out infinite;
 }

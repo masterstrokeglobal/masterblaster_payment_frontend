@@ -30,7 +30,7 @@ const CreateMerchantPage = () => {
     return (
         <section className="container-main min-h-[60vh] mx-auto">
             <header className="flex flex-col md:flex-row gap-4 flex-wrap md:items-center justify-between">
-                <h2 className="text-xl font-semibold">Create Merchant</h2>
+                <h2 className="text-xl font-semibold text-primary">Create Merchant</h2>
             </header>
             <Separator className="mt-4" />
             <main className="mt-4">

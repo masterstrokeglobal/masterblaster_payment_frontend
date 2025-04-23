@@ -67,9 +67,9 @@ export default function Dashboard() {
 
   console.log("merchantStats", merchantStats)
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg">
+    <div className="space-y-6 p-6 rounded-lg bg-background">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold text-black-sub-heading ">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-primary ">Dashboard</h1>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <Select value={dateFilter} onValueChange={handleDateFilterChange}>
             <SelectTrigger className="w-full sm:w-[180px] border-indigo-200 hover:border-indigo-400 transition-colors">
@@ -104,7 +104,11 @@ export default function Dashboard() {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-emerald-500 to-emerald-600 text-white hover:shadow-xl transition-shadow">
+            <Card style={{
+                background:
+                  "linear-gradient(45deg, rgba(43, 255, 0, 0.6), rgba(0, 255, 26, 0.6))",
+              }} 
+            className="border-0 shadow-lg overflow-hidden text-white hover:shadow-xl transition-shadow">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-emerald-100">Pay In Balance</CardTitle>
               </CardHeader>
@@ -121,7 +125,11 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-rose-500 to-rose-600 text-white hover:shadow-xl transition-shadow">
+            <Card style={{
+                background:
+                  "linear-gradient(45deg, rgba(255, 0, 34, 0.6), rgba(255, 0, 119, 0.6))",
+              }}
+              className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-rose-500 to-rose-600 text-white hover:shadow-xl transition-shadow">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-rose-100">Merchant </CardTitle>
               </CardHeader>
@@ -137,7 +145,11 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:shadow-xl transition-shadow">
+            <Card style={{
+                background:
+                  "linear-gradient(45deg, rgba(0, 26, 255, 0.6), rgba(0, 145, 255, 0.6))",
+              }}
+              className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:shadow-xl transition-shadow">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-rose-100">Merchat Withdrawl</CardTitle>
               </CardHeader>
@@ -154,7 +166,11 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-indigo-500 to-indigo-600 text-white hover:shadow-xl transition-shadow">
+            <Card style={{
+                background:
+                  "linear-gradient(45deg, rgba(0, 234, 255, 0.6), rgba(0, 162, 255, 0.6))",
+              }}
+              className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-indigo-500 to-indigo-600 text-white hover:shadow-xl transition-shadow">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-indigo-100">Wallet Balance</CardTitle>
               </CardHeader>
@@ -177,8 +193,8 @@ export default function Dashboard() {
               <CardHeader className="border-b border-gray-100 pb-4">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <BarChart2 className="h-5 w-5 text-indigo-600" />
-                    <CardTitle className="text-indigo-700">Transaction Statistics</CardTitle>
+                    <BarChart2 className="h-5 w-5 text-primary" />
+                    <CardTitle className="text-primary">Transaction Statistics</CardTitle>
                   </div>
                   <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-medium">
                     {dateFilter === "custom" && dateRange?.from && dateRange?.to
@@ -195,7 +211,7 @@ export default function Dashboard() {
             <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between border-b border-gray-100 pb-4">
                 <div className="flex items-center gap-2">
-                  <PieChart className="h-5 w-5 " />
+                  <PieChart className="h-5 w-5 text-primary" />
                   <CardTitle className="">Transaction Status</CardTitle>
                 </div>
               </CardHeader>

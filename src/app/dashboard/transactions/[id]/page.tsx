@@ -47,7 +47,7 @@ const EditTransactionPage = () => {
     return (
         <>
             {isSuccess && data && (
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-background rounded-xl grid md:grid-cols-2 gap-8">
                     {withdrawlDetails && <WithdrawalDetailsCard withdrawDetails={withdrawlDetails} />}
                     <MerchantDetailsCard merchant={merchant} />
                     <TransactionEditForm

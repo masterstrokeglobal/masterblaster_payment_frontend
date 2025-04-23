@@ -23,11 +23,11 @@ export function DatePickerWithRange({ className, dateRange, onDateRangeChange }:
             id="date"
             variant={"outline"}
             className={cn(
-              "w-full sm:w-[300px] justify-start text-left font-normal",
+              "w-full sm:w-[300px] justify-start text-left text-primary font-normal bg-gray-400/10 hover:bg-gray-400/10",
               !dateRange && "text-muted-foreground",
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="text-primary mr-2 h-4 w-4" />
             {dateRange?.from ? (
               dateRange.to ? (
                 <>
@@ -37,7 +37,7 @@ export function DatePickerWithRange({ className, dateRange, onDateRangeChange }:
                 format(dateRange.from, "LLL dd, y")
               )
             ) : (
-              <span>Pick a date range</span>
+              <span className="text-primary">Pick a date range</span>
             )}
           </Button>
         </PopoverTrigger>

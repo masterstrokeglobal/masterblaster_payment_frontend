@@ -70,12 +70,12 @@ const UserPaymentsTable = () => {
         <section className="container-main min-h-[60vh] my-12">
             <header className="flex flex-col md:flex-row gap-4 flex-wrap md:items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <h2 className="text-xl font-semibold">Withdrawal Requests</h2>
+                    <h2 className="text-xl font-semibold text-primary">Withdrawal Requests</h2>
 
                 </div>
                 <div className="flex gap-5">
                     <div className="relative min-w-60 flex-1">
-                        <Search size={18} className="absolute top-2.5 left-2.5" />
+                        <Search size={18} className="text-primary absolute top-2.5 left-2.5" />
                         <Input
                             placeholder="Search"
                             onChange={handleSearch}
@@ -104,7 +104,7 @@ const UserPaymentsTable = () => {
                     {userDetails?.isMerchant &&
                         <Link href={`/withdraw/${userDetails?.id}`}>
                             <Button
-                                className="flex items-center gap-2"
+                                className="bg-background flex items-center gap-2"
                             >
                                 <Plus size={16} />
                                 Create Request
@@ -114,7 +114,7 @@ const UserPaymentsTable = () => {
                     {merchantId && merchant.hasAccessTo(APIS.USER_WITHDRAW_BULK) &&
                         <Link href="/dashboard/user-payouts/bulk">
                             <Button
-                                className="flex items-center gap-2"
+                                className="bg-background flex items-center gap-2"
                             >
                                 <FileIcon size={16} />
                                 Bulk Payout

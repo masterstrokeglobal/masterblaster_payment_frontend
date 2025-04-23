@@ -76,6 +76,7 @@ const MerchantDocumentForm = ({ defaultValues, onSubmit, isLoading }: Props) => 
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormImage
+                                inputClassName="bg-background"
                                 control={form.control}
                                 name="companyPanCard"
                                 label="Company PAN Card*"

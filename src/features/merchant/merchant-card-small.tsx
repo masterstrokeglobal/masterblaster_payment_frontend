@@ -11,10 +11,10 @@ const DetailRow = ({ icon: Icon, label, value }: { icon: any, label: string, val
   
   return (
     <div className="flex items-start gap-3 py-2">
-      <Icon className="w-5 h-5 text-gray-500 mt-0.5" />
+      <Icon className="w-5 h-5 text-primary mt-0.5" />
       <div>
-        <p className="text-sm text-gray-500">{label}</p>
-        <p className="text-sm font-medium">{value}</p>
+        <p className="text-sm text-primary">{label}</p>
+        <p className="text-sm font-medium text-gray-400">{value}</p>
       </div>
     </div>
   );

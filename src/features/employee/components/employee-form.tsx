@@ -65,10 +65,10 @@ const EmployeeForm = ({ defaultValues, onSubmit, isLoading, isUpdate }: Props) =
             </div>
 
             <footer className="flex justify-end gap-4 mt-8">
-                <Button type="button" variant="outline" onClick={() => form.reset()}>
+                <Button className="bg-background text-primary" type="button" variant="outline" onClick={() => form.reset()}>
                     Reset
                 </Button>
-                <Button type="submit" disabled={isLoading}>
+                <Button className="bg-background hover:bg-gray-100/10" type="submit" disabled={isLoading}>
                     {isLoading ? "Creating..." : "Create Employee"}
                 </Button>
             </footer>
