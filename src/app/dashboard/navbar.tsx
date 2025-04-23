@@ -35,13 +35,13 @@ const Navbar = () => {
                 <Sidebar />
             </SheetContent>
         </Sheet>
-        <Button variant="outline-primary" onClick={() => router.back()}
-            className="rounded-full bg-gray-400/10 hover:bg-gray-400/10">
+        <Button variant="outline" onClick={() => router.back()}
+            className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
             Back
         </Button>
 
-        {isMerchant && <Button variant="outline-primary" className="ml-auto">
+        {isMerchant && <Button variant="outline" className="ml-auto">
             <Wallet2 className="h-5 w-5" />
             <span className="mr-2">
                 Wallet
@@ -50,7 +50,7 @@ const Navbar = () => {
         </Button>}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="secondary" className={cn('ml-2 rounded-full bg-gray-400/10 hover:bg-gray-400/10 text-primary', isMerchant ? 'ml-2' : 'ml-auto')}>
+                <Button variant="outline" className={cn('ml-2 rounded-full', isMerchant ? 'ml-2' : 'ml-auto')}>
                     <CircleUser className="h-5 w-5" />
                     <span className="sr-only">Toggle user menu</span>
                 </Button>

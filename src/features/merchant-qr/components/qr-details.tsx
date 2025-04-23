@@ -44,11 +44,11 @@ export const QRDetails = ({ merchantQR }: QRDetailsProps) => {
     ];
 
     return (
-        <Card className="border-2">
+        <Card className="bg-background">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
                 <CardTitle className="text-lg">QR Details</CardTitle>
                 <div className="flex items-center gap-4">
-                    <Badge variant={isActive ? "default" : "secondary"}>
+                    <Badge className="bg-background" variant={isActive ? "default" : "secondary"}>
                         {isActive ? "Active" : "Inactive"}
                     </Badge>
                     <Switch
@@ -62,17 +62,17 @@ export const QRDetails = ({ merchantQR }: QRDetailsProps) => {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-1/3">Field</TableHead>
-                            <TableHead>Details</TableHead>
+                            <TableHead className="text-primary font-bold w-1/3">Field</TableHead>
+                            <TableHead className="text-primary font-bold">Details</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {details.map((detail, index) => (
                             <TableRow key={index}>
-                                <TableCell className="text-sm text-gray-500">
+                                <TableCell className="text-sm text-primary">
                                     {detail.label}
                                 </TableCell>
-                                <TableCell className={`text-sm ${detail.mono ? 'font-mono' : ''}`}>
+                                <TableCell className={`text-sm text-primary ${detail.mono ? 'font-mono' : ''}`}>
                                     {detail.value}
                                 </TableCell>
                             </TableRow>

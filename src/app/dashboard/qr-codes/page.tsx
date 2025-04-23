@@ -165,7 +165,7 @@ const MerchantQRDashboard: React.FC = () => {
                     <div className="lg:col-span-2">
                         {selectedQR ? (<>
                             <QRDisplay qrCode={selectedQR} />
-                            <div className="bg-background space-y-6">
+                            <div className="space-y-6">
                                 <QRDetails merchantQR={selectedQR} />
                                 <Alert className="border-2 bg-blue-50">
                                     <AlertDescription className="text-sm text-blue-800">

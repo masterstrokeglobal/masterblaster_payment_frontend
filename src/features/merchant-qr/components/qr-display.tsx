@@ -67,7 +67,7 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
         : 'N/A';
 
     return (
-        <Card className="lg:col-span-2 border-2">
+        <Card className="lg:col-span-2 bg-background mb-4">
             <CardHeader className="pb-4">
                 <div className="flex justify-between items-start">
                     <div>
@@ -86,7 +86,7 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
             </CardHeader>
 
             <CardContent>
-                <div className="bg-gradient-to-b from-white to-gray-50 rounded-xl border-2 border-gray-100 p-8">
+                <div className="bg-bakcground rounded-xl p-8">
                     <div className="flex justify-center">
                         <div
                             ref={qrCodeRef}
