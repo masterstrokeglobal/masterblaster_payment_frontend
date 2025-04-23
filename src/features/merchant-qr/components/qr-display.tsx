@@ -111,6 +111,7 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                     variant="outline"
                     onClick={() => deleteQr(qrCode.id.toString())}
                     disabled={isDeleting}
+                    className="text-primary"
                 >
                     <Trash className="w-4 h-4 mr-2" />
                     Delete
@@ -121,6 +122,7 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                     variant="outline"
                     onClick={handleDownload}
                     disabled={!qrCode?.qrCode}
+                    className="text-primary"
                 >
                     <Download className="w-4 h-4 mr-2" />
                     Download
@@ -129,6 +131,7 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
                     variant="outline"
                     onClick={handleCopyLink}
                     disabled={!qrCode?.upiId}
+                    className="text-primary"
                 >
                     <Share2 className="w-4 h-4 mr-2" />
                     {copied ? 'Copied!' : 'Share'}
@@ -159,7 +162,7 @@ export const UpdateQrMerchant = ({ qrCode }: Props) => {
 
         <Dialog>
             <DialogTrigger asChild>
-                <Button>
+                <Button variant="outline" className="text-primary">
                     Update QR
                 </Button>
             </DialogTrigger>
