@@ -153,7 +153,11 @@ export const UpdateQrMerchant = ({ qrCode }: Props) => {
     const closeButtonRef = useRef<HTMLButtonElement>(null);
     const handleGenerateNewQR = async (values: MerchantQrFormValues): Promise<void> => {
         try {
-            await createMutation.mutateAsync({ qrId: qrCode.id.toString(), data: values });
+            const updatedValues = {
+                ...values,
+                qrLimit: Number(values.qrLimit), // Convert qrLimit to number
+            };
+            await createMutation.mutateAsync({ qrId: qrCode.id.toString(), data: updatedValues });
         } catch (error) {
             console.error('Error generating QR:', error);
         }

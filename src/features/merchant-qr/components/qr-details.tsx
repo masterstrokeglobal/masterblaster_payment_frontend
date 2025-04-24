@@ -20,7 +20,8 @@ export const QRDetails = ({ merchantQR }: QRDetailsProps) => {
         id,
         ifscCode,
         isActive,
-        upiId
+        upiId,
+        qrLimit
     } = merchantQR;
 
     const handleActiveToggle = async (checked: boolean) => {
@@ -41,6 +42,7 @@ export const QRDetails = ({ merchantQR }: QRDetailsProps) => {
         { label: 'Bank Name', value: bankName || 'N/A' },
         { label: 'UPI ID', value: upiId || 'N/A', mono: true },
         { label: 'IFSC Code', value: ifscCode || 'N/A', mono: true },
+        { label: 'QR Limit', value: qrLimit || 'N/A', mono: true },
     ];
 
     return (
