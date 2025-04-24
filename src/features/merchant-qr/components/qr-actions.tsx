@@ -24,6 +24,7 @@ interface CreateQRValues {
     bankName: string;
     ifscCode: string;
     upiId: string;
+    qrLimit: string;
 }
 
 
@@ -33,7 +34,11 @@ export const QuickActions = () => {
     const closeButtonRef = useRef<HTMLButtonElement>(null);
     const handleGenerateNewQR = async (values: CreateQRValues): Promise<void> => {
         try {
-            await createMutation.mutateAsync(values);
+            const updatedValues = {
+                ...values,
+                qrLimit: Number(values.qrLimit), // Convert qrLimit to number
+            };
+            await createMutation.mutateAsync(updatedValues);
         } catch (error) {
             console.error('Error generating QR:', error);
         }
