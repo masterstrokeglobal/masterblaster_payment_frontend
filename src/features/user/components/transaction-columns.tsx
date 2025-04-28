@@ -40,6 +40,13 @@ const transactionColumns: ColumnDef<Transaction>[] = [
     ),
   },
   {
+    header: "Name",
+    accessorKey: "name",
+    cell: ({ row }) => (
+      <div className="text-[#6B7280]">{row.original.payerName}</div>
+    ),
+  },
+  {
     header: "AMOUNT",
     accessorKey: "amount",
     cell: ({ row }) => (

@@ -35,6 +35,7 @@ export enum TransactionType {
     updatedAt!: Date;
     deletedAt?: Date;
     merchant!: Merchant;
+    payerName!: string;
   
     constructor(data: Partial<Transaction>) {
       Object.assign(this, data);
