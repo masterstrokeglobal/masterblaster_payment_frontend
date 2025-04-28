@@ -19,10 +19,10 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { useRef } from 'react';
 import { useCreateMerchantQr } from '../api/merchant-qr-query';
 interface CreateQRValues {
-    accountName: string;
-    accountNumber: string;
-    bankName: string;
-    ifscCode: string;
+    accountName?: string;
+    accountNumber?: string;
+    bankName?: string;
+    ifscCode?: string;
     upiId: string;
     qrLimit: string;
 }

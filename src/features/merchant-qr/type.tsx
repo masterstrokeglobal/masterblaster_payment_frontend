@@ -36,13 +36,13 @@ export interface MerchantQrResponse {
 
 // Zod schema for form validation
 export const merchantQrFormSchema = z.object({
-  accountName: z.string().min(1, "Account name is required"),
-  accountNumber: z.string().min(1, "Account number is required"),
-  bankName: z.string().min(1, "Bank name is required"),
+  accountName: z.string().optional(),
+  accountNumber: z.string().optional(),
+  bankName: z.string().optional(),
   upiId: z.string().min(1, "UPI ID is required"),
-  ifscCode: z.string().min(1, "IFSC code is required"),
+  ifscCode: z.string().optional(),
   qrLimit: z.string(),
-  isActive: z.boolean().default(true),
+  isActive: z.boolean().default(true).optional(),
 });
 
 // Infer the form type from the schema
