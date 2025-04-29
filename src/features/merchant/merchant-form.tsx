@@ -32,7 +32,7 @@ export const createMerchantInputSchema = (isEdit: boolean) => z.object({
     companyPANImage: z.string().optional(),
     companyCINImage: z.string().optional(),
     additionalVerificationInfo: z.string().optional(),
-    platformFeePercentage: z.coerce.number().positive(),
+    platformFeePercentage: z.coerce.number().nonnegative(),
 });
 
 export type MerchantFormValues = z.infer<ReturnType<typeof  createMerchantInputSchema>>;
