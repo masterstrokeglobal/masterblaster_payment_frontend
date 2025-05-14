@@ -11,6 +11,14 @@ export const merchantQrAPI = {
         return api.post("/merchant-qr", data);
     },
 
+    startAutomation: async (data: any) => {
+        return api.post("/merchant-qr/start-automation", data);
+    },
+
+    stopAutomation: async (data: any) => {
+        return api.post("/merchant-qr/stop-automation", data);
+    },
+
     getMerchantQrById: async (qrId: string) => {
         return api.get(`/merchant-qr/${qrId}`);
     },

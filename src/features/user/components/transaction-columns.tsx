@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, PenIcon } from "lucide-react";
+import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Transaction,
@@ -9,6 +9,16 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useAuthStore } from "@/context/auth-context";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import {
+  useApproveTransaction,
+  useRejectTransaction,
+} from "@/features/transaction/query/transactions-queries";
+import FormProvider from "@/components/form/form-provider";
+import FormGroupSelect from "@/components/form/form-select";
 
 const transactionColumns: ColumnDef<Transaction>[] = [
   {
@@ -76,14 +86,19 @@ const transactionColumns: ColumnDef<Transaction>[] = [
     },
   },
   {
-    header: "Platform Fee %",
-    accessorKey: "bonusPercentage",
-    cell: ({ row }) => (
-      <div className="text-[#6B7280]">
-        {row.original.platformFeePercentage}%
-      </div>
-    ),
+    header: "Update Status",
+    accessorKey: "dropDown",
+    cell: ({ row }) => <ActionDropDown transaction={row.original} />,
   },
+  // {
+  //   header: "Platform Fee %",
+  //   accessorKey: "bonusPercentage",
+  //   cell: ({ row }) => (
+  //     <div className="text-[#6B7280]">
+  //       {row.original.platformFeePercentage}%
+  //     </div>
+  //   ),
+  // },
   {
     header: "Platform Fee",
     accessorKey: "bonusAmount",
@@ -129,5 +144,74 @@ const ActionColumn = ({ transaction }: { transaction: Transaction }) => {
         </Button>
       </Link>
     </div>
+  );
+};
+export const transactionEditSchema = z.object({
+  status: z.enum([
+    TransactionStatus.PENDING,
+    TransactionStatus.COMPLETED,
+    TransactionStatus.FAILED,
+  ]),
+});
+
+const ActionDropDown = ({ transaction }: { transaction: Transaction }) => {
+  const id = String(transaction.id);
+
+  type TransactionFormValues = z.infer<typeof transactionEditSchema>;
+
+  const form = useForm<TransactionFormValues>({
+    resolver: zodResolver(transactionEditSchema),
+    defaultValues: { status: TransactionStatus.PENDING },
+  });
+
+  const { handleSubmit, control } = form;
+
+  const { mutate: approve, isPending: isPending } = useApproveTransaction();
+  const { mutate: reject, isPending: confirmPending } = useRejectTransaction();
+
+  const onSubmit = (updatedData: TransactionFormValues) => {
+    if (updatedData.status == TransactionStatus.COMPLETED) {
+      approve(id!.toString());
+    }
+    if (updatedData.status == TransactionStatus.FAILED) {
+      reject(id!.toString());
+    }
+  };
+  return (
+    <>
+      {transaction?.status === TransactionStatus.PENDING && (
+        <div className="">
+          <FormProvider className="flex" methods={form} onSubmit={handleSubmit(onSubmit)}>
+            <FormGroupSelect
+              name="status"
+              label=""
+              control={control}
+              options={Object.values(TransactionStatus).map((status) => ({
+                label: status,
+                value: status,
+              }))}
+              // options={[
+              //   {
+              //     label: "Completed",
+              //     value: TransactionStatus.COMPLETED.toString(),
+              //   },
+              //   {
+              //     label: "Cancelled",
+              //     value: TransactionStatus.FAILED.toString(),
+              //   },
+              // ]}
+            />
+            <Button
+              variant="outline"
+              className="text-primary mx-4 mt-2"
+              type="submit"
+              disabled={isPending || confirmPending}
+            >
+              {isPending || confirmPending ? "Updating..." : "Update Status"}
+            </Button>
+          </FormProvider>
+        </div>
+      )}
+    </>
   );
 };

@@ -15,6 +15,8 @@ export interface MerchantQr {
   updatedAt: Date;
   deletedAt?: Date;
   qrLimit?: string
+  mobileIp?: string;
+  batteryPercentage?: string;
 }
 
 // Type for creating a new Merchant QR

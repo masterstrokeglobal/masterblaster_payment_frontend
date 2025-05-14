@@ -9,6 +9,40 @@ export const useGetAllMerchantQrs = (filter: any) => {
     });
 };
 
+export const useStartAutomation = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (mobileIp: string) => merchantQrAPI.startAutomation({ mobileIp }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => query.queryKey[0] === "merchant-qrs",
+            });
+            toast.success("Automation started successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data.message ?? "Error starting automation");
+        },
+    });
+};
+
+export const useStopAutomation = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (mobileIp: string) => merchantQrAPI.stopAutomation({ mobileIp }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                predicate: (query) => query.queryKey[0] === "merchant-qrs",
+            });
+            toast.success("Automation stopped successfully");
+        },
+        onError: (error: any) => {
+            toast.error(error.response?.data.message ?? "Error starting automation");
+        },
+    });
+};
+
 export const useCreateMerchantQr = () => {
     const queryClient = useQueryClient();
 
