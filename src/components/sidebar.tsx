@@ -194,7 +194,7 @@ const Sidebar = ({ className }: PropsWithClassName) => {
 
     if (!merchant.restrictedApi?.includes(APIS.MERCHANT_QR)) {
       menuItems.push({
-        name: "QR Codes",
+        name: "Add QR Codes and Bank Accounts",
         icon: QrCodeIcon,
         link: "/dashboard/qr-codes",
       });

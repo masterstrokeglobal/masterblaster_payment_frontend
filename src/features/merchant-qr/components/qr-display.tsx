@@ -1,6 +1,13 @@
 "use client";
 
-import { Download, PlusCircle, Share2, Trash , StopCircle , PlayCircle} from "lucide-react";
+import {
+  Download,
+  PlusCircle,
+  Share2,
+  Trash,
+  StopCircle,
+  PlayCircle,
+} from "lucide-react";
 import { useState, useRef } from "react";
 import {
   Card,
@@ -77,32 +84,32 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
   const stopAutomationMutation = useStopAutomation();
 
   const handleStartAutomation = async () => {
-      if (!qrCode?.mobileIp) {
-          return;
-      }
-
-      try {
-          // Trigger the mutation with the mobileIp string
-          await startAutomationMutation.mutateAsync(qrCode.mobileIp);
-      } catch (error) {
-          console.error("Failed to start automation:", error);
-        //   throw new Error("Failed to start automation : " + error);
-      }
-  };
-  
-  const handleStopAutomation = async () => {
     if (!qrCode?.mobileIp) {
-        return;
+      return;
     }
 
     try {
-        // Trigger the mutation with the mobileIp string
-        await stopAutomationMutation.mutateAsync(qrCode.mobileIp);
+      // Trigger the mutation with the mobileIp string
+      await startAutomationMutation.mutateAsync(qrCode.mobileIp);
     } catch (error) {
-        console.error("Failed to stop automation:", error);
-        return;
+      console.error("Failed to start automation:", error);
+      //   throw new Error("Failed to start automation : " + error);
     }
-};
+  };
+
+  const handleStopAutomation = async () => {
+    if (!qrCode?.mobileIp) {
+      return;
+    }
+
+    try {
+      // Trigger the mutation with the mobileIp string
+      await stopAutomationMutation.mutateAsync(qrCode.mobileIp);
+    } catch (error) {
+      console.error("Failed to stop automation:", error);
+      return;
+    }
+  };
 
   const formattedDate = qrCode?.updatedAt
     ? format(new Date(qrCode.updatedAt), "PPP p")
@@ -110,7 +117,7 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
 
   const batteryPercentage = qrCode?.batteryPercentage
     ? qrCode.batteryPercentage
-    : "";  
+    : "";
 
   return (
     <Card className="lg:col-span-2 bg-background mb-4">
@@ -121,9 +128,18 @@ export const QRDisplay = ({ qrCode }: QRDisplayProps) => {
             <CardDescription>Last updated: {formattedDate}</CardDescription>
             <CardDescription> {batteryPercentage}</CardDescription>
           </div>
-          <Badge variant="outline" className="border-green-500 text-green-600">
-            Active
-          </Badge>
+          {qrCode?.isActive ? (
+            <Badge
+              variant="outline"
+              className="border-green-500 text-green-600"
+            >
+              Active
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="border-red-500 text-red-600">
+              Inactive
+            </Badge>
+          )}
         </div>
       </CardHeader>
 

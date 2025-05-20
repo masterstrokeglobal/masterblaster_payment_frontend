@@ -23,7 +23,7 @@ interface CreateQRValues {
     accountNumber?: string;
     bankName?: string;
     ifscCode?: string;
-    upiId: string;
+    upiId?: string;
     qrLimit: string;
 }
 
@@ -49,7 +49,7 @@ export const QuickActions = () => {
             <DialogTrigger asChild>
                 <Button variant="outline" className="text-primary">
                     <Plus className="w-4 h-4 mr-2" />
-                    Generate New QR
+                    Add New QR or Bank Account
                 </Button>
             </DialogTrigger>
             <DialogContent>

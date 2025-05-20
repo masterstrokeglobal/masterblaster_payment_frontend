@@ -142,7 +142,7 @@ const MerchantQRDashboard: React.FC = () => {
                                     }`}
                             >
                                 <div className="font-medium text-primary truncate">
-                                    {qr.upiId || `QR Code ${qr.id}`}
+                                    {qr.upiId || qr.accountName || `QR Code ${qr.id}`}
                                 </div>
                                 {qr.bankName && (
                                     <div className="text-sm text-gray-500">

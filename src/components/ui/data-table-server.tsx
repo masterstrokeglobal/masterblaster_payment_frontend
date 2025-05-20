@@ -70,7 +70,6 @@ export default function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
-
   return (
     <div>
       <div className={cn("dark:bg-dark-primary rounded-xl overflow-hidden transparent-dark", className)}>

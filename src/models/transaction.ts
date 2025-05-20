@@ -26,6 +26,7 @@ export enum TransactionType {
   export class Transaction {
     id!: number;
     pgId?: string;
+    accountInfo?: string;
     type!: TransactionType;
     amount!: number;
     status!: TransactionStatus;
@@ -36,6 +37,7 @@ export enum TransactionType {
     deletedAt?: Date;
     merchant!: Merchant;
     payerName!: string;
+    image?: { type: "Buffer"; data: number[] };
   
     constructor(data: Partial<Transaction>) {
       Object.assign(this, data);

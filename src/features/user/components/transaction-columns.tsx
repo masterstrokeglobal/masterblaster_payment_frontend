@@ -19,6 +19,7 @@ import {
 } from "@/features/transaction/query/transactions-queries";
 import FormProvider from "@/components/form/form-provider";
 import FormGroupSelect from "@/components/form/form-select";
+import { useEffect, useRef, useState } from "react";
 
 const transactionColumns: ColumnDef<Transaction>[] = [
   {
@@ -43,11 +44,128 @@ const transactionColumns: ColumnDef<Transaction>[] = [
     },
   },
   {
+    header: "Account Info",
+    accessorKey: "accountInfo",
+    cell: ({ row }) => {
+      // Convert accountInfo to string to handle string | number
+      const accountInfo = String(row.original.accountInfo || "");
+
+      // Parse accountInfo by splitting on newlines and trimming whitespace
+      const infoParts = accountInfo
+        .split("\n")
+        .map((line) => line.trim()) // Remove leading/trailing whitespace
+        .filter((line) => line) // Remove empty lines
+        .map((line) => {
+          const [key, ...valueParts] = line.split(": ");
+          return {
+            key: key.replace(":", "").trim(),
+            value: valueParts.join(": ").trim() || "N/A",
+          };
+        });
+
+      // State to toggle tooltip visibility
+      const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+      // Ref to track the icon element
+      const iconRef = useRef<SVGSVGElement>(null);
+
+      // Toggle tooltip on icon click
+      const handleIconClick = () => {
+        setIsTooltipVisible((prev) => !prev);
+      };
+
+      // Close tooltip on click outside
+      useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+          if (
+            iconRef.current &&
+            !iconRef.current.contains(event.target as Node)
+          ) {
+            setIsTooltipVisible(false);
+          }
+        };
+
+        // Add event listener for clicks on the document
+        document.addEventListener("click", handleClickOutside);
+
+        // Cleanup event listener on component unmount
+        return () => {
+          document.removeEventListener("click", handleClickOutside);
+        };
+      }, []);
+
+      return (
+        <div className="relative flex items-center">
+          {/* Icon with click handler and ref */}
+          <span className="inline-block">
+            <svg
+              ref={iconRef}
+              className="w-5 h-5 text-[#6B7280] cursor-pointer"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              onClick={handleIconClick}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {/* Tooltip shown based on state */}
+            {isTooltipVisible && (
+              <div className="absolute bg-gray-800 text-white text-sm rounded py-2 px-3 z-10 -top-2 left-8 min-w-max pointer-events-none">
+                {infoParts.length > 0 ? (
+                  <div className="grid gap-1">
+                    {infoParts.map((item, index) => (
+                      <div key={index} className="flex">
+                        <span className="font-semibold mr-2">{item.key}:</span>
+                        <span>{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <span>No account info available</span>
+                )}
+              </div>
+            )}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
     header: "UTR",
     accessorKey: "pgId",
     cell: ({ row }) => (
       <div className="text-[#6B7280]">{row.original.pgId}</div>
     ),
+  },
+  {
+    header: "Payment Receipt",
+    accessorKey: "image",
+    cell: ({ row }) => {
+      const buffer = row.original.image?.data;
+      if (!buffer || !buffer.length) {
+        return <span className="text-gray-400">No receipt</span>;
+      }
+
+      // Convert the buffer (Uint8Array or array of numbers) to a Blob and Object URL
+      const byteArray = new Uint8Array(buffer);
+      const blob = new Blob([byteArray], { type: "image/jpeg" }); // Adjust MIME type if needed
+      const url = URL.createObjectURL(blob);
+
+      return (
+        <a
+          href={url}
+          download={`receipt-${row.original.id || "image"}.jpg`}
+          className="text-blue-600 underline"
+        >
+          Download Receipt
+        </a>
+      );
+    },
   },
   {
     header: "Name",
@@ -181,7 +299,11 @@ const ActionDropDown = ({ transaction }: { transaction: Transaction }) => {
     <>
       {transaction?.status === TransactionStatus.PENDING && (
         <div className="">
-          <FormProvider className="flex" methods={form} onSubmit={handleSubmit(onSubmit)}>
+          <FormProvider
+            className="flex"
+            methods={form}
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <FormGroupSelect
               name="status"
               label=""
