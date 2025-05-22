@@ -315,4 +315,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .animate-fly {
   animation: fly 3s ease-in-out infinite;
+  will-change: transform; /* Optimize for transform animations */
+  position: relative; /* Ensure the element moves relative to its own position */
 }

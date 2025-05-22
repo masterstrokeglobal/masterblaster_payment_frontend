@@ -234,6 +234,7 @@ export const UpdateQrMerchant = ({ qrCode }: Props) => {
       const updatedValues = {
         ...values,
         qrLimit: Number(values.qrLimit), // Convert qrLimit to number
+        balanceQrLimit: Number(values.qrLimit), // Convert balanceQrLimit to number
       };
       await createMutation.mutateAsync({
         qrId: qrCode.id.toString(),

@@ -47,7 +47,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
         zIndex: 10
       }} className="xl:col-span-7 md:col-span-6 col-span-4 bg-[#000936] rounded-[1.25rem] hidden md:flex flex-col mt-4 pt-12 pl-12 -mr-4">
         <header className="space-y-6 mb-12">
-          <div className="space-y-2.5 bg-background p-4 animate-fly">
+          <div className="space-y-2.5 bg-background p-4">
             <h1 className="text-3xl text-primary font-bold">
               Seamless Payments Made Simple
             </h1>
@@ -65,7 +65,7 @@ const AuthLayout = ({ children }: PropsWithChildren) => {
                 className="w-32"
               />
             </div> */}
-            <p className="text-sm text-primary bg-background p-4 animate-fly">
+            <p className="text-sm text-primary bg-background p-4">
               Trusted by 50,000+ businesses worldwide
             </p>
           </div>

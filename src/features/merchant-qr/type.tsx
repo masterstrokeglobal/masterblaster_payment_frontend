@@ -15,6 +15,7 @@ export interface MerchantQr {
   updatedAt: Date;
   deletedAt?: Date;
   qrLimit?: string
+  balanceQrLimit?: string;
   mobileIp?: string;
   batteryPercentage?: string;
 }

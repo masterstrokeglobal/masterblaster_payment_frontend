@@ -37,6 +37,7 @@ export const QuickActions = () => {
             const updatedValues = {
                 ...values,
                 qrLimit: Number(values.qrLimit), // Convert qrLimit to number
+                balanceQrLimit: Number(values.qrLimit), // Convert balanceQrLimit to number
             };
             await createMutation.mutateAsync(updatedValues);
         } catch (error) {
