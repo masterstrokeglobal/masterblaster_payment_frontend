@@ -132,9 +132,9 @@ const Sidebar = ({ className }: PropsWithClassName) => {
         <AccordionItem value={item.name} key={item.name}>
           <AccordionTrigger
             className={cn(
-              "flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:text-black [&[data-state=open]]:bg-gray-200 [&[data-state=open]]:rounded-b-none rounded-md hover:bg-primary ",
+              "flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:text-black [&[data-state=open]]:bg-background [&[data-state=open]]:rounded-b-none rounded-md hover:bg-background ",
               isActive &&
-                "bg-primary text-primary-foreground hover:bg-primary/90"
+                "bg-background text-primary-foreground hover:bg-background"
             )}
           >
             <span className="flex items-center">
@@ -142,7 +142,7 @@ const Sidebar = ({ className }: PropsWithClassName) => {
               {item.name}
             </span>
           </AccordionTrigger>
-          <AccordionContent className="bg-gray-200 rounded-b-md pl-4">
+          <AccordionContent className="bg-background rounded-b-md pl-4">
             <div className="flex flex-col space-y-1 px-4">
               {item.subItems.map((subItem) => (
                 <Link
@@ -210,30 +210,25 @@ const Sidebar = ({ className }: PropsWithClassName) => {
 
     if (!merchant.restrictedApi?.includes(APIS.MERCHANT_PAYOUT)) {
       menuItems.push({
-        name: "Payouts",
+        name: "Payout Settings",
         icon: DollarSign,
-        link: "/dashboard/payouts",
-      });
-      menuItems.push({
-        name: "Payout Options",
-        icon: Repeat1,
-        link: "/dashboard/payout-options",
+        subItems: [
+          { name: "Payouts", link: "/dashboard/payouts" },
+          { name: "Payout Options", link: "/dashboard/payout-options" },
+        ],
       });
     }
 
     if (!merchant.restrictedApi?.includes(APIS.DEVELOPER_API)) {
-      menuItems.push(
-        {
-          name: "Available API's",
-          icon: Code2,
-          link: "/dashboard/apis",
-        },
-        {
-          name: "Developer Settings",
-          icon: KeyIcon,
-          link: "/dashboard/api-key",
-        }
-      );
+
+      menuItems.push({
+        name: "API Settings",
+        icon: DollarSign,
+        subItems: [
+          { name: "Available API's", link: "/dashboard/apis" },
+          { name: "Developer Settings", link: "/dashboard/api-key" },
+        ],
+      });
     }
   }
 
