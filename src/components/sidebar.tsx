@@ -132,7 +132,7 @@ const Sidebar = ({ className }: PropsWithClassName) => {
         <AccordionItem value={item.name} key={item.name}>
           <AccordionTrigger
             className={cn(
-              "flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:text-black [&[data-state=open]]:bg-background [&[data-state=open]]:rounded-b-none rounded-md hover:bg-background ",
+              "flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:bg-background [&[data-state=open]]:rounded-b-none rounded-md hover:bg-background ",
               isActive &&
                 "bg-background text-primary-foreground hover:bg-background"
             )}
@@ -144,12 +144,12 @@ const Sidebar = ({ className }: PropsWithClassName) => {
           </AccordionTrigger>
           <AccordionContent className="bg-background rounded-b-md pl-4">
             <div className="flex flex-col space-y-1 px-4">
-              {item.subItems.map((subItem) => (
+              {item.subItems.map((subItem :any) => (
                 <Link
                   key={subItem.name}
                   href={subItem.link}
                   className={cn(
-                    "flex items-center py-2 px-2 text-sm font-medium rounded-md hover:bg-gray-300 hover:text-accent-foreground",
+                    "flex !text-primary items-center py-2 px-2 text-sm font-medium rounded-md hover:bg-background hover:text-accent-foreground",
                     "transition-colors duration-200",
                     pathname === subItem.link &&
                       "bg-primary/50 text-accent-foreground"
@@ -202,16 +202,18 @@ const Sidebar = ({ className }: PropsWithClassName) => {
 
     if (!merchant.restrictedApi?.includes(APIS.USER_WITHDRAW)) {
       menuItems.push({
-        name: "User Payouts",
+        name: "Withdraws",
         icon: DollarSign,
-        link: "/dashboard/user-payouts",
+        subItems: [
+          { name: "User Payouts", link: "/dashboard/user-payouts" },
+        ],
       });
     }
 
     if (!merchant.restrictedApi?.includes(APIS.MERCHANT_PAYOUT)) {
       menuItems.push({
         name: "Payout Settings",
-        icon: DollarSign,
+        icon: Repeat1,
         subItems: [
           { name: "Payouts", link: "/dashboard/payouts" },
           { name: "Payout Options", link: "/dashboard/payout-options" },
@@ -223,7 +225,7 @@ const Sidebar = ({ className }: PropsWithClassName) => {
 
       menuItems.push({
         name: "API Settings",
-        icon: DollarSign,
+        icon: KeyIcon,
         subItems: [
           { name: "Available API's", link: "/dashboard/apis" },
           { name: "Developer Settings", link: "/dashboard/api-key" },
