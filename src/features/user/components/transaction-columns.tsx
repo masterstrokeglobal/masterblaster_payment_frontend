@@ -175,6 +175,13 @@ const transactionColumns: ColumnDef<Transaction>[] = [
     ),
   },
   {
+    header: "Account Id",
+    accessorKey: "accountId",
+    cell: ({ row }) => (
+      <div className="text-[#6B7280]">{row.original.accountId}</div>
+    ),
+  },
+  {
     header: "AMOUNT",
     accessorKey: "amount",
     cell: ({ row }) => (

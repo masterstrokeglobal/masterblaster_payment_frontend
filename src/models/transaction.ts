@@ -26,6 +26,7 @@ export enum TransactionType {
   export class Transaction {
     id!: number;
     pgId?: string;
+    accountId?: string;
     accountInfo?: string;
     type!: TransactionType;
     amount!: number;
