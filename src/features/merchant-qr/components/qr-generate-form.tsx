@@ -46,7 +46,7 @@ export const QRGenerateForm = ({
       upiId: defaultValues?.upiId ?? "",
       ifscCode: defaultValues?.ifscCode ?? "",
       isActive: defaultValues?.isActive ?? true,
-      qrLimit: defaultValues?.qrLimit ?? "10000",
+      qrLimit: defaultValues?.qrLimit?.toString() ?? "10000",
     },
   });
 
