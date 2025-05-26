@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { gsap } from "gsap";
+import earthTexture from "../../../public/images/earth.jpg"
+import earthSkeleton from "../../../public/images/earth_skeleton.jpg"
 
 const GlobeAnimation = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,12 +42,9 @@ const GlobeAnimation = () => {
 
     // Texture loader
     const loader = new THREE.TextureLoader();
-    const earthTextureSrc =
-      "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg";
-    const bumpTextureSrc =
-      "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"; // Dedicated bump map
-    const specularTextureSrc =
-      "https://threejs.org/examples/textures/planets/earth_specular_2048.jpg";
+    const earthTextureSrc = earthTexture.src
+    const bumpTextureSrc = earthTexture.src // Dedicated bump map
+    const specularTextureSrc = earthSkeleton.src;
 
     let globe: THREE.Mesh | undefined; // Explicitly type globe
     Promise.all([
