@@ -132,7 +132,7 @@ const Sidebar = ({ className }: PropsWithClassName) => {
         <AccordionItem value={item.name} key={item.name}>
           <AccordionTrigger
             className={cn(
-              "flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:bg-background [&[data-state=open]]:rounded-b-none rounded-md hover:bg-background ",
+              "hover:no-underline [&[data-state=open]]:text-white text-gray-400 flex items-center py-2 px-4 text-sm font-medium [&[data-state=open]]:bg-background [&[data-state=open]]:rounded-b-none rounded-md hover:bg-background ",
               isActive &&
                 "bg-background text-primary-foreground hover:bg-background"
             )}

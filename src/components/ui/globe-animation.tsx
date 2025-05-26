@@ -130,7 +130,7 @@ const GlobeAnimation = () => {
           ref={textRef}
           className="mt-6 text-3xl font-bold text-[#00ffe8] tracking-wider shadow-[0_0_8px_#00ffe8,0_0_18px_#00ffe8,0_0_28px_#00ffe8] select-none"
         >
-          RAPID PAYMENTS
+           {process.env.NEXT_PUBLIC_GLOBE_ANIMATION_NAME || "Bolt Payments"}
         </div>
       </div>
     );
@@ -148,7 +148,7 @@ const GlobeAnimation = () => {
         ref={textRef}
         className="mt-6 text-3xl font-bold text-[#00ffe8] tracking-wider shadow-[0_0_8px_#00ffe8,0_0_18px_#00ffe8,0_0_28px_#00ffe8] select-none"
       >
-        RAPID PAYMENTS
+        {process.env.NEXT_PUBLIC_GLOBE_ANIMATION_NAME || "Bolt Payments"}
       </div>
     </div>
   );
