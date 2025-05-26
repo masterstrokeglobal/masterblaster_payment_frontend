@@ -32,9 +32,9 @@ const GlobeAnimation = () => {
     container.appendChild(renderer.domElement);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0x00ffe8, 1.2);
+    // const ambientLight = new THREE.AmbientLight(0x606060, 2.0); // Neutral gray, increased intensity
+    // scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); // Neutral white light
     directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
 
@@ -43,11 +43,11 @@ const GlobeAnimation = () => {
     const earthTextureSrc =
       "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg";
     const bumpTextureSrc =
-      "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg";
+      "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"; // Dedicated bump map
     const specularTextureSrc =
       "https://threejs.org/examples/textures/planets/earth_specular_2048.jpg";
 
-    let globe: THREE.Mesh;
+    let globe: THREE.Mesh | undefined; // Explicitly type globe
     Promise.all([
       loader.loadAsync(earthTextureSrc).catch(() => {
         throw new Error("Failed to load Earth texture");
@@ -64,10 +64,10 @@ const GlobeAnimation = () => {
         const material = new THREE.MeshPhongMaterial({
           map: earthMap,
           bumpMap: bumpMap,
-          bumpScale: 0.05,
+          bumpScale: 0.1, // Increased for more terrain detail
           specularMap: specularMap,
-          specular: new THREE.Color("grey"),
-          shininess: 10,
+          specular: new THREE.Color(0x333333), // Neutral gray specular
+          shininess: 30, // Increased for sharper highlights
         });
         globe = new THREE.Mesh(geometry, material);
         scene.add(globe);
@@ -130,7 +130,7 @@ const GlobeAnimation = () => {
           ref={textRef}
           className="mt-6 text-3xl font-bold text-[#00ffe8] tracking-wider shadow-[0_0_8px_#00ffe8,0_0_18px_#00ffe8,0_0_28px_#00ffe8] select-none"
         >
-           {process.env.NEXT_PUBLIC_GLOBE_ANIMATION_NAME || "Bolt Payments"}
+          {process.env.NEXT_PUBLIC_GLOBE_ANIMATION_NAME || "Bolt Payments"}
         </div>
       </div>
     );
