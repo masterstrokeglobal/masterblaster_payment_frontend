@@ -19,7 +19,7 @@ import {
   TransactionType,
 } from "@/models/transaction";
 import { Download, Search } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import transactionColumns from "../user/components/transaction-columns";
 import {
   useGetAllTransactions,
@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getExtension } from "@/lib/utils";
-
+import { Howl } from "howler";
 type Props = {
   userId?: string;
 };
@@ -61,6 +61,49 @@ const TransactionTable = ({ userId }: Props) => {
       refetchInterval: 5000,
     }
   );
+
+  const prevDataRef = useRef<Transaction[] | null>(null);
+
+  const notificationSound = new Howl({
+  src: ["/mp3/deposit.mp3"],
+    });
+
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("Notification permission granted");
+        } else {
+          console.warn("Notification permission denied");
+        }
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess && data?.data?.transactions) {
+      const currentTransactions = data.data.transactions;
+      console.log(prevDataRef.current, currentTransactions);
+      // Check if prevDataRef has data and compare with current transactions
+      if (prevDataRef.current && currentTransactions.length > 0 && prevDataRef.current.length > 0 && currentTransactions[0].id !== prevDataRef.current[0].id) {
+        const newTransactionCount = currentTransactions[0].id - prevDataRef.current[0].id;
+        
+        // Show browser notification
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("New Transactions", {
+            body: `${newTransactionCount} new transaction${newTransactionCount > 1 ? "s" : ""} received!`,
+            icon: "/path/to/icon.png", // Optional: Path to an icon
+          });
+        }
+
+        // Play sound notification
+        notificationSound.play();
+      }
+
+      // Update prevDataRef with current transactions
+      prevDataRef.current = currentTransactions;
+    }
+  }, [data, isSuccess]);
 
   const { mutateAsync: downloadData, isPending } = useGetTransactionDownload();
 
