@@ -65,8 +65,12 @@ const TransactionTable = ({ userId }: Props) => {
   const prevDataRef = useRef<Transaction[] | null>(null);
 
   const notificationSound = new Howl({
-  src: ["/mp3/deposit.mp3"],
-    });
+    src: ["/mp3/deposit.mp3"],
+  });
+
+  const notificationSpeechSound = new Howl({
+    src: ["/mp3/deposit_speech.mp3"],
+  });
 
   useEffect(() => {
     if ("Notification" in window && Notification.permission !== "granted") {
@@ -85,19 +89,30 @@ const TransactionTable = ({ userId }: Props) => {
       const currentTransactions = data.data.transactions;
       console.log(prevDataRef.current, currentTransactions);
       // Check if prevDataRef has data and compare with current transactions
-      if (prevDataRef.current && currentTransactions.length > 0 && prevDataRef.current.length > 0 && currentTransactions[0].id !== prevDataRef.current[0].id) {
-        const newTransactionCount = currentTransactions[0].id - prevDataRef.current[0].id;
-        
+      if (
+        prevDataRef.current &&
+        currentTransactions.length > 0 &&
+        prevDataRef.current.length > 0 &&
+        currentTransactions[0].id !== prevDataRef.current[0].id
+      ) {
+        const newTransactionCount =
+          currentTransactions[0].id - prevDataRef.current[0].id;
+
         // Show browser notification
         if ("Notification" in window && Notification.permission === "granted") {
           new Notification("New Transactions", {
-            body: `${newTransactionCount} new transaction${newTransactionCount > 1 ? "s" : ""} received!`,
+            body: `${newTransactionCount} new transaction${
+              newTransactionCount > 1 ? "s" : ""
+            } received!`,
             icon: "/path/to/icon.png", // Optional: Path to an icon
           });
         }
 
         // Play sound notification
         notificationSound.play();
+        notificationSound.on("end", () => {
+          notificationSpeechSound.play();
+        });
       }
 
       // Update prevDataRef with current transactions
@@ -165,7 +180,10 @@ const TransactionTable = ({ userId }: Props) => {
         <h2 className="text-xl font-semibold text-primary">Transactions</h2>
         <div className="flex gap-5 ">
           <div className="relative min-w-60 flex-1">
-            <Search size={18} className="absolute top-2.5 left-2.5 text-primary" />
+            <Search
+              size={18}
+              className="absolute top-2.5 left-2.5 text-primary"
+            />
             <Input
               placeholder="Search"
               onChange={handleSearch}
@@ -257,7 +275,7 @@ const TransactionTable = ({ userId }: Props) => {
       <main className="mt-4">
         <DataTable
           page={page}
-        //   loading={isFetching}
+          //   loading={isFetching}
           columns={transactionColumns}
           data={transactions}
           totalPage={totalPages}
