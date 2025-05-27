@@ -49,7 +49,7 @@ const TransactionTable = () => {
       status: status === "all" ? "" : status,
     },
     {
-      refetchInterval: 5000,
+      refetchInterval: 2000,
     }
   );
 
