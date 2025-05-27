@@ -41,7 +41,7 @@ const UserPaymentsTable = () => {
         status: status === "all" ? "" : status,
     },
     {
-      refetchInterval: 2000,
+      refetchInterval: 3000,
     });
 
     const transactions = useMemo(() => {

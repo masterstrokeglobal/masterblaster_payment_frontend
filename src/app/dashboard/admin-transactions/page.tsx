@@ -59,7 +59,7 @@ const AdminTransactionTable = () => {
       status: status === "all" ? "" : status,
     },
     {
-      refetchInterval: 2000,
+      refetchInterval: 3000,
     }
   );
 
