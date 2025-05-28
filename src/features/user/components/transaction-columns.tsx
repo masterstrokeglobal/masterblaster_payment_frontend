@@ -181,13 +181,18 @@ const transactionColumns: ColumnDef<Transaction>[] = [
       <div className="text-[#6B7280]">{row.original.accountId}</div>
     ),
   },
-  {
-    header: "AMOUNT",
-    accessorKey: "amount",
-    cell: ({ row }) => (
-      <div className="font-medium">Rs.{row.original.amount.toFixed(2)}</div>
-    ),
-  },
+{
+  header: "AMOUNT",
+  accessorKey: "amount",
+  cell: ({ row }) => (
+    <div className="font-medium">
+      Rs.
+      {Number.isInteger(row.original.amount)
+        ? row.original.amount
+        : row.original.amount.toFixed(2)}
+    </div>
+  ),
+},
   {
     header: "STATUS",
     accessorKey: "status",
