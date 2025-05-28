@@ -171,6 +171,7 @@ const TransactionTable = ({ userId }: Props) => {
 
   // Change page when pagination controls are used
   const changePage = (newPage: number) => {
+    prevDataRef.current = null;
     setPage(newPage);
   };
 
