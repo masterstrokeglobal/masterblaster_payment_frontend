@@ -30,13 +30,20 @@ const EditTransactionPage = () => {
         return new Merchant(data?.data.merchant);
     }, [data]);
 
+
     const onSubmit = (updatedData: TransactionFormValues) => {
 
+        const payload = {
+      id : id!.toString(),
+      message: "",
+      image: undefined,
+    };
+
         if (updatedData.status == TransactionStatus.COMPLETED) {
-            approve(id!.toString());
+            approve(payload);
         }
         if (updatedData.status == TransactionStatus.FAILED) {
-            reject(id!.toString());
+            reject(payload);
         }
     };
 

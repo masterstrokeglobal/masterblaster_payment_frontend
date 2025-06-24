@@ -181,18 +181,18 @@ const transactionColumns: ColumnDef<Transaction>[] = [
       <div className="text-[#6B7280]">{row.original.accountId}</div>
     ),
   },
-{
-  header: "AMOUNT",
-  accessorKey: "amount",
-  cell: ({ row }) => (
-    <div className="font-medium">
-      Rs.
-      {Number.isInteger(row.original.amount)
-        ? row.original.amount
-        : row.original.amount.toFixed(2)}
-    </div>
-  ),
-},
+  {
+    header: "AMOUNT",
+    accessorKey: "amount",
+    cell: ({ row }) => (
+      <div className="font-medium">
+        Rs.
+        {Number.isInteger(row.original.amount)
+          ? row.original.amount
+          : row.original.amount.toFixed(2)}
+      </div>
+    ),
+  },
   {
     header: "STATUS",
     accessorKey: "status",
@@ -282,6 +282,8 @@ export const transactionEditSchema = z.object({
     TransactionStatus.COMPLETED,
     TransactionStatus.FAILED,
   ]),
+  responseMessage: z.string().optional(),
+  image: z.any().optional(),
 });
 
 const ActionDropDown = ({ transaction }: { transaction: Transaction }) => {
@@ -291,20 +293,35 @@ const ActionDropDown = ({ transaction }: { transaction: Transaction }) => {
 
   const form = useForm<TransactionFormValues>({
     resolver: zodResolver(transactionEditSchema),
-    defaultValues: { status: TransactionStatus.PENDING },
+    defaultValues: {
+      status: TransactionStatus.PENDING,
+      responseMessage: "",
+      image: undefined,
+    },
   });
 
-  const { handleSubmit, control } = form;
+  const { handleSubmit, control, register } = form;
 
   const { mutate: approve, isPending: isPending } = useApproveTransaction();
   const { mutate: reject, isPending: confirmPending } = useRejectTransaction();
 
   const onSubmit = (updatedData: TransactionFormValues) => {
+    const image =
+      updatedData.image instanceof FileList
+        ? updatedData.image[0]
+        : updatedData.image;
+
+    const payload = {
+      id,
+      message: updatedData.responseMessage,
+      image: image,
+    };
+
     if (updatedData.status == TransactionStatus.COMPLETED) {
-      approve(id!.toString());
+      approve(payload);
     }
     if (updatedData.status == TransactionStatus.FAILED) {
-      reject(id!.toString());
+      reject(payload);
     }
   };
   return (
@@ -312,37 +329,56 @@ const ActionDropDown = ({ transaction }: { transaction: Transaction }) => {
       {transaction?.status === TransactionStatus.PENDING && (
         <div className="">
           <FormProvider
-            className="flex"
             methods={form}
             onSubmit={handleSubmit(onSubmit)}
           >
-            <FormGroupSelect
-              name="status"
-              label=""
-              control={control}
-              options={Object.values(TransactionStatus).map((status) => ({
-                label: status,
-                value: status,
-              }))}
-              // options={[
-              //   {
-              //     label: "Completed",
-              //     value: TransactionStatus.COMPLETED.toString(),
-              //   },
-              //   {
-              //     label: "Cancelled",
-              //     value: TransactionStatus.FAILED.toString(),
-              //   },
-              // ]}
-            />
-            <Button
-              variant="outline"
-              className="text-primary mx-4 mt-2"
-              type="submit"
-              disabled={isPending || confirmPending}
-            >
-              {isPending || confirmPending ? "Updating..." : "Update Status"}
-            </Button>
+            <div className="flex">
+              <FormGroupSelect
+                name="status"
+                label=""
+                control={control}
+                options={Object.values(TransactionStatus).map((status) => ({
+                  label: status,
+                  value: status,
+                }))}
+                // options={[
+                //   {
+                //     label: "Completed",
+                //     value: TransactionStatus.COMPLETED.toString(),
+                //   },
+                //   {
+                //     label: "Cancelled",
+                //     value: TransactionStatus.FAILED.toString(),
+                //   },
+                // ]}
+              />
+              <Button
+                variant="outline"
+                className="text-primary mx-4 mt-2"
+                type="submit"
+                disabled={isPending || confirmPending}
+              >
+                {isPending || confirmPending ? "Updating..." : "Update Status"}
+              </Button>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Response Message</label>
+              <input
+                type="text"
+                {...register("responseMessage")}
+                className="w-full text-primary mt-1 p-2 rounded bg-background"
+                placeholder="Enter response message"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Upload Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                {...register("image")}
+                className="mt-1"
+              />
+            </div>
           </FormProvider>
         </div>
       )}
